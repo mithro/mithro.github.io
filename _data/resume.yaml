@@ -1,0 +1,123 @@
+# Structured from the resume Google Doc (bit.ly/mithro-resume), 2026-08-08.
+# The named references grid stays in the Google Doc only; the site shows
+# references_note.
+doc_url: "https://bit.ly/mithro-resume"
+skills:
+  - "Expert in building open ecosystems."
+  - "Strong organization & project management capabilities."
+  - "Strong presentation ability."
+  - "Cross role collaborator including with finance, legal, sales & public policy."
+technical_skills:
+  - ">10 years experience with C++ & Python"
+  - "Embedded C (Zephyr, Linux & Bare Metal)"
+  - "Verilog, VHDL, Migen, Amaranth, & other HDLs"
+  - "Strong experience with Javascript & CSS and web browser development"
+achievements:
+  - title: "SKY130 & GF180MCU PDKs"
+    role: "Creator, Manager & Project Lead"
+    years: "2018 - 2024"
+    detail: "Worked with SkyWater Technology Foundry and GlobalFoundries to release open source PDKs for their 130nm and 180nm process technologies with support for open source EDA tooling such as OpenROAD, KLayout, Magic, OpenRAM, Xschem and many others."
+    links:
+      - { label: "SKY130", url: "https://skywater-pdk.rtfd.io" }
+      - { label: "GF180MCU", url: "https://gf180mcu-pdk.rtfd.io" }
+  - title: "Open MPW program"
+    role: "Creator, Manager & Project Lead"
+    years: "2018 - 2024"
+    detail: "Developed partnership with multiple entities including foundries such as SkyWater & GlobalFoundries, startups such as Efabless, and academic groups to enable >1,000 manufacturable tape outs in under 3 years with >40% first time designers. Secured $15m USD in funding from the DoD to enable expansion to SKY90FD technology."
+    links:
+      - { label: "Open MPW program", url: "https://opensource.googleblog.com/2022/05/Build%20Open%20Silicon%20with%20Google.html" }
+      - { label: "GlobalFoundries announcement", url: "https://opensource.googleblog.com/2022/10/announcing-globalfoundries-open-mpw-shuttle-program.html" }
+  - title: "NIST Nanotechnology Development Platform"
+    role: "Project Oversight"
+    years: "2019 - 2024"
+    detail: "Worked with public policy & legal at Google to create a partnership with NIST to utilize the SKY130 open source PDKs to create a Nanotechnology Development Platform announced by Gina Raimondo, Secretary of Commerce. More info, including other programs, at bit.ly/goog-nist."
+    links:
+      - { label: "Announcement", url: "https://opensource.googleblog.com/2022/09/google-and-nist-partner-on-nanotechnology-development-platform.html" }
+      - { label: "bit.ly/goog-nist", url: "https://bit.ly/goog-nist" }
+  - title: "Organized >$6.5m USD in academic grants"
+    role: "Lead Organizer"
+    years: "2020 - 2023"
+    detail: "Worked with Google's University Relations team and academic collaborators to enable $6.8m USD in grants to 21 academic institutes from around the globe. Met regularly with multiple groups to help direct research and provide feedback, including the exciting results at bit.ly/goog-analog."
+    links:
+      - { label: "bit.ly/goog-analog", url: "https://bit.ly/goog-analog" }
+  - title: "Presented >100 technical presentations"
+    role: "Author"
+    years: "(~10 per year) 2012 - 2022"
+    detail: "Presented at multiple high profile community conferences including >1,000 people audiences (35C3 & 33C3, CCCamp19 & CCCamp15, COSCUP, Linux.conf.au, Hack-A-Day Supercon), top level academic events (ICCAD, DAC, CICC, ESSCIRC, FCCM, SPIE, SSCD), and government entities (NIST, NSF, T&M, US Navy, Japan's METI, DARPA ERI Summit)."
+    links:
+      - { label: "All talks", url: "/talks/" }
+  - title: "Launched 7 successful hardware crowdfunding campaigns"
+    role: "Project Manager"
+    years: "2015 - 2021"
+    detail: "Opsis (2015), Tomu (2018), NeTV2 (2018), Fomu (2019), Somu (2019), QuickFeather (2020), Qomu (2021)."
+    links:
+      - { label: "Opsis", url: "https://www.crowdsupply.com/numato-lab/opsis" }
+      - { label: "Tomu", url: "https://www.crowdsupply.com/sutajio-kosagi/tomu" }
+      - { label: "NeTV2", url: "https://www.crowdsupply.com/alphamax/netv2" }
+      - { label: "Fomu", url: "https://www.crowdsupply.com/sutajio-kosagi/fomu" }
+      - { label: "Somu", url: "https://www.crowdsupply.com/solokeys/somu" }
+      - { label: "QuickFeather", url: "https://www.crowdsupply.com/quicklogic/quickfeather" }
+      - { label: "Qomu", url: "https://www.crowdsupply.com/quicklogic/qomu" }
+  - title: "PyCon AU Conference"
+    role: "Lead Organizer"
+    years: "2010 - 2018"
+    detail: "Created the PyCon AU conference and helped it grow to >500 people."
+employment:
+  - org: "Arc PBC / Arc Labs"
+    role: "SVP of Hardware (Arc PBC); Chief Technology Officer (Arc Labs)"
+    years: "2024 - Present"
+    location: "New Jersey, USA"
+  - org: "Google"
+    role: "Lead for open silicon efforts; Google Board Member, OpenPOWER Foundation"
+    years: "2018 - 2024"
+    location: "Sunnyvale, USA"
+  - org: "Google"
+    role: "Chrome - Animation, Input & Scheduling"
+    years: "2014 - 2018"
+    location: "Sydney, Australia"
+  - org: "Google"
+    role: "Site Reliability Engineer / Google Maps"
+    years: "2011 - 2014"
+    location: "Sydney, Australia"
+  - org: "Google"
+    role: "Technical Solutions Engineer / Mobile & Android"
+    years: "2008 - 2011"
+    location: "Sydney, Australia"
+  - org: "Australia Semiconductor Technology Company"
+    role: "Hardware Simulator Developer"
+    years: "2006 - 2007"
+    location: "Adelaide, Australia"
+employment_note: "Tim's employment continues back to 1995 but has been truncated for brevity."
+projects:
+  - { name: "TimVideos.us", years: "2015 - Present" }
+  - { name: "Tomu device series (Tomu, Fomu, Somu, Qomu)", years: "2015 - 2021" }
+  - { name: "F4PGA (previously SymbiFlow)", years: "2015 - 2022", url: "https://f4pga.org" }
+  - { name: "OpenZaurus, OpenEmbedded & BitBake", years: "2002 - 2008" }
+academic_note: "Tim has been industry focused. Select academic contributions are included."
+academic_highlights:
+  - "Presented at multiple top tier academic conferences such as ICCAD, DAC, CICC, ESSCIRC, FCCM, SPIE, SSCD and many more."
+  - "Organized >$6.5m USD in academic grants across 21 institutes."
+selected_papers:
+  - title: "CFU Playground: Want a faster ML processor? Do it yourself!"
+    venue: "2023 Design, Automation & Test in Europe Conference & Exhibition (DATE)"
+    year: 2023
+    url: "https://ieeexplore.ieee.org/abstract/document/10137093"
+  - title: "An Open-Source and Autonomous Temperature Sensor Generator Verified With 64 Instances in SkyWater 130 nm for Comprehensive Design Space Exploration"
+    venue: "IEEE Solid-State Circuits Letters #5"
+    year: 2023
+    url: "https://ieeexplore.ieee.org/abstract/document/9816083"
+  - title: "SymbiFlow and VPR: An open-source design flow for commercial and novel FPGAs"
+    venue: "IEEE Micro #40"
+    year: 2020
+    url: "https://ieeexplore.ieee.org/document/9103284"
+  - title: "The missing pieces of open design enablement: A recent history of Google efforts"
+    venue: "Proceedings of the 39th International Conference on Computer-Aided Design"
+    year: 2020
+    url: "https://j.mp/iccad20-goog-miss-paper"
+education:
+  - org: "University of Adelaide"
+    years: "2001 - 2006"
+    degrees:
+      - "Bachelor of Engineering (Information Technology & Telecommunications) with Honors"
+      - "Bachelor of Arts (Philosophy & Cognitive Science) with Honors"
+references_note: "Reference contact details provided on request."
