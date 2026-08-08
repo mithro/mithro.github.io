@@ -41,8 +41,8 @@ description: "Tim 'mithro' Ansell's resume — skills, achievements, employment 
   <h2>Employment</h2>
   {% for e in site.data.resume.employment %}
   <div class="prose">
-    <h3>{{ e.org | escape }}</h3>
-    <p class="meta">{{ e.role | escape }} · {{ e.years | escape }} · {{ e.location | escape }}</p>
+    <h3>{{ e.org | escape }} · {{ e.years | escape }}</h3>
+    <p class="meta">{{ e.role | escape }} · {{ e.location | escape }}</p>
   </div>
   {% endfor %}
   <p class="prose meta">{{ site.data.resume.employment_note | escape }}</p>
