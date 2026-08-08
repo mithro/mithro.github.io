@@ -1139,6 +1139,11 @@ git commit -m "Generate short-link redirect pages from approved list"
 - Modify: `README.md`
 - Delete: brainstorming leftovers in `tmp/`
 
+- [ ] **Step 0: OG image** (added by Task 7 code review): generate
+`assets/photos/og-image.jpg`, a ~1200x630 landscape crop of the die scan
+under 300KB (e.g. via Pillow in a `uv run` script), and point
+`_layouts/default.html`'s `og:image` at it — the full 1600x2082 / 1.7MB
+portrait die-scan.jpg previews poorly on link-unfurl platforms.
 - [ ] **Step 1: Write `CNAME`** containing exactly `mith.ro`.
 - [ ] **Step 2: Rewrite `README.md`**: what the site is, how data files are
 refreshed (`scripts/*.py` usage incl. `BITLY_TOKEN`), how to build locally
