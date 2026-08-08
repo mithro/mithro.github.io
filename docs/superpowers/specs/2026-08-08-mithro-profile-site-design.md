@@ -52,13 +52,18 @@ every color painted explicitly.
 ### / (home)
 
 - Header nav: About · Talks · Papers · Resume (+ ⌖ mith.ro brand).
+  "About" is the homepage itself (`/`), not a separate page; `about` still
+  joins the reserved shortlink paths in case that ever changes.
 - Hero: name, 2–3 sentence bio (open silicon ecosystems: SKY130 & GF180MCU
   PDKs, Open MPW, wafer.space, Arc PBC), wafer photo.
 - Contact block directly in the hero, not buried: me@mith.ro,
   +1 774 264 8476, +61 421 968 221, github.com/mithro, linkedin.com/in/mithro,
   twitter.com/mithro, fosstodon.org/@mithro, bsky.app/profile/mith.ro,
   blog.mithis.net.
-- Stats strip: talks / papers / citations counts (computed from data files).
+- Stats strip: talks / papers / citations. Talk and paper counts are
+  computed from their data files; the citations figure reads the
+  profile-metrics block in `_data/papers.yaml` (not a sum of per-paper
+  counts), so home and /papers/ can never disagree.
 - Recent talks: latest ~5 from `_data/talks.yaml`.
 - Photo gallery row (3 shots: die scan, chip-on-board, die on fingertip).
 - Footer: repeat of contact links (footer appears on every page).
@@ -127,7 +132,9 @@ All scripts run with `uv run`, live in `scripts/`, and write YAML into
   (b) web/YouTube searches for Tim's 2023–2026 appearances. New entries are
   marked `source: compiled` in the YAML for Tim's review, and delivered as
   CSV rows matching the sheet's columns so Tim can paste them back into
-  the spreadsheet.
+  the spreadsheet. Unlike shortlinks, compiled talks ship on the site
+  immediately (they are the point of the refresh); Tim's review corrects
+  or removes entries afterwards.
 - `_data/papers.yaml` — snapshot of the Google Scholar profile
   (user pDTwJe4AAAAJ): all papers with title, authors, venue, year,
   citations, plus the profile metrics.
