@@ -12,12 +12,15 @@ this writing, so that directory may not exist yet in a fresh checkout.
 
 ## Building locally
 
-The repo vendors gems under `vendor/bundle` and installs the bundler
-binary to the Ruby user gem dir, which isn't on `PATH` by default:
+`vendor/`, `.bundle/`, and `Gemfile.lock` are gitignored, so a fresh
+checkout has none of them — gems install locally under `vendor/bundle`
+instead of system-wide, and the bundler binary goes to the Ruby user
+gem dir, which isn't on `PATH` by default:
 
 ```bash
 export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
-bundle install   # first time only
+bundle config set --local path vendor/bundle   # first time only
+bundle install                                 # first time only
 bundle exec jekyll serve   # http://localhost:4000
 ```
 
@@ -82,10 +85,13 @@ shell history (e.g. `read -s BITLY_TOKEN && export BITLY_TOKEN`). No
 token is stored anywhere in this repo. Rotate the token periodically
 and after any token has been pasted into a terminal, ticket, or chat.
 
-Each generated entry defaults `include: false` with a `reason`, except
-for keywords already referenced from public sources (the talks sheet,
-the resume) or that collide with a reserved site path, which default
-to `include: true`. See "Short-link redirects" for what happens next.
+Each generated entry defaults `include: false` with a `reason`, pending
+review — except keywords already referenced from public sources (the
+talks sheet, the resume), which default to `include: true`, *unless*
+they collide with a reserved site path (`talks`, `papers`, `resume`,
+`about`, `assets`, `docs`, `scripts`, `404`), in which case they are
+always excluded regardless of source. See "Short-link redirects" for
+what happens next.
 
 ### `scripts/make_og_image.py`
 
@@ -144,7 +150,7 @@ resolves to a file that Jekyll actually built:
 ```bash
 export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
 bundle exec jekyll build
-uv run --with pyyaml python - <<'EOF'
+uv run python - <<'EOF'
 import pathlib, re
 site = pathlib.Path("_site")
 missing = []
@@ -173,14 +179,20 @@ GitHub Pages. Getting `mith.ro` itself live additionally requires:
    certificate has provisioned.
 2. **Cloudflare DNS** for `mith.ro`: point the apex record at GitHub
    Pages, either as
-   - `A` records at `185.199.108.153`, `.109`, `.110`, `.111`, plus
-     `AAAA` records at `2606:50c0:8000::153`, `8001::153`, `8002::153`,
-     `8003::153`; or
-   - a CNAME-flatten of the apex to `mithro.github.io`.
+   - `A` records at `185.199.108.153`, `185.199.109.153`,
+     `185.199.110.153`, `185.199.111.153`, plus `AAAA` records at:
+     - `2606:50c0:8000::153`
+     - `2606:50c0:8001::153`
+     - `2606:50c0:8002::153`
+     - `2606:50c0:8003::153`
+   - or a CNAME-flatten of the apex to `mithro.github.io`.
 
-   Either way, set the record to grey-cloud (DNS only, not proxied) or,
-   if it must stay orange-clouded, set Cloudflare's SSL/TLS mode to
-   "Full" so GitHub's certificate is respected end-to-end.
+   Keep the record grey-clouded (DNS only, not proxied) at least until
+   GitHub has provisioned the certificate and "Enforce HTTPS" is
+   available — GitHub's HTTP-01 challenge cannot complete through
+   Cloudflare's proxy. If you later switch it to orange-clouded, set
+   Cloudflare's SSL/TLS mode to "Full (strict)"; plain "Full" does not
+   validate the origin certificate and can silently downgrade security.
 
 ### Post-push checklist
 

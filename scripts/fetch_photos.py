@@ -12,8 +12,8 @@ import urllib.request
 
 UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36"
 
-# base URLs come from tmp/photo_urls.json captured during brainstorming;
-# =w1600 requests a 1600px-wide rendition.
+# base URLs are recorded in assets/photos/manifest.yaml alongside their
+# source albums; =w1600 requests a 1600px-wide rendition.
 PHOTOS = {
     "wafer-grid.jpg": "https://lh3.googleusercontent.com/pw/AP1GczM3MseGDmcDF7egcGuUbrGhADx8ywKMx62n8fm3a9VsVnJ18rSdlopoaGP1XKMalPq2qO0zXD6rt8EMnyJZtht434iaDUqCiCxFg4imHTRqmw6RXHU",
     "die-scan.jpg": "https://lh3.googleusercontent.com/pw/AP1GczMh6LOLVO5gNiSWKeaxcmp7dZs9wQochSNMexsj9Fk728Lhq6mmvlRsDqpWeWJ4r0-8UaR7byzq5MRZr2ytqNwcyBeew571ZvIqF1ann8BpdAQ2S8U4",
