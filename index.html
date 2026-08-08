@@ -26,19 +26,25 @@ description: "Tim 'mithro' Ansell — building open source silicon ecosystems: S
 
 <section class="sect">
   <h2>Recent talks</h2>
-  {% assign recent = site.data.talks | sort: "year" | reverse | slice: 0, 5 %}
-  <div class="table-scroll">
+  {% assign recent = site.data.talks | sort: "sort_date" | reverse | slice: 0, 5 %}
+  <div class="table-scroll" tabindex="0" role="region" aria-label="Recent talks">
   <table class="talks-table">
+    <caption class="visually-hidden">Five most recent talks</caption>
+    <thead>
+      <tr><th scope="col">Year</th><th scope="col">Talk</th><th scope="col">Event</th></tr>
+    </thead>
+    <tbody>
     {% for talk in recent %}
     <tr>
       <td class="yr">{{ talk.year }}</td>
       <td class="ti">
-        {% if talk.slides != "" and talk.slides %}<a href="{{ talk.slides }}">{{ talk.title | escape }}</a>{% else %}{{ talk.title | escape }}{% endif %}
-        {% if talk.video != "" and talk.video %} <a class="vid" href="{{ talk.video }}">▶ video</a>{% endif %}
+        {% if talk.slides != "" and talk.slides %}<a href="{{ talk.slides | escape }}">{{ talk.title | escape }}</a>{% else %}{{ talk.title | escape }}{% endif %}
+        {% if talk.video != "" and talk.video %} <a class="vid" href="{{ talk.video | escape }}"><span aria-hidden="true">▶</span> video</a>{% endif %}
       </td>
       <td class="ev"><span>{{ talk.event | escape }}</span></td>
     </tr>
     {% endfor %}
+    </tbody>
   </table>
   </div>
   <p class="more"><a href="{{ '/talks/' | relative_url }}">All {{ site.data.talks | size }} talks →</a></p>
@@ -46,15 +52,15 @@ description: "Tim 'mithro' Ansell — building open source silicon ecosystems: S
 
 <div class="gallery">
   <figure class="shot">
-    <img src="{{ '/assets/photos/die-scan.jpg' | relative_url }}" alt="Full die scan in gold and copper with a blue pad ring">
+    <img src="{{ '/assets/photos/die-scan.jpg' | relative_url }}" alt="Full die scan in gold and copper with a blue pad ring" loading="lazy">
     <figcaption>Die scan — GF180MCU</figcaption>
   </figure>
   <figure class="shot">
-    <img src="{{ '/assets/photos/chip-on-board.jpg' | relative_url }}" alt="Wire-bonded chips on black circuit boards">
+    <img src="{{ '/assets/photos/chip-on-board.jpg' | relative_url }}" alt="Wire-bonded chips on black circuit boards" loading="lazy">
     <figcaption>Chip on board — wafer.space Run 1</figcaption>
   </figure>
   <figure class="shot">
-    <img src="{{ '/assets/photos/die-on-finger.jpg' | relative_url }}" alt="A single silicon die resting on a fingertip">
+    <img src="{{ '/assets/photos/die-on-finger.jpg' | relative_url }}" alt="A single silicon die resting on a fingertip" loading="lazy">
     <figcaption>One die, actual size</figcaption>
   </figure>
 </div>
