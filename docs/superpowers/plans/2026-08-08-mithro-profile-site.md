@@ -342,7 +342,7 @@ a { color: var(--gold); }
 .prose { max-width: 72ch; font-family: var(--sans); font-size: .95rem; color: #c4beb2; }
 .prose h2 { font-family: var(--mono); color: var(--gold); font-size: .95rem; letter-spacing: .1em; text-transform: uppercase; margin: 2rem 0 .6rem; }
 .prose h3 { font-family: var(--mono); color: var(--silk); font-size: .9rem; margin: 1.4rem 0 .4rem; }
-.prose .meta { color: var(--muted); font-family: var(--mono); font-size: .78rem; }
+.prose.meta, .prose .meta { color: var(--muted); font-family: var(--mono); font-size: .78rem; }
 
 .papers-list { list-style: none; margin: 0; padding: 0; }
 .papers-list li { border-top: 1px solid var(--line); padding: .8rem 0; }
@@ -863,15 +863,15 @@ description: "Scientific papers by Tim 'mithro' Ansell."
     h-index {{ site.data.papers.metrics.h_index }} ·
     i10-index {{ site.data.papers.metrics.i10_index }} ·
     snapshot {{ site.data.papers.metrics.snapshot_date }} ·
-    <a href="{{ site.data.papers.metrics.profile }}">Google Scholar profile</a>
+    <a href="{{ site.data.papers.metrics.profile | escape }}">Google Scholar profile</a>
   </p>
-  <ul class="papers-list">
+  <ul class="papers-list" role="list">
     {% assign papers_sorted = site.data.papers.papers | sort: "citations" | reverse %}
     {% for paper in papers_sorted %}
     <li>
-      <span class="ti">{% if paper.url %}<a href="{{ paper.url }}">{{ paper.title | escape }}</a>{% else %}{{ paper.title | escape }}{% endif %}</span>
+      <span class="ti">{% if paper.url %}<a href="{{ paper.url | escape }}">{{ paper.title | escape }}</a>{% else %}{{ paper.title | escape }}{% endif %}</span>
       <span class="au">{{ paper.authors | escape }}</span>
-      <span class="ve">{{ paper.venue | escape }} · {{ paper.year }}{% if paper.citations and paper.citations > 0 %} · <span class="ci">{{ paper.citations }} citations</span>{% endif %}</span>
+      <span class="ve">{{ paper.venue | escape }} · {{ paper.year }}{% if paper.citations and paper.citations > 0 %} · <span class="ci">{{ paper.citations }} citation{% if paper.citations != 1 %}s{% endif %}</span>{% endif %}</span>
     </li>
     {% endfor %}
   </ul>
@@ -885,7 +885,9 @@ Run:
 export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
 bundle exec jekyll build && grep -c "<li>" _site/papers/index.html
 ```
-Expected: count equals number of papers in the YAML.
+Expected: papers count PLUS the layout footer's contact `<li>` lines
+(the footer contributes 9); the papers list itself must have exactly
+the YAML paper count.
 
 - [ ] **Step 3: Commit**
 
