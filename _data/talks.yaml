@@ -1014,3 +1014,84 @@
   video: "https://youtu.be/ekrypMxEB44"
   video_title: "Google Tech Talk (2008-06) - Gaming For Freedom"
   source: sheet
+
+# --- Compiled 2023-2026 additions (source: compiled) — gathered from
+# --- bit.ly links + web/YouTube research, Aug 2026. Pending Tim's review.
+
+- title: "wafer.space: Silicon now $4 USD, get inspired from Run #1!"
+  event: "Hackware hardware meetup, Singapore"
+  year: 2026
+  date: ""
+  video: "https://www.youtube.com/watch?v=t6Z0_Krhshc"
+  source: compiled
+
+- title: "Teardown Session 56: wafer.space with Tim Ansell & Leo Moser"
+  event: "Crowd Supply Teardown Session (livestream)"
+  year: 2025
+  date: "2 Oct 2025"
+  video: "https://www.youtube.com/watch?v=tEOmnN8IAjs"
+  source: compiled
+
+- title: "A brain dump on open source silicon (FPGAs, ASICs and similar)"
+  event: "Lawrence Berkeley National Laboratory (LBNL) seminar"
+  year: 2025
+  date: ""
+  slides: "https://bit.ly/mithro-lbnl25"
+  source: compiled
+
+- title: "wafer.space - Budget silicon manufacturing (lightning talk)"
+  event: "Latch-Up 2025, UC Santa Barbara"
+  year: 2025
+  date: "3 May 2025"
+  source: compiled
+
+- title: "So you wanna make a chip? Open Source Silicon"
+  event: "Flashbots_X, San Francisco"
+  year: 2025
+  date: "14 Mar 2025"
+  slides: "https://bit.ly/open-silicon-fbx"
+  source: compiled
+
+- title: "So you wanna make a chip? Open Source Silicon"
+  event: "<d/acc day> @ UC Berkeley"
+  year: 2025
+  date: "13 Mar 2025"
+  slides: "https://bit.ly/open-silicon-dacc"
+  source: compiled
+
+- title: "Open-source silicon enabling HEP-IC opportunities"
+  event: "High Energy Physics IC Workshop (HEP-IC 2024), Brookhaven National Laboratory"
+  year: 2024
+  date: "2 May 2024"
+  slides: "https://bit.ly/mithro-hepic24"
+  source: compiled
+
+- title: "Will open source design be the future direction? (panelist)"
+  event: "IEEE Custom Integrated Circuits Conference (CICC) 2024, Denver"
+  year: 2024
+  date: "22 Apr 2024"
+  slides: "https://bit.ly/mithro-cicc24"
+  source: compiled
+
+- title: "Tim's Silicon Presentations"
+  event: "Latch-Up 2024, MIT"
+  year: 2024
+  date: ""
+  slides: "https://bit.ly/tim-silicon-2024"
+  video: "https://www.youtube.com/watch?v=FDYfu0Mx__0"
+  video_title: "\"Tim's Silicon Presentations\" - Tim Ansell (Latch_2024)"
+  source: compiled
+
+- title: "Education and workforce development"
+  event: ""
+  year: 2023
+  date: ""
+  slides: "https://bit.ly/goog-ic-edu"
+  source: compiled
+
+- title: "SERDES, PIPE and protocols - Pathway to fully open source implementations"
+  event: ""
+  year: 2023
+  date: ""
+  slides: "https://bit.ly/open-pipe-talk"
+  source: compiled
