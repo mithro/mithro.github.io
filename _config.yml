@@ -1,0 +1,18 @@
+title: "Tim 'mithro' Ansell"
+description: "Building open source silicon ecosystems — SKY130 & GF180MCU PDKs, Open MPW, wafer.space."
+url: "https://mith.ro"
+lang: en
+
+plugins:
+  - jekyll-redirect-from
+
+# Redirect stubs are generated files; everything else is hand-written.
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - LICENSE
+  - docs/
+  - scripts/
+  - tmp/
+  - vendor/
