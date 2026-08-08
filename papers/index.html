@@ -1,0 +1,25 @@
+---
+layout: default
+title: Papers
+description: "Scientific papers by Tim 'mithro' Ansell."
+---
+<section class="sect">
+  <h2>Papers</h2>
+  <p class="prose meta">
+    {{ site.data.papers.metrics.citations }} citations ·
+    h-index {{ site.data.papers.metrics.h_index }} ·
+    i10-index {{ site.data.papers.metrics.i10_index }} ·
+    snapshot {{ site.data.papers.metrics.snapshot_date }} ·
+    <a href="{{ site.data.papers.metrics.profile }}">Google Scholar profile</a>
+  </p>
+  <ul class="papers-list">
+    {% assign papers_sorted = site.data.papers.papers | sort: "citations" | reverse %}
+    {% for paper in papers_sorted %}
+    <li>
+      <span class="ti">{% if paper.url %}<a href="{{ paper.url }}">{{ paper.title | escape }}</a>{% else %}{{ paper.title | escape }}{% endif %}</span>
+      <span class="au">{{ paper.authors | escape }}</span>
+      <span class="ve">{{ paper.venue | escape }} · {{ paper.year }}{% if paper.citations and paper.citations > 0 %} · <span class="ci">{{ paper.citations }} citations</span>{% endif %}</span>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
