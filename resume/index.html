@@ -1,0 +1,105 @@
+---
+layout: default
+title: Resume
+description: "Tim 'mithro' Ansell's resume — skills, achievements, employment history, projects, academic contributions and education."
+---
+<section class="sect">
+  <h2>Skills</h2>
+  <div class="skills-grid">
+    <div class="prose">
+      <h3>Core skills</h3>
+      <ul>
+        {% for s in site.data.resume.skills %}<li>{{ s | escape }}</li>{% endfor %}
+      </ul>
+    </div>
+    <div class="prose">
+      <h3>Technical skills</h3>
+      <ul>
+        {% for s in site.data.resume.technical_skills %}<li>{{ s | escape }}</li>{% endfor %}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="sect">
+  <h2>Achievements</h2>
+  {% for a in site.data.resume.achievements %}
+  <div class="prose">
+    <h3>{{ a.title | escape }}</h3>
+    <p class="meta">{{ a.role | escape }} · {{ a.years | escape }}</p>
+    <p>{{ a.detail | escape }}</p>
+    {% if a.links %}
+    <p class="meta">
+      {% for l in a.links %}{% if l.url contains '://' %}<a href="{{ l.url | escape }}">{{ l.label | escape }}</a>{% else %}<a href="{{ l.url | relative_url | escape }}">{{ l.label | escape }}</a>{% endif %}{% unless forloop.last %} · {% endunless %}{% endfor %}
+    </p>
+    {% endif %}
+  </div>
+  {% endfor %}
+</section>
+
+<section class="sect">
+  <h2>Employment</h2>
+  {% for e in site.data.resume.employment %}
+  <div class="prose">
+    <h3>{{ e.org | escape }}</h3>
+    <p class="meta">{{ e.role | escape }} · {{ e.years | escape }} · {{ e.location | escape }}</p>
+  </div>
+  {% endfor %}
+  <p class="prose meta">{{ site.data.resume.employment_note | escape }}</p>
+</section>
+
+<section class="sect">
+  <h2>Projects</h2>
+  <ul class="papers-list" role="list">
+    {% for p in site.data.resume.projects %}
+    <li>
+      <span class="ti">{% if p.url %}<a href="{{ p.url | escape }}">{{ p.name | escape }}</a>{% else %}{{ p.name | escape }}{% endif %}</span>
+      <span class="ve">{{ p.years | escape }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+
+<section class="sect">
+  <h2>Academic</h2>
+  <div class="prose">
+    <p>{{ site.data.resume.academic_note | escape }}</p>
+    <ul>
+      {% for h in site.data.resume.academic_highlights %}<li>{{ h | escape }}</li>{% endfor %}
+    </ul>
+    <h3>Selected papers</h3>
+  </div>
+  <ul class="papers-list" role="list">
+    {% for sp in site.data.resume.selected_papers %}
+    <li>
+      <span class="ti">{% if sp.url %}<a href="{{ sp.url | escape }}">{{ sp.title | escape }}</a>{% else %}{{ sp.title | escape }}{% endif %}</span>
+      <span class="ve">{{ sp.venue | escape }} · {{ sp.year }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+
+<section class="sect">
+  <h2>Education</h2>
+  {% for ed in site.data.resume.education %}
+  <div class="prose">
+    <h3>{{ ed.org | escape }}</h3>
+    <p class="meta">{{ ed.years | escape }}</p>
+    <ul>
+      {% for d in ed.degrees %}<li>{{ d | escape }}</li>{% endfor %}
+    </ul>
+  </div>
+  {% endfor %}
+</section>
+
+<section class="sect">
+  <h2>References</h2>
+  <p class="prose">{{ site.data.resume.references_note | escape }}</p>
+</section>
+
+<section class="sect">
+  <h2>Full resume</h2>
+  <p class="prose">This page is generated from structured data. The
+  canonical, most up to date version of this resume is a Google Doc:
+  <a href="{{ site.data.resume.doc_url | escape }}">{{ site.data.resume.doc_url | escape }}</a></p>
+</section>
