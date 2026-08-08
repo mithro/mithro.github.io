@@ -10,15 +10,15 @@ description: "Scientific papers by Tim 'mithro' Ansell."
     h-index {{ site.data.papers.metrics.h_index }} ·
     i10-index {{ site.data.papers.metrics.i10_index }} ·
     snapshot {{ site.data.papers.metrics.snapshot_date }} ·
-    <a href="{{ site.data.papers.metrics.profile }}">Google Scholar profile</a>
+    <a href="{{ site.data.papers.metrics.profile | escape }}">Google Scholar profile</a>
   </p>
-  <ul class="papers-list">
+  <ul class="papers-list" role="list">
     {% assign papers_sorted = site.data.papers.papers | sort: "citations" | reverse %}
     {% for paper in papers_sorted %}
     <li>
-      <span class="ti">{% if paper.url %}<a href="{{ paper.url }}">{{ paper.title | escape }}</a>{% else %}{{ paper.title | escape }}{% endif %}</span>
+      <span class="ti">{% if paper.url %}<a href="{{ paper.url | escape }}">{{ paper.title | escape }}</a>{% else %}{{ paper.title | escape }}{% endif %}</span>
       <span class="au">{{ paper.authors | escape }}</span>
-      <span class="ve">{{ paper.venue | escape }} · {{ paper.year }}{% if paper.citations and paper.citations > 0 %} · <span class="ci">{{ paper.citations }} citations</span>{% endif %}</span>
+      <span class="ve">{{ paper.venue | escape }} · {{ paper.year }}{% if paper.citations and paper.citations > 0 %} · <span class="ci">{{ paper.citations }} citation{% if paper.citations != 1 %}s{% endif %}</span>{% endif %}</span>
     </li>
     {% endfor %}
   </ul>
