@@ -146,6 +146,7 @@ a { color: var(--gold); }
 
 .err { max-width: 1080px; margin: 0 auto; padding: 4rem 1.25rem; text-align: center; }
 .err h1 { color: var(--gold); font-size: 2rem; }
+.err .prose { margin: 0 auto; }
 
 @media (max-width: 760px) {
   .hero { grid-template-columns: 1fr; }
