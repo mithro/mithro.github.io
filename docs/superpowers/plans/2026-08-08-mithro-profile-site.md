@@ -311,7 +311,11 @@ a { color: var(--gold); }
 .talks-table td.ev { color: var(--muted); text-align: right; white-space: nowrap; }
 .talks-table td.ev > span { display: block; max-width: 18rem; overflow: hidden; text-overflow: ellipsis; }
 .talks-table .vid { color: var(--blue); font-size: .78rem; text-decoration: none; }
+.talks-table th { font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-align: left; font-weight: 600; padding: 0 .8rem .3rem 0; border-bottom: 1px solid var(--gold-dim); }
+.talks-table th:last-child { text-align: right; padding-right: 0; }
 .table-scroll { overflow-x: auto; }
+
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
 .gallery {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: .9rem;
@@ -414,7 +418,11 @@ edit URL when no short link exists. Rows with no year get `year: 0` —
 never null, because Liquid's `sort: "year"` fails on nil values; the
 talks page renders year 0 as "Undated". The extra YouTube-only tab
 entries (e.g. The Amp Hour interview, LCA 2020 "3 Talks for the Price
-of 1!") are included with `video` set and no `slides`.
+of 1!") are included with `video` set and no `slides`. Every entry also
+carries a derived `sort_date` (YYYY-MM-DD) for stable chronological
+sorting: the parsed `date` when its year matches the `year` field,
+`YYYY-07-01` otherwise, `0000-01-01` for undated — year-only sorting is
+unstable and cannot order within a year.
 
 - [ ] **Step 2: Validate the YAML parses and count entries**
 
@@ -698,19 +706,25 @@ description: "Tim 'mithro' Ansell — building open source silicon ecosystems: S
 
 <section class="sect">
   <h2>Recent talks</h2>
-  {% assign recent = site.data.talks | sort: "year" | reverse | slice: 0, 5 %}
-  <div class="table-scroll">
+  {% assign recent = site.data.talks | sort: "sort_date" | reverse | slice: 0, 5 %}
+  <div class="table-scroll" tabindex="0" role="region" aria-label="Recent talks">
   <table class="talks-table">
+    <caption class="visually-hidden">Five most recent talks</caption>
+    <thead>
+      <tr><th scope="col">Year</th><th scope="col">Talk</th><th scope="col">Event</th></tr>
+    </thead>
+    <tbody>
     {% for talk in recent %}
     <tr>
       <td class="yr">{{ talk.year }}</td>
       <td class="ti">
-        {% if talk.slides != "" and talk.slides %}<a href="{{ talk.slides }}">{{ talk.title | escape }}</a>{% else %}{{ talk.title | escape }}{% endif %}
-        {% if talk.video != "" and talk.video %} <a class="vid" href="{{ talk.video }}">▶ video</a>{% endif %}
+        {% if talk.slides != "" and talk.slides %}<a href="{{ talk.slides | escape }}">{{ talk.title | escape }}</a>{% else %}{{ talk.title | escape }}{% endif %}
+        {% if talk.video != "" and talk.video %} <a class="vid" href="{{ talk.video | escape }}"><span aria-hidden="true">▶</span> video</a>{% endif %}
       </td>
       <td class="ev"><span>{{ talk.event | escape }}</span></td>
     </tr>
     {% endfor %}
+    </tbody>
   </table>
   </div>
   <p class="more"><a href="{{ '/talks/' | relative_url }}">All {{ site.data.talks | size }} talks →</a></p>
@@ -718,15 +732,15 @@ description: "Tim 'mithro' Ansell — building open source silicon ecosystems: S
 
 <div class="gallery">
   <figure class="shot">
-    <img src="{{ '/assets/photos/die-scan.jpg' | relative_url }}" alt="Full die scan in gold and copper with a blue pad ring">
+    <img src="{{ '/assets/photos/die-scan.jpg' | relative_url }}" alt="Full die scan in gold and copper with a blue pad ring" loading="lazy">
     <figcaption>Die scan — GF180MCU</figcaption>
   </figure>
   <figure class="shot">
-    <img src="{{ '/assets/photos/chip-on-board.jpg' | relative_url }}" alt="Wire-bonded chips on black circuit boards">
+    <img src="{{ '/assets/photos/chip-on-board.jpg' | relative_url }}" alt="Wire-bonded chips on black circuit boards" loading="lazy">
     <figcaption>Chip on board — wafer.space Run 1</figcaption>
   </figure>
   <figure class="shot">
-    <img src="{{ '/assets/photos/die-on-finger.jpg' | relative_url }}" alt="A single silicon die resting on a fingertip">
+    <img src="{{ '/assets/photos/die-on-finger.jpg' | relative_url }}" alt="A single silicon die resting on a fingertip" loading="lazy">
     <figcaption>One die, actual size</figcaption>
   </figure>
 </div>{% endraw %}
@@ -772,25 +786,35 @@ description: "All of Tim 'mithro' Ansell's talks and presentations, 2012–prese
   recordings. Entries marked ✱ were compiled from public sources in
   August 2026 and may still be corrected.</p>
 
-  {% assign talks_sorted = site.data.talks | sort: "year" | reverse %}
+  {% assign talks_sorted = site.data.talks | sort: "sort_date" | reverse %}
   {% assign years = talks_sorted | map: "year" | uniq %}
   {% for y in years %}
   <h3 class="year-head">{% if y == 0 %}Undated{% else %}{{ y }}{% endif %}</h3>
-  <div class="table-scroll">
+  <div class="table-scroll" tabindex="0" role="region" aria-label="{% if y == 0 %}Undated talks{% else %}Talks from {{ y }}{% endif %}">
   <table class="talks-table">
+    <caption class="visually-hidden">{% if y == 0 %}Undated talks{% else %}Talks from {{ y }}{% endif %}</caption>
+    <thead>
+      <tr><th scope="col">Talk</th><th scope="col">Event · Date</th></tr>
+    </thead>
+    <tbody>
     {% for talk in talks_sorted %}{% if talk.year == y %}
     <tr>
       <td class="ti">
-        {% if talk.slides != "" and talk.slides %}<a href="{{ talk.slides }}">{{ talk.title | escape }}</a>{% else %}{{ talk.title | escape }}{% endif %}
-        {% if talk.video != "" and talk.video %} <a class="vid" href="{{ talk.video }}">▶ video</a>{% endif %}
+        {% if talk.slides != "" and talk.slides %}<a href="{{ talk.slides | escape }}">{{ talk.title | escape }}</a>{% else %}{{ talk.title | escape }}{% endif %}
+        {% if talk.video != "" and talk.video %} <a class="vid" href="{{ talk.video | escape }}"><span aria-hidden="true">▶</span> video</a>{% endif %}
         {% if talk.source == "compiled" %} <span class="compiled" title="Compiled from public sources">✱</span>{% endif %}
       </td>
       <td class="ev"><span>{{ talk.event | escape }}{% if talk.date != "" and talk.date %} · {{ talk.date }}{% endif %}</span></td>
     </tr>
     {% endif %}{% endfor %}
+    </tbody>
   </table>
   </div>
   {% endfor %}
+
+Note: `map: "year"` over the sort_date-sorted list yields years in
+correct newest-first order because sort_date always starts with the
+year; `uniq` then keeps first occurrences. Undated (year 0) groups last.
 </section>{% endraw %}
 ```
 
