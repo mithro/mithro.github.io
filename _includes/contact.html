@@ -1,0 +1,9 @@
+<ul class="contact{% if include.class %} {{ include.class }}{% endif %}">
+  <li><a href="mailto:{{ site.data.contact.email }}">{{ site.data.contact.email }}</a></li>
+  {% for phone in site.data.contact.phones %}
+  <li><a href="{{ phone.href }}">{{ phone.number }}</a></li>
+  {% endfor %}
+  {% for link in site.data.contact.links %}
+  <li><a href="{{ link.url }}" rel="me">{{ link.label }}: {{ link.handle }}</a></li>
+  {% endfor %}
+</ul>

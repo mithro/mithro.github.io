@@ -1,0 +1,27 @@
+email: me@mith.ro
+phones:
+  - label: US
+    number: "+1 774 264 8476"
+    href: "tel:+17742648476"
+  - label: AU
+    number: "+61 421 968 221"
+    href: "tel:+61421968221"
+links:
+  - label: GitHub
+    url: https://github.com/mithro
+    handle: mithro
+  - label: LinkedIn
+    url: https://www.linkedin.com/in/mithro/
+    handle: in/mithro
+  - label: Twitter
+    url: https://twitter.com/mithro
+    handle: "@mithro"
+  - label: Mastodon
+    url: https://fosstodon.org/@mithro
+    handle: "@mithro@fosstodon.org"
+  - label: Bluesky
+    url: https://bsky.app/profile/mith.ro
+    handle: "@mith.ro"
+  - label: Blog
+    url: https://blog.mithis.net/
+    handle: blog.mithis.net
