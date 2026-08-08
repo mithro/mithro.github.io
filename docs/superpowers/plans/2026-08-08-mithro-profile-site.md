@@ -804,7 +804,7 @@ description: "All of Tim 'mithro' Ansell's talks and presentations, 2012–prese
         {% if talk.video != "" and talk.video %} <a class="vid" href="{{ talk.video | escape }}"><span aria-hidden="true">▶</span> video</a>{% endif %}
         {% if talk.source == "compiled" %} <span class="compiled" title="Compiled from public sources">✱</span>{% endif %}
       </td>
-      <td class="ev"><span>{{ talk.event | escape }}{% if talk.date != "" and talk.date %} · {{ talk.date }}{% endif %}</span></td>
+      <td class="ev"><span>{% if talk.event != "" and talk.event %}{{ talk.event | escape }}{% if talk.date != "" and talk.date %} · {{ talk.date | escape }}{% endif %}{% else %}{{ talk.date | escape }}{% endif %}</span></td>
     </tr>
     {% endif %}{% endfor %}
     </tbody>
