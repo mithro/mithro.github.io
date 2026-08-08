@@ -33,10 +33,10 @@ description: "Tim 'mithro' Ansell — building open source silicon ecosystems: S
     <tr>
       <td class="yr">{{ talk.year }}</td>
       <td class="ti">
-        {% if talk.slides != "" and talk.slides %}<a href="{{ talk.slides }}">{{ talk.title }}</a>{% else %}{{ talk.title }}{% endif %}
+        {% if talk.slides != "" and talk.slides %}<a href="{{ talk.slides }}">{{ talk.title | escape }}</a>{% else %}{{ talk.title | escape }}{% endif %}
         {% if talk.video != "" and talk.video %} <a class="vid" href="{{ talk.video }}">▶ video</a>{% endif %}
       </td>
-      <td class="ev"><span>{{ talk.event }}</span></td>
+      <td class="ev"><span>{{ talk.event | escape }}</span></td>
     </tr>
     {% endfor %}
   </table>
