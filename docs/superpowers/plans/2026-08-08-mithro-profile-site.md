@@ -705,10 +705,10 @@ description: "Tim 'mithro' Ansell — building open source silicon ecosystems: S
     <tr>
       <td class="yr">{{ talk.year }}</td>
       <td class="ti">
-        {% if talk.slides != "" and talk.slides %}<a href="{{ talk.slides }}">{{ talk.title }}</a>{% else %}{{ talk.title }}{% endif %}
+        {% if talk.slides != "" and talk.slides %}<a href="{{ talk.slides }}">{{ talk.title | escape }}</a>{% else %}{{ talk.title | escape }}{% endif %}
         {% if talk.video != "" and talk.video %} <a class="vid" href="{{ talk.video }}">▶ video</a>{% endif %}
       </td>
-      <td class="ev"><span>{{ talk.event }}</span></td>
+      <td class="ev"><span>{{ talk.event | escape }}</span></td>
     </tr>
     {% endfor %}
   </table>
@@ -781,11 +781,11 @@ description: "All of Tim 'mithro' Ansell's talks and presentations, 2012–prese
     {% for talk in talks_sorted %}{% if talk.year == y %}
     <tr>
       <td class="ti">
-        {% if talk.slides != "" and talk.slides %}<a href="{{ talk.slides }}">{{ talk.title }}</a>{% else %}{{ talk.title }}{% endif %}
+        {% if talk.slides != "" and talk.slides %}<a href="{{ talk.slides }}">{{ talk.title | escape }}</a>{% else %}{{ talk.title | escape }}{% endif %}
         {% if talk.video != "" and talk.video %} <a class="vid" href="{{ talk.video }}">▶ video</a>{% endif %}
         {% if talk.source == "compiled" %} <span class="compiled" title="Compiled from public sources">✱</span>{% endif %}
       </td>
-      <td class="ev"><span>{{ talk.event }}{% if talk.date != "" and talk.date %} · {{ talk.date }}{% endif %}</span></td>
+      <td class="ev"><span>{{ talk.event | escape }}{% if talk.date != "" and talk.date %} · {{ talk.date }}{% endif %}</span></td>
     </tr>
     {% endif %}{% endfor %}
   </table>
@@ -845,9 +845,9 @@ description: "Scientific papers by Tim 'mithro' Ansell."
     {% assign papers_sorted = site.data.papers.papers | sort: "citations" | reverse %}
     {% for paper in papers_sorted %}
     <li>
-      <span class="ti">{% if paper.url %}<a href="{{ paper.url }}">{{ paper.title }}</a>{% else %}{{ paper.title }}{% endif %}</span>
-      <span class="au">{{ paper.authors }}</span>
-      <span class="ve">{{ paper.venue }} · {{ paper.year }}{% if paper.citations and paper.citations > 0 %} · <span class="ci">{{ paper.citations }} citations</span>{% endif %}</span>
+      <span class="ti">{% if paper.url %}<a href="{{ paper.url }}">{{ paper.title | escape }}</a>{% else %}{{ paper.title | escape }}{% endif %}</span>
+      <span class="au">{{ paper.authors | escape }}</span>
+      <span class="ve">{{ paper.venue | escape }} · {{ paper.year }}{% if paper.citations and paper.citations > 0 %} · <span class="ci">{{ paper.citations }} citations</span>{% endif %}</span>
     </li>
     {% endfor %}
   </ul>
