@@ -186,10 +186,10 @@ links:
   <header class="topline">
     <a class="brand" href="{{ '/' | relative_url }}">mith.ro</a>
     <nav>
-      <a href="{{ '/' | relative_url }}"{% if page.url == '/' %} class="on"{% endif %}>About</a>
-      <a href="{{ '/talks/' | relative_url }}"{% if page.url contains '/talks/' %} class="on"{% endif %}>Talks</a>
-      <a href="{{ '/papers/' | relative_url }}"{% if page.url contains '/papers/' %} class="on"{% endif %}>Papers</a>
-      <a href="{{ '/resume/' | relative_url }}"{% if page.url contains '/resume/' %} class="on"{% endif %}>Resume</a>
+      <a href="{{ '/' | relative_url }}"{% if page.url == '/' %} class="on" aria-current="page"{% endif %}>About</a>
+      <a href="{{ '/talks/' | relative_url }}"{% if page.url contains '/talks/' %} class="on" aria-current="page"{% endif %}>Talks</a>
+      <a href="{{ '/papers/' | relative_url }}"{% if page.url contains '/papers/' %} class="on" aria-current="page"{% endif %}>Papers</a>
+      <a href="{{ '/resume/' | relative_url }}"{% if page.url contains '/resume/' %} class="on" aria-current="page"{% endif %}>Resume</a>
     </nav>
   </header>
   <main>
@@ -308,7 +308,8 @@ a { color: var(--gold); }
 .talks-table td.yr { color: var(--muted); white-space: nowrap; width: 4.5rem; font-variant-numeric: tabular-nums; }
 .talks-table td.ti a { color: var(--silk); text-decoration: none; border-bottom: 1px solid var(--gold-dim); }
 .talks-table td.ti a:hover, .talks-table td.ti a:focus-visible { color: var(--gold); }
-.talks-table td.ev { color: var(--muted); text-align: right; white-space: nowrap; max-width: 18rem; overflow: hidden; text-overflow: ellipsis; }
+.talks-table td.ev { color: var(--muted); text-align: right; white-space: nowrap; }
+.talks-table td.ev > span { display: block; max-width: 18rem; overflow: hidden; text-overflow: ellipsis; }
 .talks-table .vid { color: var(--blue); font-size: .78rem; text-decoration: none; }
 .table-scroll { overflow-x: auto; }
 
@@ -331,7 +332,7 @@ a { color: var(--gold); }
 }
 .footer .contact-inline {
   max-width: 1080px; margin: 0 auto; padding: 1rem 1.25rem 1.4rem;
-  font-size: .72rem; letter-spacing: .08em; text-transform: uppercase;
+  font-size: .72rem; letter-spacing: .04em;
 }
 
 .prose { max-width: 72ch; font-family: var(--sans); font-size: .95rem; color: #c4beb2; }
@@ -707,7 +708,7 @@ description: "Tim 'mithro' Ansell — building open source silicon ecosystems: S
         {% if talk.slides != "" and talk.slides %}<a href="{{ talk.slides }}">{{ talk.title }}</a>{% else %}{{ talk.title }}{% endif %}
         {% if talk.video != "" and talk.video %} <a class="vid" href="{{ talk.video }}">▶ video</a>{% endif %}
       </td>
-      <td class="ev">{{ talk.event }}</td>
+      <td class="ev"><span>{{ talk.event }}</span></td>
     </tr>
     {% endfor %}
   </table>
@@ -784,7 +785,7 @@ description: "All of Tim 'mithro' Ansell's talks and presentations, 2012–prese
         {% if talk.video != "" and talk.video %} <a class="vid" href="{{ talk.video }}">▶ video</a>{% endif %}
         {% if talk.source == "compiled" %} <span class="compiled" title="Compiled from public sources">✱</span>{% endif %}
       </td>
-      <td class="ev">{{ talk.event }}{% if talk.date != "" and talk.date %} · {{ talk.date }}{% endif %}</td>
+      <td class="ev"><span>{{ talk.event }}{% if talk.date != "" and talk.date %} · {{ talk.date }}{% endif %}</span></td>
     </tr>
     {% endif %}{% endfor %}
   </table>
