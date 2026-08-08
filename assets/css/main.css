@@ -158,3 +158,6 @@ a { color: var(--gold); }
 @media (prefers-reduced-motion: no-preference) {
   a { transition: color .12s ease; }
 }
+
+.year-head { font-family: var(--mono); color: var(--silk); font-size: 1rem; margin: 1.6rem 0 .4rem; }
+.compiled { color: var(--muted); }

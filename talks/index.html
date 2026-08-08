@@ -1,0 +1,37 @@
+---
+layout: default
+title: Talks
+description: "All of Tim 'mithro' Ansell's talks and presentations, 2012–present."
+---
+<section class="sect">
+  <h2>Talks &amp; presentations</h2>
+  <p class="prose">Slides links go to the deck for each talk; ▶ links go to
+  recordings. Entries marked ✱ were compiled from public sources in
+  August 2026 and may still be corrected.</p>
+
+  {% assign talks_sorted = site.data.talks | sort: "sort_date" | reverse %}
+  {% assign years = talks_sorted | map: "year" | uniq %}
+  {% for y in years %}
+  <h3 class="year-head">{% if y == 0 %}Undated{% else %}{{ y }}{% endif %}</h3>
+  <div class="table-scroll" tabindex="0" role="region" aria-label="{% if y == 0 %}Undated talks{% else %}Talks from {{ y }}{% endif %}">
+  <table class="talks-table">
+    <caption class="visually-hidden">{% if y == 0 %}Undated talks{% else %}Talks from {{ y }}{% endif %}</caption>
+    <thead>
+      <tr><th scope="col">Talk</th><th scope="col">Event · Date</th></tr>
+    </thead>
+    <tbody>
+    {% for talk in talks_sorted %}{% if talk.year == y %}
+    <tr>
+      <td class="ti">
+        {% if talk.slides != "" and talk.slides %}<a href="{{ talk.slides | escape }}">{{ talk.title | escape }}</a>{% else %}{{ talk.title | escape }}{% endif %}
+        {% if talk.video != "" and talk.video %} <a class="vid" href="{{ talk.video | escape }}"><span aria-hidden="true">▶</span> video</a>{% endif %}
+        {% if talk.source == "compiled" %} <span class="compiled" title="Compiled from public sources">✱</span>{% endif %}
+      </td>
+      <td class="ev"><span>{{ talk.event | escape }}{% if talk.date != "" and talk.date %} · {{ talk.date }}{% endif %}</span></td>
+    </tr>
+    {% endif %}{% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% endfor %}
+</section>
