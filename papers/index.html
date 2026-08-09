@@ -12,13 +12,17 @@ description: "Scientific papers by Tim 'mithro' Ansell."
     snapshot {{ site.data.papers.metrics.snapshot_date }} ·
     <a href="{{ site.data.papers.metrics.profile | escape }}">Google Scholar profile</a>
   </p>
+  {% assign years = site.data.papers.papers | map: "year" | uniq %}
+  {% for y in years %}
+  <h3 class="year-head">{{ y }}</h3>
   <ul class="papers-list" role="list">
-    {% for paper in site.data.papers.papers %}
+    {% for paper in site.data.papers.papers %}{% if paper.year == y %}
     <li>
       <span class="ti">{% if paper.url %}<a href="{{ paper.url | escape }}">{{ paper.title | escape }}</a>{% else %}{{ paper.title | escape }}{% endif %}</span>
       <span class="au">{{ paper.authors | escape }}</span>
-      <span class="ve">{{ paper.venue | escape }} · {{ paper.year }}{% if paper.citations and paper.citations > 0 %} · <span class="ci">{{ paper.citations }} citation{% if paper.citations != 1 %}s{% endif %}</span>{% endif %}</span>
+      <span class="ve">{{ paper.venue | escape }}{% if paper.citations and paper.citations > 0 %} · <span class="ci">{{ paper.citations }} citation{% if paper.citations != 1 %}s{% endif %}</span>{% endif %}</span>
     </li>
-    {% endfor %}
+    {% endif %}{% endfor %}
   </ul>
+  {% endfor %}
 </section>

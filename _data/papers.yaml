@@ -67,7 +67,7 @@ papers:
   year: 2022
   citations: 27
   url: https://ieeexplore.ieee.org/abstract/document/9816083
-- title: 'CFU Playground: Full-stack open-source framework for tiny machine learning (tinyML) acceleration on FPGAs (arXiv preprint)'
+- title: 'CFU Playground: Full-stack open-source framework for tiny machine learning (tinyML) acceleration on FPGAs'
   authors: S Prakash, T Callahan, J Bushagour, C Banbury, AV Green, P Warden, et al.
   venue: arXiv preprint arXiv:2201.01863
   year: 2022
