@@ -149,7 +149,8 @@ a { color: var(--gold); }
 .prose.meta, .prose .meta { color: var(--muted); font-family: var(--mono); font-size: .78rem; }
 .prose.meta { max-width: none; }
 
-.papers-list { list-style: none; margin: 0; padding: 0; }
+.papers-list { list-style: none; margin: 0; padding: 0; max-width: 74ch; }
+.papers-list li:first-child { border-top: 0; }
 .papers-list li { border-top: 1px solid var(--line); padding: .8rem 0; }
 .papers-list .ti a { color: var(--silk); text-decoration: none; border-bottom: 1px solid var(--gold-dim); }
 .papers-list .ti a:hover, .papers-list .ti a:focus-visible { color: var(--gold); }
