@@ -19,13 +19,13 @@ description: "Tim 'mithro' Ansell — building open source silicon ecosystems: S
 </section>
 
 <dl class="spec">
-  <div><dt>Talks</dt><dd>{{ site.data.talks | size }}</dd></div>
-  <div><dt>Papers</dt><dd>{{ site.data.papers.papers | size }}</dd></div>
-  <div><dt>Citations</dt><dd>{{ site.data.papers.metrics.citations }}</dd></div>
+  <div><dt><span aria-hidden="true">🎤</span> Talks</dt><dd>{{ site.data.talks | size }}</dd></div>
+  <div><dt><span aria-hidden="true">📄</span> Papers</dt><dd>{{ site.data.papers.papers | size }}</dd></div>
+  <div><dt><span aria-hidden="true">🎓</span> Citations</dt><dd>{{ site.data.papers.metrics.citations }}</dd></div>
 </dl>
 
 <section class="sect">
-  <h2>Recent talks</h2>
+  <h2><span aria-hidden="true">🎤</span> Recent talks</h2>
   {% assign recent = site.data.talks | sort: "sort_date" | reverse | slice: 0, 5 %}
   <div class="table-scroll" tabindex="0" role="region" aria-label="Recent talks">
   <table class="talks-table">
