@@ -119,28 +119,23 @@ Paste the CSV rows in, then this file can be deleted.
 
 ## Short-link redirects
 
-`_data/shortlinks.yaml` is the fetched-and-reviewed list of bit.ly
-short links (see `scripts/fetch_bitly.py` above). Each entry has an
-`include` flag: `true` means it should get a redirect stub on mith.ro
-(e.g. `mith.ro/tim-silicon-2024/` → the long URL); `false` means it's
-excluded, usually because it isn't yet confirmed to be referenced from
-a public source and needs Tim's review before being published under
-this domain.
+The source of truth for which short links are published is the private
+"mith.ro short links" Google Sheet
+(docs.google.com/spreadsheets/d/1asrDy1-BwPuOSLjAM79Voz48lmDTeRBF3gWuOmRT2a8):
+one row per bit.ly link with a `Visibility` column — `public` rows get
+a redirect stub on mith.ro (e.g. `mith.ro/tim-silicon-2024/` → the
+long URL), `private` rows do not.
 
-Intended workflow once the review is done:
+Workflow after editing Visibility in the sheet:
 
-1. Tim reviews `_data/shortlinks.yaml`, flips `include` to `true` for
-   any additional keywords that are safe to publish (or `false` to
-   drop any that shouldn't be), and commits the updated YAML.
-2. Run `scripts/gen_redirect_pages.py` (added alongside the review —
-   not present until that step lands) to generate one redirect page
-   per included entry under `redirects/`, using the `jekyll-redirect-from`
-   plugin (already in the `Gemfile`/`_config.yml`).
+1. Ask Claude to sync `_data/shortlinks.yaml` from the sheet (the YAML
+   mirrors it; `include: true` == `public`). Target URLs still come
+   from the bit.ly API (`scripts/fetch_bitly.py`) — the sheet only
+   governs visibility.
+2. Run `scripts/gen_redirect_pages.py` to regenerate `redirects/`
+   (one page per public entry, rendered by `jekyll-redirect-from`).
 3. Rebuild and verify (see "Verification" below), then commit
    `redirects/` and push.
-
-As of this checkout, `redirects/` does not exist yet — the review in
-step 1 is still pending, so nothing has been generated.
 
 ## Verification
 
