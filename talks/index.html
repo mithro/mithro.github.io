@@ -6,8 +6,7 @@ description: "All of Tim 'mithro' Ansell's talks and presentations, 2012–prese
 <section class="sect">
   <h2>Talks &amp; presentations</h2>
   <p class="prose">Slides links go to the deck for each talk; ▶ links go to
-  recordings. Entries marked ✱ were compiled from public sources in
-  August 2026 and may still be corrected.</p>
+  recordings.</p>
 
   {% assign talks_sorted = site.data.talks | sort: "sort_date" | reverse %}
   {% assign years = talks_sorted | map: "year" | uniq %}
@@ -25,7 +24,6 @@ description: "All of Tim 'mithro' Ansell's talks and presentations, 2012–prese
       <td class="ti">
         {% if talk.slides != "" and talk.slides %}<a href="{{ talk.slides | escape }}">{{ talk.title | escape }}</a>{% else %}{{ talk.title | escape }}{% endif %}
         {% if talk.video != "" and talk.video %} <a class="vid" href="{{ talk.video | escape }}"><span aria-hidden="true">▶</span> video</a>{% endif %}
-        {% if talk.source == "compiled" %} <span class="compiled" title="Compiled from public sources">✱</span>{% endif %}
       </td>
       <td class="ev"><span>{% if talk.event != "" and talk.event %}{{ talk.event | escape }}{% if talk.date != "" and talk.date %} · {{ talk.date | escape }}{% endif %}{% else %}{{ talk.date | escape }}{% endif %}</span></td>
     </tr>
