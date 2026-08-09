@@ -1017,6 +1017,7 @@
   video: https://www.youtube.com/watch?v=t6Z0_Krhshc
   source: compiled
   sort_date: '2026-07-01'
+  slides: https://docs.google.com/presentation/d/1rxkuZUQ4PWsyyaC8cx8P8C96ZEm0XDM42W2A2Rgo3rE
 - title: A brain dump on open source silicon (FPGAs, ASICs and similar)
   event: Lawrence Berkeley National Laboratory (LBNL) seminar
   year: 2025
@@ -1030,6 +1031,7 @@
   date: 3 May 2025
   source: compiled
   sort_date: '2025-05-03'
+  slides: https://docs.google.com/presentation/d/1_pczLov3qvqhZhzFPIERLUElKfsyZdDfAlBjyz_e1G8
 - title: So you wanna make a chip? Open Source Silicon
   event: Flashbots_X, San Francisco
   year: 2025
@@ -1081,3 +1083,45 @@
   slides: https://bit.ly/open-pipe-talk
   source: compiled
   sort_date: '2023-07-01'
+- title: wafer.space - COSCUP 2026
+  event: COSCUP 2026
+  year: 2026
+  date: ''
+  slides: https://docs.google.com/presentation/d/1OwQk496IsRp-9S61GmK5Ew7lkc1Qf1SRQ3MvaJn9Fsc
+  source: drive
+  sort_date: '2026-08-08'
+- title: wafer.space - Hack-A-Day Europe 2026
+  event: Hackaday Europe 2026
+  year: 2026
+  date: ''
+  slides: https://docs.google.com/presentation/d/19B_h0WY9UAcuUAcgJF6T_YBWIk7LCmVd9yK6ZmSfHk4
+  source: drive
+  sort_date: '2026-05-16'
+- title: wafer.space - Silicon Sprint AUC 2026
+  event: Silicon Sprint AUC 2026
+  year: 2026
+  date: ''
+  slides: https://docs.google.com/presentation/d/1PF5bVWQY2wML1B6cTRs9q0EVngTXpYYBdOQMwuvrHx4
+  source: drive
+  sort_date: '2026-04-06'
+- title: wafer.space - Down Underflow 2026
+  event: Down Underflow 2026
+  year: 2026
+  date: ''
+  slides: https://docs.google.com/presentation/d/1rm-qfeo2sq3mF7M_VMgdgMnmqoOVOsmlqGDwuwcfNG0
+  source: drive
+  sort_date: '2026-02-27'
+- title: wafer.space - Hackware 2025
+  event: Hackware hardware meetup, Singapore
+  year: 2025
+  date: ''
+  slides: https://docs.google.com/presentation/d/1w7wblALt7JnNUvFwazbV_eICCFPlBI-f8cd3xUwHwZM
+  source: drive
+  sort_date: '2025-10-09'
+- title: ESSCIRC workshop 2022 presentation
+  event: ESSCIRC ESSDERC 2022
+  year: 2022
+  date: ''
+  slides: https://docs.google.com/presentation/d/17PmLMICwDsupvkcZhJs-43lX7KdScTgKq_0T_QwlIo4
+  source: drive
+  sort_date: '2022-09-21'
