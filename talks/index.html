@@ -42,7 +42,7 @@ description: "All of Tim 'mithro' Ansell's talks and presentations, 2012–prese
           {%- else %} <a class="vid" href="{{ talk.video | escape }}"><span aria-hidden="true">▶</span> video</a>{% endif -%}
         {%- endif %}
       </td>
-      <td class="ev"><span>{% if talk.event != "" and talk.event %}{{ talk.event | escape }}{% if talk.date != "" and talk.date %} · {{ talk.date | escape }}{% endif %}{% elsif talk.date != "" and talk.date %}{{ talk.date | escape }}{% else %}<span class="ev-none" aria-hidden="true">—</span>{% endif %}</span></td>
+      <td class="ev"><span>{% if talk.event != "" and talk.event %}{{ talk.event | escape }}{% if talk.date != "" and talk.date %} · <span class="nowrap">{{ talk.date | escape }}</span>{% endif %}{% elsif talk.date != "" and talk.date %}<span class="nowrap">{{ talk.date | escape }}</span>{% else %}<span class="ev-none" aria-hidden="true">—</span>{% endif %}</span></td>
     </tr>
     {% endif %}{% endfor %}
     </tbody>

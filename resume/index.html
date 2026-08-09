@@ -26,7 +26,7 @@ description: "Tim 'mithro' Ansell's resume — skills, achievements, employment 
   {% for a in site.data.resume.achievements %}
   <div class="prose">
     <h3>{{ a.title | escape }}</h3>
-    <p class="meta">{{ a.role | escape }} · {{ a.years | escape }}</p>
+    <p class="meta">{{ a.role | escape }} · <span class="nowrap">{{ a.years | escape }}</span></p>
     <p>{{ a.detail | escape }}</p>
     {% if a.links %}
     <p class="meta">
@@ -41,7 +41,7 @@ description: "Tim 'mithro' Ansell's resume — skills, achievements, employment 
   <h2>Employment</h2>
   {% for e in site.data.resume.employment %}
   <div class="prose">
-    <h3>{{ e.org | escape }} · {{ e.years | escape }}</h3>
+    <h3>{{ e.org | escape }} · <span class="nowrap">{{ e.years | escape }}</span></h3>
     <p class="meta">{{ e.role | escape }} · {{ e.location | escape }}</p>
   </div>
   {% endfor %}
@@ -54,7 +54,7 @@ description: "Tim 'mithro' Ansell's resume — skills, achievements, employment 
     {% for p in site.data.resume.projects %}
     <li>
       <span class="ti">{% if p.url %}<a href="{{ p.url | escape }}">{{ p.name | escape }}</a>{% else %}{{ p.name | escape }}{% endif %}</span>
-      <span class="ve">{{ p.years | escape }}</span>
+      <span class="ve nowrap">{{ p.years | escape }}</span>
     </li>
     {% endfor %}
   </ul>
