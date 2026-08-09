@@ -10,18 +10,24 @@ links:
   - label: GitHub
     url: https://github.com/mithro
     handle: mithro
+    icon: github
   - label: LinkedIn
     url: https://www.linkedin.com/in/mithro/
     handle: in/mithro
+    icon: linkedin
   - label: Twitter
     url: https://twitter.com/mithro
     handle: "@mithro"
+    icon: x
   - label: Mastodon
     url: https://fosstodon.org/@mithro
     handle: "@mithro@fosstodon.org"
+    icon: mastodon
   - label: Bluesky
     url: https://bsky.app/profile/mith.ro
     handle: "@mith.ro"
+    icon: bluesky
   - label: Blog
     url: https://blog.mithis.net/
     handle: blog.mithis.net
+    icon: wordpress
