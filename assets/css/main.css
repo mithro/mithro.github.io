@@ -105,6 +105,18 @@ a { color: var(--gold); }
 .talks-table td.ev { color: var(--muted); text-align: right; }
 .talks-table td.ev > span { display: block; max-width: 28rem; margin-left: auto; }
 .talks-table .vid { color: var(--blue); font-size: .78rem; text-decoration: none; }
+.vid-embed { display: inline-block; }
+.vid-embed summary {
+  color: var(--blue); font-size: .78rem; cursor: pointer; list-style: none;
+  display: inline; user-select: none;
+}
+.vid-embed summary::-webkit-details-marker { display: none; }
+.vid-embed summary:hover, .vid-embed summary:focus-visible { color: var(--gold); }
+.vid-embed[open] { display: block; }
+.vid-embed .vid-frame iframe {
+  display: block; width: 100%; max-width: 560px; aspect-ratio: 16 / 9;
+  border: 1px solid var(--line); border-radius: 4px; margin: .55rem 0 .3rem;
+}
 .table-scroll { overflow-x: auto; }
 
 .gallery {
