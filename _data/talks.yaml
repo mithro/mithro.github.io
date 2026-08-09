@@ -311,12 +311,12 @@
   sort_date: '0000-01-01'
 - title: Love Rusty 3K - LCA2018 FPGA Project Miniconf
   event: LCA2018
-  year: 0
-  date: ''
+  year: 2018
+  date: 23 Jan 2018
   slides: https://docs.google.com/presentation/d/1Lw4l4uZKTiymLV6uO-w0zHtxZ7iaUEH0GTLcmeFnp1w
   slides_edit: https://docs.google.com/presentation/d/1Lw4l4uZKTiymLV6uO-w0zHtxZ7iaUEH0GTLcmeFnp1w
   source: sheet
-  sort_date: '0000-01-01'
+  sort_date: '2018-01-23'
 - title: CHIPS Alliance Spring Workshop - Fully Open Silicon Down to the Transistor - Tim Ansell, Google
   event: CHIPS Alliance Spring Workshop
   year: 2021
@@ -415,23 +415,23 @@
 - title: 'Eating Rabbits: A guide to using Python to conquer FPGA video systems'
   event: Teardown
   year: 2018
-  date: 16 May 2018
+  date: 12 May 2018
   slides: https://docs.google.com/presentation/d/1C6OVyv6tFeKrRPNCX0WCjVNiWqTL1vgzUcFECrUz-B8
   slides_edit: https://docs.google.com/presentation/d/1C6OVyv6tFeKrRPNCX0WCjVNiWqTL1vgzUcFECrUz-B8
   video: https://youtu.be/181-roBM0tI
   video_title: 'Eating Rabbits: A guide to using Python to conquer FPGA video systems'
   source: sheet
-  sort_date: '2018-05-16'
+  sort_date: '2018-05-12'
 - title: Fomu - RISC-V Summit 2019
   event: RISC-V Summit 2019
   year: 2019
-  date: 27 Feb 2020
+  date: 12 Dec 2019
   slides: https://docs.google.com/presentation/d/1ea_FEC7TAWe5bfHVYYN6BFrdF34jELIfh7QgQKg0Ndc
   slides_edit: https://docs.google.com/presentation/d/1ea_FEC7TAWe5bfHVYYN6BFrdF34jELIfh7QgQKg0Ndc
   video: https://youtu.be/bNCH-AK1UPw
   video_title: 'RISC-V Summit 2019: 72 Fomu Python, RISC V, and FPGA in your USB Port'
   source: sheet
-  sort_date: '2019-07-01'
+  sort_date: '2019-12-12'
 - title: SymbiFlow - Xilinx Series 7 FPGAs now have a fully Open Source toolchain! - HAD2019
   event: HAD2019
   year: 2019
@@ -445,37 +445,37 @@
 - title: OrConf19 - SymbiFlow Combined Slides
   event: OrConf19
   year: 2019
-  date: ''
+  date: 28 Sep 2019
   slides: https://docs.google.com/presentation/d/11diLJ7RY9z9h9UPnWGvczLXCcom9a8loNPUZsbzsHBc
   slides_edit: https://docs.google.com/presentation/d/11diLJ7RY9z9h9UPnWGvczLXCcom9a8loNPUZsbzsHBc
   source: sheet
-  sort_date: '2019-07-01'
+  sort_date: '2019-09-28'
 - title: OrConf19 - v2x - Generation of VPR Architecture from Verilog Files
   event: OrConf19
   year: 2019
-  date: ''
+  date: 28 Sep 2019
   slides: https://docs.google.com/presentation/d/1KKjIJHskaowFeJR7Llllrg0Dua_DpE9BIdZTlpoVTRk
   slides_edit: https://docs.google.com/presentation/d/1KKjIJHskaowFeJR7Llllrg0Dua_DpE9BIdZTlpoVTRk
   source: sheet
-  sort_date: '2019-07-01'
+  sort_date: '2019-09-28'
 - title: OrConf19 - Status of Artix 7 support in SymbiFlow
   event: OrConf19
   year: 2019
-  date: 12 Oct 2019
+  date: 28 Sep 2019
   slides: https://docs.google.com/presentation/d/1EBpThE64ci4nNbQaO5n_Uc7QmDGpcb1Rm-iNAyd7fUw
   slides_edit: https://docs.google.com/presentation/d/1EBpThE64ci4nNbQaO5n_Uc7QmDGpcb1Rm-iNAyd7fUw
   video: https://youtu.be/V7jdYMOC9VM
   video_title: Status of Xilinx Artix 7 support in Symbiflow - Tim 'mithro' Ansell - ORConf 2019
   source: sheet
-  sort_date: '2019-10-12'
+  sort_date: '2019-09-28'
 - title: OrConf19 - SystemVerilog Test Suite
   event: ''
   year: 2019
-  date: ''
+  date: 28 Sep 2019
   slides: https://docs.google.com/presentation/d/1ytlKMWrt4XYk-JVxCn1pN4bAojBsT1oWuKu3KRJtbZU
   slides_edit: https://docs.google.com/presentation/d/1ytlKMWrt4XYk-JVxCn1pN4bAojBsT1oWuKu3KRJtbZU
   source: sheet
-  sort_date: '2019-07-01'
+  sort_date: '2019-09-28'
 - title: OrConf - Yosys Synthesis Improvements
   event: ''
   year: 0
@@ -495,35 +495,35 @@
 - title: Tim has too many projects - PyOhio19 Version
   event: PyOhio19
   year: 2019
-  date: ''
+  date: 27 Jul 2019
   slides: https://j.mp/timtoomany-pyo19
   slides_edit: https://docs.google.com/presentation/d/1LNR3npXeVYcA4HczyxQ2G53Ell2FlMzVJuKFCCeTtsU
   source: sheet
-  sort_date: '2019-07-01'
+  sort_date: '2019-07-27'
 - title: ERI Summit POSH/IDEA - Open Source 102
   event: DARPA ERI Summit
-  year: 0
-  date: ''
+  year: 2019
+  date: 17 Jul 2019
   slides: https://j.mp/eri19-foss102
   slides_edit: https://docs.google.com/presentation/d/1gmXXHhAS6aSrZ2nvwqmAKM2e25FnsbgHS1u--dcp0rk
   source: sheet
-  sort_date: '0000-01-01'
+  sort_date: '2019-07-17'
 - title: ERI Summit POSH/IDEA - Open Source 101
   event: DARPA ERI Summit
-  year: 0
-  date: ''
+  year: 2019
+  date: 17 Jul 2019
   slides: https://j.mp/eri19-foss101
   slides_edit: https://docs.google.com/presentation/d/1el3P-xodUHPe7rRRj8A0U_syQJZ0JiIZMBw3WWl1als
   source: sheet
-  sort_date: '0000-01-01'
+  sort_date: '2019-07-17'
 - title: I'm Tomu - Microprocessor which fits *inside* your USB slot (33C3 Version) -- Original?
   event: 33C3
-  year: 0
-  date: ''
+  year: 2016
+  date: 29 Dec 2016
   slides: https://docs.google.com/presentation/d/12oJ6TG7MS-XbXDMtXsnExupP8yQ20YIIXUq6H64rTFs
   slides_edit: https://docs.google.com/presentation/d/12oJ6TG7MS-XbXDMtXsnExupP8yQ20YIIXUq6H64rTFs
   source: sheet
-  sort_date: '0000-01-01'
+  sort_date: '2016-12-29'
 - title: FuPy - Supported Boards
   event: ''
   year: 0
@@ -541,15 +541,15 @@
   source: sheet
   sort_date: '0000-01-01'
 - title: Tim has too many projects - LatchUp18 Version
-  event: LatchUp18
-  year: 2018
+  event: Latch-Up 2019
+  year: 2019
   date: 5 May 2019
   slides: https://docs.google.com/presentation/d/1BqQDv7261i9DfhcXhXZVtFqAFz9sO72qg0QGKSCrroI
   slides_edit: https://docs.google.com/presentation/d/1BqQDv7261i9DfhcXhXZVtFqAFz9sO72qg0QGKSCrroI
   video: https://youtu.be/v7WrTmexod0
   video_title: Tim has to many projects - LatchUp Edition
   source: sheet
-  sort_date: '2018-07-01'
+  sort_date: '2019-05-05'
 - title: SymbiFlow - Finally the GCC of FPGAs! - 35c3
   event: 35C3
   year: 2018
@@ -563,11 +563,11 @@
 - title: Cool and awesome projects you should work on! (aka Tim has too many projects) - LCA2017 Version
   event: LCA2017
   year: 2017
-  date: ''
+  date: 20 Jan 2017
   slides: https://docs.google.com/presentation/d/1wM-dOx_KsP71fZYps2aXOUPeLxYSfxQNk14m6N-CKnc
   slides_edit: https://docs.google.com/presentation/d/1wM-dOx_KsP71fZYps2aXOUPeLxYSfxQNk14m6N-CKnc
   source: sheet
-  sort_date: '2017-07-01'
+  sort_date: '2017-01-20'
 - title: SymbiFlow - Finally the GCC of FPGAs! - LCA2019
   event: LCA2019
   year: 2019
@@ -581,21 +581,21 @@
 - title: I'm Tomu - Microprocessor which fits *inside* your USB slot (LCA2019)
   event: LCA2019
   year: 2019
-  date: ''
+  date: 21 Jan 2019
   slides: https://docs.google.com/presentation/d/16cimTC7QCa0OUeBbc7PX8p_nroaZcObBp6hROyasmR4
   slides_edit: https://docs.google.com/presentation/d/16cimTC7QCa0OUeBbc7PX8p_nroaZcObBp6hROyasmR4
   source: sheet
-  sort_date: '2019-07-01'
+  sort_date: '2019-01-21'
 - title: I'm Tomu - Microprocessor which fits *inside* your USB slot (HackADay SuperCon 2018)
   event: HackADay SuperCon 2018
   year: 2018
-  date: 25 Dec 2018
+  date: 3 Nov 2018
   slides: https://docs.google.com/presentation/d/1f3kR6iMGiKx3irbp2zQhVYaf9nDm7wP0OUxZTF-p1is
   slides_edit: https://docs.google.com/presentation/d/1f3kR6iMGiKx3irbp2zQhVYaf9nDm7wP0OUxZTF-p1is
   video: https://youtu.be/ZOMLzuNyWac
   video_title: 'Hackaday Supercon - Tim Ansell : An ARM MicroProcessor or FPGA in your USB port!'
   source: sheet
-  sort_date: '2018-12-25'
+  sort_date: '2018-11-03'
 - title: Snakes and Rabbits - How CCC shaped an open hardware success
   event: 35C3
   year: 2018
@@ -609,13 +609,13 @@
 - title: An update on SymbiFlow - a multiplatform FPGA project
   event: OrConf 2018
   year: 2018
-  date: 7 Nov 2018
+  date: 22 Sep 2018
   slides: https://docs.google.com/presentation/d/1GZrZCDr59AObbs6rtPOdraIlhRz1YNychQ8M0NbOQlQ
   slides_edit: https://docs.google.com/presentation/d/1GZrZCDr59AObbs6rtPOdraIlhRz1YNychQ8M0NbOQlQ
   video: https://youtu.be/CI1lpbt2Hz8
   video_title: An update on SymbiFlow - a multiplatform FPGA project - Tim Ansell - ORConf 2018
   source: sheet
-  sort_date: '2018-11-07'
+  sort_date: '2018-09-22'
 - title: I'm Fomu - An FPGA which fits *inside* your USB slot details
   event: ''
   year: 0
@@ -635,13 +635,13 @@
 - title: Tim has too many projects - CCCamp15 Version
   event: CCCamp15
   year: 2015
-  date: 16 Aug 2015
+  date: 14 Aug 2015
   slides: https://docs.google.com/presentation/d/1565UnU3ApvMtouKnc6jfM7NSn1hG1t4im9B7-5GWSso
   slides_edit: https://docs.google.com/presentation/d/1565UnU3ApvMtouKnc6jfM7NSn1hG1t4im9B7-5GWSso
   video: https://youtu.be/eR4i-XJDGCM
   video_title: Tim has too many projects - CCCamp15 Lightning Talks
   source: sheet
-  sort_date: '2015-08-16'
+  sort_date: '2015-08-14'
 - title: FuPy - FPGAs and MicroPython! (SF Python)
   event: SF Python
   year: 0
@@ -677,11 +677,11 @@
 - title: I'm Tomu - Microprocessor which fits *inside* your USB slot (LCA2017 Version)
   event: LCA2017
   year: 2017
-  date: ''
+  date: 17 Jan 2017
   slides: https://j.mp/tomu-lca2017
   slides_edit: https://docs.google.com/presentation/d/1NV4QAr7nQg5OAjLGDzVBely9bvDAFhP1qIqw7IU5Wdk
   source: sheet
-  sort_date: '2017-07-01'
+  sort_date: '2017-01-17'
 - title: Using Python for creating hardware to record FOSS conferences! (PyCon AU 2017)
   event: PyCon AU 2017
   year: 2017
@@ -705,35 +705,35 @@
 - title: Being an effective FPGA Dev - LCA2018 FPGA Project Miniconf
   event: LCA2018
   year: 2018
-  date: ''
+  date: 23 Jan 2018
   slides: https://docs.google.com/presentation/d/16gKGk759063-wo-orZ8akO6C9KCMyi-SJcrS1oqBsIo
   slides_edit: https://docs.google.com/presentation/d/16gKGk759063-wo-orZ8akO6C9KCMyi-SJcrS1oqBsIo
   source: sheet
-  sort_date: '2018-07-01'
+  sort_date: '2018-01-23'
 - title: LED Flashing - LCA2018 FPGA Project Miniconf
   event: LCA2018
   year: 2018
-  date: ''
+  date: 23 Jan 2018
   slides: https://docs.google.com/presentation/d/1M7f6QoIcNFKd9qSij50gUCezrbUYetuJ4U9-c09R7fg
   slides_edit: https://docs.google.com/presentation/d/1M7f6QoIcNFKd9qSij50gUCezrbUYetuJ4U9-c09R7fg
   source: sheet
-  sort_date: '2018-07-01'
+  sort_date: '2018-01-23'
 - title: Introduction - LCA2018 FPGA Project Miniconf
   event: LCA2018
   year: 2018
-  date: ''
+  date: 23 Jan 2018
   slides: https://docs.google.com/presentation/d/1AQK8YwrnqPDqBglcrjPeqQ5nr9XnTg1suGp1kb1970k
   slides_edit: https://docs.google.com/presentation/d/1AQK8YwrnqPDqBglcrjPeqQ5nr9XnTg1suGp1kb1970k
   source: sheet
-  sort_date: '2018-07-01'
+  sort_date: '2018-01-23'
 - title: MicroPython on FPGAs
   event: PyCon AU 2017
   year: 2017
-  date: ''
+  date: 5 Aug 2017
   slides: https://j.mp/fupy-pycon2017
   slides_edit: https://docs.google.com/presentation/d/1_kXMJ__-Ige4Ozx98mzBa1EtIqjvsl_WHpCzRZtrh2E
   source: sheet
-  sort_date: '2017-07-01'
+  sort_date: '2017-08-05'
 - title: Using Python for creating hardware to record FOSS conferences! (LCA2017)
   event: LCA2017
   year: 2017
@@ -747,11 +747,11 @@
 - title: Tim has too many projects - PyConAU15 Version
   event: PyCon AU 2015
   year: 2015
-  date: ''
+  date: 1 Aug 2015
   slides: https://docs.google.com/presentation/d/12LK397OSnFd1X5g-iSAFK-ovA90LFzaQVzyanTEGu0I
   slides_edit: https://docs.google.com/presentation/d/12LK397OSnFd1X5g-iSAFK-ovA90LFzaQVzyanTEGu0I
   source: sheet
-  sort_date: '2015-07-01'
+  sort_date: '2015-08-01'
 - title: Dissecting HDMI - Developing open, FPGA-based capture hardware for conference & user group recording [33C3]
   event: 33C3
   year: 2016
@@ -765,19 +765,19 @@
 - title: I'm Tomu - Microprocessor which fits *inside* your USB slot (33C3 Version)
   event: 33C3
   year: 2016
-  date: ''
+  date: 29 Dec 2016
   slides: https://docs.google.com/presentation/d/1XT5oWsYzFATEelErZnxvSWVnVSFUm2gO2fWi31SKbWI
   slides_edit: https://docs.google.com/presentation/d/1XT5oWsYzFATEelErZnxvSWVnVSFUm2gO2fWi31SKbWI
   source: sheet
-  sort_date: '2016-07-01'
+  sort_date: '2016-12-29'
 - title: I'm Tomu - Microprocessor which fits *inside* your USB slot (CyptoParty, Sydney, October 2016)
   event: CyptoParty, Sydney
   year: 2016
-  date: ''
+  date: Oct 2016
   slides: https://docs.google.com/presentation/d/1BIs-_TyDVwslrIBCsOALj73NRvq6Fjja8x0y50SZn4k
   slides_edit: https://docs.google.com/presentation/d/1BIs-_TyDVwslrIBCsOALj73NRvq6Fjja8x0y50SZn4k
   source: sheet
-  sort_date: '2016-07-01'
+  sort_date: '2016-10-01'
 - title: Random Talk about HDMI, Python and FPGAs (TT2016)
   event: TT2016
   year: 2016
@@ -815,41 +815,41 @@
 - title: Designing Hardware with Python (PyCon AU 2016)
   event: PyCon AU 2016
   year: 2016
-  date: 15 Aug 2016
+  date: 13 Aug 2016
   slides: https://docs.google.com/presentation/d/15hsBGf7nvxl3VBNiXJJV9zRASovTK5Xmp3QktwtheVc
   slides_edit: https://docs.google.com/presentation/d/15hsBGf7nvxl3VBNiXJJV9zRASovTK5Xmp3QktwtheVc
   video: https://youtu.be/wNantzHGxIs
   video_title: Designing Hardware with Python - A story of the HDMI2USB.tv project...
   source: sheet
-  sort_date: '2016-08-15'
+  sort_date: '2016-08-13'
 - title: Debugging HDMI & other tales from developing conference capture hardware....
   event: PyCon AU 2016
   year: 2016
-  date: ''
+  date: 14 Aug 2016
   slides: https://j.mp/hdmi-pyconau2016
   slides_edit: https://docs.google.com/presentation/d/1A0BcUsXpnhlw9gJHMkvn99ps-y6vTfl6EcpW3abQSl0
   source: sheet
-  sort_date: '2016-07-01'
+  sort_date: '2016-08-14'
 - title: slidelint
   event: LCA 2014
   year: 2014
-  date: 7 Dec 2014
+  date: 10 Jan 2014
   slides: https://docs.google.com/presentation/d/13gF-Z_C_JYEdg2UIhL6fokMNYNUzKlWKfBKrr4GJyNw
   slides_edit: https://docs.google.com/presentation/d/13gF-Z_C_JYEdg2UIhL6fokMNYNUzKlWKfBKrr4GJyNw
   video: https://youtu.be/1bkbyfP--BM
   video_title: slidelint "Presentation Proofreader" - Lightning Talk @ LCA2014
   source: sheet
-  sort_date: '2014-12-07'
+  sort_date: '2014-01-10'
 - title: Tim has too many projects
   event: PyCon AU 2014
   year: 2014
-  date: 7 Dec 2014
+  date: 3 Aug 2014
   slides: https://docs.google.com/presentation/d/1IG0wbCLwuqmlmupwbjb8EBHlytnE8Lwg_kBgu7_9cHk
   slides_edit: https://docs.google.com/presentation/d/1IG0wbCLwuqmlmupwbjb8EBHlytnE8Lwg_kBgu7_9cHk
   video: https://youtu.be/io9P5fZdqcE
   video_title: Tim has too many projects - Lightning Talk @ PyCon AU 2014
   source: sheet
-  sort_date: '2014-12-07'
+  sort_date: '2014-08-03'
 - title: TimVideos HDMI2USB and WebRTC
   event: WebRTC Sydney Meetup
   year: 2015
@@ -863,11 +863,11 @@
 - title: Tim has too many projects - DebConf15 Version
   event: DebConf15
   year: 2015
-  date: ''
+  date: 20 Aug 2015
   slides: https://docs.google.com/presentation/d/1dBbUrQIMc8AGMfL3II-vVEDRYvjNEbW-B4K2v_5mU_Q
   slides_edit: https://docs.google.com/presentation/d/1dBbUrQIMc8AGMfL3II-vVEDRYvjNEbW-B4K2v_5mU_Q
   source: sheet
-  sort_date: '2015-07-01'
+  sort_date: '2015-08-20'
 - title: Why you should use KiCad?
   event: ''
   year: 2015
@@ -879,29 +879,29 @@
 - title: Other Things! - LCA 2014
   event: LCA 2014
   year: 2014
-  date: 20 Jan 2014
+  date: 10 Jan 2014
   slides: https://docs.google.com/presentation/d/1bQEGZLKoRJGlcIzhVPFaJp8RLY7x6y0z5OjcHMTC18I
   slides_edit: https://docs.google.com/presentation/d/1bQEGZLKoRJGlcIzhVPFaJp8RLY7x6y0z5OjcHMTC18I
   source: sheet
-  sort_date: '2014-01-20'
+  sort_date: '2014-01-10'
 - title: Other Things! - PyCon AU 2013
   event: PyCon AU 2013
   year: 2013
-  date: ''
+  date: 7 Jul 2013
   slides: https://docs.google.com/presentation/d/1rOUVeid8n2cu0FHFl0gzABSr32yRzKn-4pO7Wa_bEis
   slides_edit: https://docs.google.com/presentation/d/1rOUVeid8n2cu0FHFl0gzABSr32yRzKn-4pO7Wa_bEis
   source: sheet
-  sort_date: '2013-07-01'
+  sort_date: '2013-07-07'
 - title: Linux.conf.au and TimVideos - Live Streaming
   event: LCA 2014
   year: 2014
-  date: 17 Jan 2014
+  date: 7 Jan 2014
   slides: https://docs.google.com/presentation/d/1VrHdjbKqjr70qH-SmKGDoM2SjGfy1dc5LbKuL3VKeF0
   slides_edit: https://docs.google.com/presentation/d/1VrHdjbKqjr70qH-SmKGDoM2SjGfy1dc5LbKuL3VKeF0
   video: https://youtu.be/jtuzEQaG0Vc
   video_title: How Linux.conf.au is being live streamed (TIm Ansell).
   source: sheet
-  sort_date: '2014-01-17'
+  sort_date: '2014-01-07'
 - title: Making Video Streaming Interactive
   event: LCA 2012
   year: 2012
@@ -931,29 +931,29 @@
 - title: PyCon AU - 2013 - 10 Projects, 5 minutes
   event: PyCon AU 2013
   year: 2013
-  date: ''
+  date: 6 Jul 2013
   slides: https://docs.google.com/presentation/d/1Nc16Ho4qYlqPGenXMhgInkgz3EcsvSlhGAOxmXb2ijc
   slides_edit: https://docs.google.com/presentation/d/1Nc16Ho4qYlqPGenXMhgInkgz3EcsvSlhGAOxmXb2ijc
   source: sheet
-  sort_date: '2013-07-01'
+  sort_date: '2013-07-06'
 - title: Fun with gstreamer pipelines - Python
   event: LCA2013
   year: 2013
-  date: 23 Nov 2014
+  date: 28 Jan 2013
   slides: https://docs.google.com/presentation/d/1Kn1qsBpQEDCtdoEFAmsRZ9n4E4p8dnI8VfvqoFvmtZA
   slides_edit: https://docs.google.com/presentation/d/1Kn1qsBpQEDCtdoEFAmsRZ9n4E4p8dnI8VfvqoFvmtZA
   video: https://youtu.be/RDsIdXrIHVQ
   video_title: Fun with GStreamer Pipelines!
   source: sheet
-  sort_date: '2013-07-01'
+  sort_date: '2013-01-28'
 - title: Other Things! - PyCon AU 2012
   event: PyCon AU 2012
   year: 2012
-  date: ''
+  date: 19 Aug 2012
   slides: https://docs.google.com/presentation/d/1XJ02OwvkJb0WV5bUrTWayQg8FKjIYL7x-TpYZ8NpZYk
   slides_edit: https://docs.google.com/presentation/d/1XJ02OwvkJb0WV5bUrTWayQg8FKjIYL7x-TpYZ8NpZYk
   source: sheet
-  sort_date: '2012-07-01'
+  sort_date: '2012-08-19'
 - title: Fun with gstreamer pipelines
   event: ''
   year: 0
@@ -997,7 +997,7 @@
 - title: Google Lightning Talks (2009-07) - Write a game in 5 minutes
   event: Google Internal
   year: 2009
-  date: ''
+  date: Jul 2009
   video: https://youtu.be/QX3x92NsCTY
   video_title: Google Lightning Talks (2009-07) - Write a game in 5 minutes
   source: sheet
@@ -1005,11 +1005,11 @@
 - title: Google Tech Talk (2008-06) - Gaming For Freedom
   event: Google Tech Talk
   year: 2008
-  date: ''
+  date: 5 Jun 2008
   video: https://youtu.be/ekrypMxEB44
   video_title: Google Tech Talk (2008-06) - Gaming For Freedom
   source: sheet
-  sort_date: '2008-07-01'
+  sort_date: '2008-06-05'
 - title: 'wafer.space: Silicon now $4 USD, get inspired from Run #1!'
   event: Hackware hardware meetup, Singapore
   year: 2026
