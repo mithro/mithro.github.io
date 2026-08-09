@@ -1,9 +1,9 @@
 <ul class="contact{% if include.class %} {{ include.class }}{% endif %}">
-  <li><a href="mailto:{{ site.data.contact.email }}">{{ site.data.contact.email }}</a></li>
+  <li><a href="mailto:{{ site.data.contact.email }}"><span class="ci-emoji" aria-hidden="true">✉️</span> {{ site.data.contact.email }}</a></li>
   {% for phone in site.data.contact.phones %}
-  <li><a href="{{ phone.href }}">{{ phone.number }}</a></li>
+  <li><a href="{{ phone.href }}"><span class="ci-emoji" aria-hidden="true">📞</span> <span class="nowrap">{{ phone.number }}</span></a></li>
   {% endfor %}
   {% for link in site.data.contact.links %}
-  <li><a href="{{ link.url }}" rel="me">{{ link.label }}: {{ link.handle }}</a></li>
+  <li><a href="{{ link.url }}" rel="me">{% if link.icon %}<span class="ci-icon" aria-hidden="true">{% case link.icon %}{% when 'github' %}{% include icons/github.svg %}{% when 'linkedin' %}{% include icons/linkedin.svg %}{% when 'x' %}{% include icons/x.svg %}{% when 'mastodon' %}{% include icons/mastodon.svg %}{% when 'bluesky' %}{% include icons/bluesky.svg %}{% when 'wordpress' %}{% include icons/wordpress.svg %}{% endcase %}</span> {% endif %}{{ link.label }}: {{ link.handle }}</a></li>
   {% endfor %}
 </ul>
