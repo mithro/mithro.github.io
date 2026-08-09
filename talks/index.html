@@ -51,6 +51,42 @@ description: "All of Tim 'mithro' Ansell's talks and presentations, 2012–prese
   {% endfor %}
 </section>
 
+<section class="sect">
+  <h2><span aria-hidden="true">🎙️</span> Interviews &amp; podcasts</h2>
+  <div class="table-scroll" tabindex="0" role="region" aria-label="Interviews and podcasts">
+  <table class="talks-table">
+    <caption class="visually-hidden">Interviews and podcasts</caption>
+    <thead>
+      <tr><th scope="col">Interview</th><th scope="col">Show · Date</th></tr>
+    </thead>
+    <tbody>
+    {% for iv in site.data.interviews %}
+    <tr>
+      <td class="ti">
+        <a href="{{ iv.url | escape }}">{{ iv.title | escape }}</a>
+        {%- if iv.video -%}
+          {%- assign vid_id = "" -%}
+          {%- if iv.video contains "youtu.be/" -%}
+            {%- assign vid_id = iv.video | split: "youtu.be/" | last | split: "?" | first -%}
+          {%- elsif iv.video contains "watch?v=" -%}
+            {%- assign vid_id = iv.video | split: "v=" | last | split: "&" | first -%}
+          {%- endif -%}
+          {%- if vid_id != "" %}
+        <details class="vid-embed" data-video="{{ vid_id }}">
+          <summary><span aria-hidden="true">▶</span> video</summary>
+          <div class="vid-frame"></div>
+        </details>
+          {%- endif -%}
+        {%- endif %}
+      </td>
+      <td class="ev"><span>{{ iv.show | escape }} · <span class="nowrap">{{ iv.date | escape }}</span></span></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</section>
+
 <script>
   // Load the YouTube iframe only when a row's video is first expanded.
   document.querySelectorAll('details.vid-embed').forEach(function (d) {

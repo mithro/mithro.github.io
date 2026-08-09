@@ -986,14 +986,6 @@
   video_title: '"3 Talks for the Price of 1!" - Tim Ansell (LCA 2020)'
   source: sheet
   sort_date: '2020-07-01'
-- title: 'The Amp Hour #375 - An Interview with Tim "Mithro" Ansell'
-  event: AmpHour
-  year: 0
-  date: ''
-  video: https://youtu.be/W_h-92N65_4
-  video_title: 'The Amp Hour #375 - An Interview with Tim "Mithro" Ansell'
-  source: sheet
-  sort_date: '0000-01-01'
 - title: Lightning Talk given at PyCon AU
   event: PyCon AU
   year: 0
@@ -1025,13 +1017,6 @@
   video: https://www.youtube.com/watch?v=t6Z0_Krhshc
   source: compiled
   sort_date: '2026-07-01'
-- title: 'Teardown Session 56: wafer.space with Tim Ansell & Leo Moser'
-  event: Crowd Supply Teardown Session (livestream)
-  year: 2025
-  date: 2 Oct 2025
-  video: https://www.youtube.com/watch?v=tEOmnN8IAjs
-  source: compiled
-  sort_date: '2025-10-02'
 - title: A brain dump on open source silicon (FPGAs, ASICs and similar)
   event: Lawrence Berkeley National Laboratory (LBNL) seminar
   year: 2025
