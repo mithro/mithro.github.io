@@ -23,7 +23,24 @@ description: "All of Tim 'mithro' Ansell's talks and presentations, 2012–prese
     <tr>
       <td class="ti">
         {% if talk.slides != "" and talk.slides %}<a href="{{ talk.slides | escape }}">{{ talk.title | escape }}</a>{% else %}{{ talk.title | escape }}{% endif %}
-        {% if talk.video != "" and talk.video %} <a class="vid" href="{{ talk.video | escape }}"><span aria-hidden="true">▶</span> video</a>{% endif %}
+        {%- if talk.video != "" and talk.video -%}
+          {%- assign vid_id = "" -%}
+          {%- if talk.video contains "youtu.be/" -%}
+            {%- assign vid_id = talk.video | split: "youtu.be/" | last | split: "?" | first -%}
+          {%- elsif talk.video contains "watch?v=" -%}
+            {%- assign vid_id = talk.video | split: "v=" | last | split: "&" | first -%}
+          {%- endif -%}
+          {%- if vid_id != "" -%}
+            {%- assign vid_start = "" -%}
+            {%- if talk.video contains "t=" -%}
+              {%- assign vid_start = talk.video | split: "t=" | last | split: "&" | first | split: "s" | first -%}
+            {%- endif %}
+        <details class="vid-embed" data-video="{{ vid_id }}"{% if vid_start != "" %} data-start="{{ vid_start }}"{% endif %}>
+          <summary><span aria-hidden="true">▶</span> video</summary>
+          <div class="vid-frame"></div>
+        </details>
+          {%- else %} <a class="vid" href="{{ talk.video | escape }}"><span aria-hidden="true">▶</span> video</a>{% endif -%}
+        {%- endif %}
       </td>
       <td class="ev"><span>{% if talk.event != "" and talk.event %}{{ talk.event | escape }}{% if talk.date != "" and talk.date %} · {{ talk.date | escape }}{% endif %}{% else %}{{ talk.date | escape }}{% endif %}</span></td>
     </tr>
@@ -33,3 +50,22 @@ description: "All of Tim 'mithro' Ansell's talks and presentations, 2012–prese
   </div>
   {% endfor %}
 </section>
+
+<script>
+  // Load the YouTube iframe only when a row's video is first expanded.
+  document.querySelectorAll('details.vid-embed').forEach(function (d) {
+    d.addEventListener('toggle', function () {
+      if (!d.open || d.dataset.loaded) return;
+      d.dataset.loaded = '1';
+      var src = 'https://www.youtube-nocookie.com/embed/' +
+        encodeURIComponent(d.dataset.video) +
+        (d.dataset.start ? '?start=' + encodeURIComponent(d.dataset.start) : '');
+      var f = document.createElement('iframe');
+      f.src = src;
+      f.title = 'Talk recording';
+      f.allow = 'encrypted-media; picture-in-picture; fullscreen';
+      f.referrerPolicy = 'strict-origin-when-cross-origin';
+      d.querySelector('.vid-frame').appendChild(f);
+    });
+  });
+</script>
