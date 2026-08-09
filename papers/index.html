@@ -13,8 +13,7 @@ description: "Scientific papers by Tim 'mithro' Ansell."
     <a href="{{ site.data.papers.metrics.profile | escape }}">Google Scholar profile</a>
   </p>
   <ul class="papers-list" role="list">
-    {% assign papers_sorted = site.data.papers.papers | sort: "year" | reverse %}
-    {% for paper in papers_sorted %}
+    {% for paper in site.data.papers.papers %}
     <li>
       <span class="ti">{% if paper.url %}<a href="{{ paper.url | escape }}">{{ paper.title | escape }}</a>{% else %}{{ paper.title | escape }}{% endif %}</span>
       <span class="au">{{ paper.authors | escape }}</span>

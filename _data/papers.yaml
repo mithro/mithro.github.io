@@ -1,95 +1,97 @@
 # Snapshot of Google Scholar profile pDTwJe4AAAAJ, taken 2026-08-08.
-# citations: 0 means no citations shown on the profile (never omit the key —
-# /papers/ sorts on it).
+# citations: 0 means no citations shown on the profile (never omit the key).
+# ORDER CONTRACT: papers are stored in display order — year descending,
+# then citations descending, then title — and /papers/ renders file order
+# directly (no Liquid sort). Keep it sorted when adding entries.
 metrics:
   citations: 246
   h_index: 6
   i10_index: 5
   snapshot_date: 2026-08-08
-  profile: "https://scholar.google.com/citations?user=pDTwJe4AAAAJ"
+  profile: https://scholar.google.com/citations?user=pDTwJe4AAAAJ
 papers:
-  - title: "CFU Playground: Full-stack open-source framework for tiny machine learning (tinyML) acceleration on FPGAs"
-    authors: "S Prakash, T Callahan, J Bushagour, C Banbury, AV Green, P Warden, et al."
-    venue: "2023 IEEE International Symposium on Performance Analysis of Systems and Software (ISPASS)"
-    year: 2023
-    citations: 69
-  - title: "SymbiFlow and VPR: An open-source design flow for commercial and novel FPGAs"
-    authors: "KE Murray, MA Elgammal, V Betz, T Ansell, K Rothman, A Comodi"
-    venue: "IEEE Micro 40 (4), 49-57"
-    year: 2020
-    citations: 68
-    url: "https://ieeexplore.ieee.org/document/9103284"
-  - title: "The missing pieces of open design enablement: A recent history of Google efforts"
-    authors: "T Ansell, M Saligane"
-    venue: "Proceedings of the 39th International Conference on Computer-Aided Design, 1-8"
-    year: 2020
-    citations: 49
-    url: "https://j.mp/iccad20-goog-miss-paper"
-  - title: "An open-source and autonomous temperature sensor generator verified with 64 instances in SkyWater 130 nm for comprehensive design space exploration"
-    authors: "Q Zhang, W Duan, T Edwards, T Ansell, D Blaauw, D Sylvester, et al."
-    venue: "IEEE Solid-State Circuits Letters 5, 174-177"
-    year: 2022
-    citations: 27
-    url: "https://ieeexplore.ieee.org/abstract/document/9816083"
-  - title: "OpenFASoC: An open platform towards analog and mixed-signal automation and acceleration of chip design"
-    authors: "A Hammoud, V Shankar, R Mains, T Ansell, J Matres, M Saligane"
-    venue: "2023 International Symposium on Devices, Circuits and Systems (ISDCS)"
-    year: 2023
-    citations: 12
-  - title: "CFU Playground: Want a faster ML processor? Do it yourself!"
-    authors: "S Prakash, T Callahan, J Bushagour, C Banbury, AV Green, P Warden, et al."
-    venue: "2023 Design, Automation & Test in Europe Conference & Exhibition (DATE), 1-2"
-    year: 2023
-    citations: 6
-    url: "https://ieeexplore.ieee.org/abstract/document/10137093"
-  - title: "CFU Playground: Full-stack open-source framework for tiny machine learning (tinyML) acceleration on FPGAs (arXiv preprint)"
-    authors: "S Prakash, T Callahan, J Bushagour, C Banbury, AV Green, P Warden, et al."
-    venue: "arXiv preprint arXiv:2201.01863"
-    year: 2022
-    citations: 6
-    url: "https://arxiv.org/abs/2201.01863"
-  - title: "Unlocking Circuits for Quantum With Open Source Silicon: A first look at measured open source silicon results at 4 K"
-    authors: "A Li, T Zeng, L Zhang, J Riem, GC Adam, DL Fleischer, A Zaslavsky, et al."
-    venue: "IEEE Solid-State Circuits Magazine 16 (2), 39-48"
-    year: 2024
-    citations: 3
-  - title: "Google investment in open source custom hardware development including no-cost shuttle program"
-    authors: "T Ansell"
-    venue: "Proceedings of the 2023 International Symposium on Physical Design, 207"
-    year: 2023
-    citations: 3
-  - title: "Disrupting conventional chip design through the open source EDA ecosystem"
-    authors: "C Goyal, H Khandeparkar, S Charan, JSM Baquero, A Li, J Euphrosine, et al."
-    venue: "2024 8th IEEE Electron Devices Technology & Manufacturing Conference (EDTM), 1-3"
-    year: 2024
-    citations: 2
-  - title: "Position Papers for the ASCR Workshop on Reimagining Codesign"
-    authors: "JA Ang, AA Chien, S Hammond, A Hoisie, I Karlin, S Pakin, J Shalf, et al."
-    venue: "US Department of Energy (USDOE), Office of Science"
-    year: 2021
-    citations: 1
-  - title: "Rapid Prototyping of Laser-Induced Graphene Sensors With Open-Source Silicon: Paving the Way for Low-Cost and Robust Flexible Wearable Sensing"
-    authors: "A Li, H Wu, M Lingamguntla, AA Fadila, CH Kye, A Balijepalli, T Ansell, et al."
-    venue: "IEEE Solid-State Circuits Magazine 16 (2), 49-57"
-    year: 2024
-    citations: 0
-  - title: "Fully integrated multifunctional sensor and open-source ASIC for flexible wearables"
-    authors: "A Li, H Wu, AA Fadila, C Kye, A Balijepalli, J Euphrosine, T Ansell, et al."
-    venue: "IEEE (2024)"
-    year: 2024
-    citations: 0
-  - title: "2024 Index IEEE Solid-State Circuits Magazine Vol. 16"
-    authors: "GC Adam, A Akturk, S Andreev, T Ansell, A Balijepalli, L Belostotski, et al."
-    venue: "IEEE Solid-State Circuits Magazine 16 (4)"
-    year: 2024
-    citations: 0
-  - title: "Open-source and FPGAs: Hardware, Software, Both or None?"
-    authors: "D How, T Ansell, V Betz, C Lavin, T Speers, PE Gaillardon"
-    venue: "Proceedings of the 2023 ACM/SIGDA International Symposium on Field-Programmable Gate Arrays"
-    year: 2023
-    citations: 0
-  - title: "Why is Google investing in fully open source PDKs?"
-    authors: "T Ansell"
-    venue: "Novel Patterning Technologies 2022, PC120540A"
-    year: 2022
-    citations: 0
+- title: 'Unlocking Circuits for Quantum With Open Source Silicon: A first look at measured open source silicon results at 4 K'
+  authors: A Li, T Zeng, L Zhang, J Riem, GC Adam, DL Fleischer, A Zaslavsky, et al.
+  venue: IEEE Solid-State Circuits Magazine 16 (2), 39-48
+  year: 2024
+  citations: 3
+- title: Disrupting conventional chip design through the open source EDA ecosystem
+  authors: C Goyal, H Khandeparkar, S Charan, JSM Baquero, A Li, J Euphrosine, et al.
+  venue: 2024 8th IEEE Electron Devices Technology & Manufacturing Conference (EDTM), 1-3
+  year: 2024
+  citations: 2
+- title: 2024 Index IEEE Solid-State Circuits Magazine Vol. 16
+  authors: GC Adam, A Akturk, S Andreev, T Ansell, A Balijepalli, L Belostotski, et al.
+  venue: IEEE Solid-State Circuits Magazine 16 (4)
+  year: 2024
+  citations: 0
+- title: Fully integrated multifunctional sensor and open-source ASIC for flexible wearables
+  authors: A Li, H Wu, AA Fadila, C Kye, A Balijepalli, J Euphrosine, T Ansell, et al.
+  venue: IEEE (2024)
+  year: 2024
+  citations: 0
+- title: 'Rapid Prototyping of Laser-Induced Graphene Sensors With Open-Source Silicon: Paving the Way for Low-Cost and Robust Flexible Wearable Sensing'
+  authors: A Li, H Wu, M Lingamguntla, AA Fadila, CH Kye, A Balijepalli, T Ansell, et al.
+  venue: IEEE Solid-State Circuits Magazine 16 (2), 49-57
+  year: 2024
+  citations: 0
+- title: 'CFU Playground: Full-stack open-source framework for tiny machine learning (tinyML) acceleration on FPGAs'
+  authors: S Prakash, T Callahan, J Bushagour, C Banbury, AV Green, P Warden, et al.
+  venue: 2023 IEEE International Symposium on Performance Analysis of Systems and Software (ISPASS)
+  year: 2023
+  citations: 69
+- title: 'OpenFASoC: An open platform towards analog and mixed-signal automation and acceleration of chip design'
+  authors: A Hammoud, V Shankar, R Mains, T Ansell, J Matres, M Saligane
+  venue: 2023 International Symposium on Devices, Circuits and Systems (ISDCS)
+  year: 2023
+  citations: 12
+- title: 'CFU Playground: Want a faster ML processor? Do it yourself!'
+  authors: S Prakash, T Callahan, J Bushagour, C Banbury, AV Green, P Warden, et al.
+  venue: 2023 Design, Automation & Test in Europe Conference & Exhibition (DATE), 1-2
+  year: 2023
+  citations: 6
+  url: https://ieeexplore.ieee.org/abstract/document/10137093
+- title: Google investment in open source custom hardware development including no-cost shuttle program
+  authors: T Ansell
+  venue: Proceedings of the 2023 International Symposium on Physical Design, 207
+  year: 2023
+  citations: 3
+- title: 'Open-source and FPGAs: Hardware, Software, Both or None?'
+  authors: D How, T Ansell, V Betz, C Lavin, T Speers, PE Gaillardon
+  venue: Proceedings of the 2023 ACM/SIGDA International Symposium on Field-Programmable Gate Arrays
+  year: 2023
+  citations: 0
+- title: An open-source and autonomous temperature sensor generator verified with 64 instances in SkyWater 130 nm for comprehensive design space exploration
+  authors: Q Zhang, W Duan, T Edwards, T Ansell, D Blaauw, D Sylvester, et al.
+  venue: IEEE Solid-State Circuits Letters 5, 174-177
+  year: 2022
+  citations: 27
+  url: https://ieeexplore.ieee.org/abstract/document/9816083
+- title: 'CFU Playground: Full-stack open-source framework for tiny machine learning (tinyML) acceleration on FPGAs (arXiv preprint)'
+  authors: S Prakash, T Callahan, J Bushagour, C Banbury, AV Green, P Warden, et al.
+  venue: arXiv preprint arXiv:2201.01863
+  year: 2022
+  citations: 6
+  url: https://arxiv.org/abs/2201.01863
+- title: Why is Google investing in fully open source PDKs?
+  authors: T Ansell
+  venue: Novel Patterning Technologies 2022, PC120540A
+  year: 2022
+  citations: 0
+- title: Position Papers for the ASCR Workshop on Reimagining Codesign
+  authors: JA Ang, AA Chien, S Hammond, A Hoisie, I Karlin, S Pakin, J Shalf, et al.
+  venue: US Department of Energy (USDOE), Office of Science
+  year: 2021
+  citations: 1
+- title: 'SymbiFlow and VPR: An open-source design flow for commercial and novel FPGAs'
+  authors: KE Murray, MA Elgammal, V Betz, T Ansell, K Rothman, A Comodi
+  venue: IEEE Micro 40 (4), 49-57
+  year: 2020
+  citations: 68
+  url: https://ieeexplore.ieee.org/document/9103284
+- title: 'The missing pieces of open design enablement: A recent history of Google efforts'
+  authors: T Ansell, M Saligane
+  venue: Proceedings of the 39th International Conference on Computer-Aided Design, 1-8
+  year: 2020
+  citations: 49
+  url: https://j.mp/iccad20-goog-miss-paper
