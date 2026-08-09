@@ -177,3 +177,4 @@ a { color: var(--gold); }
 }
 
 .year-head { font-family: var(--mono); color: var(--silk); font-size: 1rem; margin: 1.6rem 0 .4rem; }
+.ev-none { opacity: .35; }
