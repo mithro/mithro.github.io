@@ -20,7 +20,7 @@ description: "Scientific papers by Tim 'mithro' Ansell."
     <li>
       <span class="ti">{% if paper.url %}<a href="{{ paper.url | escape }}">{{ paper.title | escape }}</a>{% else %}{{ paper.title | escape }}{% endif %}</span>
       <span class="au">{{ paper.authors | escape }}</span>
-      <span class="ve">{{ paper.venue | escape }}{% if paper.citations and paper.citations > 0 %} · <span class="ci">{{ paper.citations }} citation{% if paper.citations != 1 %}s{% endif %}</span>{% endif %}</span>
+      <span class="ve">{{ paper.venue | escape }}{% if paper.citations and paper.citations > 0 %} · <span class="ci">{{ paper.citations }} citation{% if paper.citations != 1 %}s{% endif %}</span>{% endif %}{% if paper.pdf %} · <a class="pdf" href="{% if paper.pdf contains '://' %}{{ paper.pdf | escape }}{% else %}{{ paper.pdf | relative_url | escape }}{% endif %}"><span aria-hidden="true">📄</span> PDF</a>{% endif %}</span>
     </li>
     {% endif %}{% endfor %}
   </ul>
