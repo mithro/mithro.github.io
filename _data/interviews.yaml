@@ -1,0 +1,63 @@
+# Interviews, podcasts, and livestream Q&As — compiled 2026-08-09 from
+# public episode pages (all dates verified against RSS/episode metadata).
+# ORDER CONTRACT: stored newest-first; the talks page renders file order.
+- title: "wafer.space - Tim 'mithro' Ansell"
+  show: "The Siliconimist"
+  year: 2026
+  date: "27 Mar 2026"
+  url: "https://www.siliconimist.com/p/waferspace-tim-mithro-ansell"
+- title: "Custom Silicon with wafer.space // Hackster Café"
+  show: "Hackster Café"
+  year: 2026
+  date: "10 Feb 2026"
+  url: "https://www.youtube.com/watch?v=HpBEOXHUzHE"
+  video: "https://www.youtube.com/watch?v=HpBEOXHUzHE"
+- title: "Custom Silicon at 7 Dollars | wafer.space Makes Low-Volume Chip Fabrication Viable"
+  show: "Circuit Digest"
+  year: 2025
+  date: "5 Nov 2025"
+  url: "https://circuitdigest.com/interview/wafer-space-makes-low-volume-silicon-fabrication-viable"
+  video: "https://www.youtube.com/watch?v=2FsSZbZE5jM"
+- title: "E-Lab Interview: Wafer.Space Founder Aims to Make Custom Silicon Accessible Again"
+  show: "Electronics-Lab.com"
+  year: 2025
+  date: "2 Oct 2025"
+  url: "https://www.electronics-lab.com/e-lab-interview-wafer-space-founder-aims-to-make-custom-silicon-accessible-again/"
+- title: "Teardown Session 56: wafer.space with Tim Ansell & Leo Moser"
+  show: "Crowd Supply Teardown Session"
+  year: 2025
+  date: "2 Oct 2025"
+  url: "https://www.youtube.com/watch?v=tEOmnN8IAjs"
+  video: "https://www.youtube.com/watch?v=tEOmnN8IAjs"
+- title: "The Amp Hour #703 - Building wafer.space with Tim Ansell"
+  show: "The Amp Hour"
+  year: 2025
+  date: "25 Sep 2025"
+  url: "https://theamphour.com/703-building-wafer-space-with-tim-ansell/"
+  video: "https://www.youtube.com/watch?v=4S8A_b7WDGs"
+- title: "SkyWater PDK Hack Chat (with Mohamed Kassem & Michael Gielda)"
+  show: "Hackaday.io Hack Chat"
+  year: 2020
+  date: "16 Sep 2020"
+  url: "https://hackaday.io/event/174186-skywater-pdk-hack-chat"
+- title: "The Amp Hour #501 - Discussing the Open Source PDK with Tim Ansell"
+  show: "The Amp Hour"
+  year: 2020
+  date: "20 Jul 2020"
+  url: "https://theamphour.com/501-discussing-the-open-source-pdk-with-tim-ansell/"
+- title: "The Amp Hour #456.3 - Discussing Fomu with Tim Ansell and Sean Cross"
+  show: "The Amp Hour"
+  year: 2019
+  date: "4 Sep 2019"
+  url: "https://theamphour.com/456-3-discussing-fomu-with-tim-ansell-and-sean-cross/"
+- title: "The Amp Hour #375 - An Interview with Tim \"Mithro\" Ansell"
+  show: "The Amp Hour"
+  year: 2018
+  date: "15 Jan 2018"
+  url: "https://theamphour.com/375-an-interview-with-tim-mithro-ansell/"
+  video: "https://youtu.be/W_h-92N65_4"
+- title: "FLOSS Weekly #359: Numato Opsis"
+  show: "FLOSS Weekly (TWiT.tv)"
+  year: 2015
+  date: "20 Oct 2015"
+  url: "https://twit.tv/shows/floss-weekly/episodes/359"
