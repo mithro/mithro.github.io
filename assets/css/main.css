@@ -115,7 +115,7 @@ a { color: var(--gold); }
 .table-scroll { overflow-x: auto; }
 
 .gallery {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: .9rem;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: .9rem;
   max-width: 1080px; margin: 0 auto; padding: 1.8rem 1.25rem 2.2rem;
 }
 .shot { position: relative; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; aspect-ratio: 4 / 3; }
