@@ -21,6 +21,12 @@
 - file: tim-ansell.jpg
   source_url: "https://wafer.space/assets/images/people/tim.jpg"
   note: "Portrait from the wafer.space about page (Tim's own site)."
+- file: numato-opsis.jpg
+  source_url: "https://www.crowdsupply.com/img/36cc/8032dd6e-23f2-4283-8a5d-2e229bb936cc_open-graph.jpg"
+  note: "Campaign photo from Tim's Numato Opsis Crowd Supply page (crowdsupply.com/numato-lab/opsis)."
+- file: fomu.jpg
+  source_url: "https://www.crowdsupply.com/img/1f11/93e802cb-033a-4218-833a-52349af81f11_open-graph.jpg"
+  note: "Campaign photo from Tim's Fomu Crowd Supply page (crowdsupply.com/sutajio-kosagi/fomu)."
 - file: og-image.jpg
   derived_from: die-scan.jpg
   generator: scripts/make_og_image.py
