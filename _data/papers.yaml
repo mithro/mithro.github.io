@@ -74,7 +74,7 @@ papers:
   venue: Proceedings of the 2023 ACM/SIGDA International Symposium on Field-Programmable Gate Arrays
   year: 2023
   citations: 0
-  pdf: https://dl.acm.org/doi/pdf/10.1145/3543622.3579026
+  pdf: /assets/papers/open-source-and-fpgas-fpga23.pdf
   url: https://doi.org/10.1145/3543622.3579026
 - title: An open-source and autonomous temperature sensor generator verified with 64 instances in SkyWater 130 nm for comprehensive design space exploration
   authors: Q Zhang, W Duan, T Edwards, T Ansell, D Blaauw, D Sylvester, et al.
