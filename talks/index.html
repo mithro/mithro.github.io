@@ -6,7 +6,7 @@ description: "All of Tim 'mithro' Ansell's talks and presentations, 2012–prese
 <section class="sect">
   <h2><span aria-hidden="true">🎤</span> Talks &amp; presentations</h2>
   <p class="prose">Slides links go to the deck for each talk; ▶ links go to
-  recordings. Decks and recordings are embedded below each talk.</p>
+  recordings. Click a preview tile to load the deck or recording in place.</p>
 
   {% assign talks_sorted = site.data.talks | sort: "sort_date" | reverse %}
   {% assign years = talks_sorted | map: "year" | uniq %}
@@ -31,6 +31,16 @@ description: "All of Tim 'mithro' Ansell's talks and presentations, 2012–prese
       {%- if vid_id != "" and talk.video contains "t=" -%}
         {%- assign vid_start = talk.video | split: "t=" | last | split: "&" | first | split: "s" | first -%}
       {%- endif -%}
+    {%- endif -%}
+    {%- assign short_disp = "" -%}
+    {%- if talk.slides contains "bit.ly/" or talk.slides contains "j.mp/" -%}
+      {%- assign short_disp = talk.slides | replace: "https://", "" | replace: "http://", "" -%}
+    {%- endif -%}
+    {%- assign pres_id = "" -%}
+    {%- if talk.slides_embed and talk.slides_embed contains "/presentation/d/" -%}
+      {%- unless talk.slides_embed contains "/d/e/" -%}
+        {%- assign pres_id = talk.slides_embed | split: "/d/" | last | split: "/embed" | first -%}
+      {%- endunless -%}
     {%- endif %}
     <tr>
       <td class="ti">
@@ -38,12 +48,42 @@ description: "All of Tim 'mithro' Ansell's talks and presentations, 2012–prese
         {%- if vid_id == "" and talk.video != "" and talk.video %} <a class="vid" href="{{ talk.video | escape }}"><span aria-hidden="true">▶</span> video</a>{% endif %}
         {%- if talk.slides_embed or vid_id != "" %}
         <div class="embeds">
-          {% if talk.slides_embed %}<iframe class="emb-slides" src="{{ talk.slides_embed | escape }}" title="Slides: {{ talk.title | escape }}" loading="lazy" allowfullscreen></iframe>{% endif %}
-          {% if vid_id != "" %}<iframe class="emb-video" src="https://www.youtube-nocookie.com/embed/{{ vid_id }}{% if vid_start != '' %}?start={{ vid_start }}{% endif %}" title="Video: {{ talk.title | escape }}" loading="lazy" allow="encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>{% endif %}
+          {% if talk.slides_embed %}
+          <button type="button" class="embed-lite lite-slides" data-src="{{ talk.slides_embed | escape }}" aria-label="Load slides: {{ talk.title | escape }}">
+            {% if pres_id != "" %}<img src="https://drive.google.com/thumbnail?id={{ pres_id }}&amp;sz=w640{% if talk.slides_embed contains 'resourcekey=' %}&amp;resourcekey={{ talk.slides_embed | split: 'resourcekey=' | last }}{% endif %}" alt="" loading="lazy">{% endif %}
+            <span class="lite-tag">Slides</span>
+            <span class="lite-play" aria-hidden="true">▶</span>
+          </button>
+          {% endif %}
+          {% if vid_id != "" %}
+          <button type="button" class="embed-lite lite-video" data-src="https://www.youtube-nocookie.com/embed/{{ vid_id }}?autoplay=1{% if vid_start != '' %}&amp;start={{ vid_start }}{% endif %}" aria-label="Play video: {{ talk.title | escape }}">
+            <img src="https://i.ytimg.com/vi/{{ vid_id }}/hqdefault.jpg" alt="" loading="lazy">
+            <span class="lite-tag">Video</span>
+            <span class="lite-play" aria-hidden="true">▶</span>
+          </button>
+          {% endif %}
         </div>
         {%- endif %}
       </td>
-      <td class="ev"><span>{% if talk.event != "" and talk.event %}{{ talk.event | escape }}{% if talk.date != "" and talk.date %} · <span class="nowrap">{{ talk.date | escape }}</span>{% endif %}{% elsif talk.date != "" and talk.date %}<span class="nowrap">{{ talk.date | escape }}</span>{% else %}<span class="ev-none" aria-hidden="true">—</span>{% endif %}</span></td>
+      {%- assign has_evdate = false -%}
+      {%- if talk.event != "" and talk.event -%}{%- assign has_evdate = true -%}{%- endif -%}
+      {%- if talk.date != "" and talk.date -%}{%- assign has_evdate = true -%}{%- endif %}
+      <td class="ev"><span>
+        {%- if talk.event != "" and talk.event -%}
+          {%- if talk.event_url -%}<a href="{{ talk.event_url | escape }}">{{ talk.event | escape }}</a>{%- else -%}{{ talk.event | escape }}{%- endif -%}
+        {%- endif -%}
+        {%- if talk.date != "" and talk.date -%}
+          {%- if talk.event != "" and talk.event %} · {% endif -%}
+          <span class="nowrap">{{ talk.date | escape }}</span>
+        {%- endif -%}
+        {%- if short_disp != "" -%}
+          {%- if has_evdate %} · {% endif -%}
+          <a class="short-url nowrap" href="{{ talk.slides | escape }}">{{ short_disp | escape }}</a>
+        {%- endif -%}
+        {%- if has_evdate == false and short_disp == "" -%}
+          <span class="ev-none" aria-hidden="true">—</span>
+        {%- endif -%}
+      </span></td>
     </tr>
     {% endif %}{% endfor %}
     </tbody>
@@ -75,7 +115,11 @@ description: "All of Tim 'mithro' Ansell's talks and presentations, 2012–prese
         <a href="{{ iv.url | escape }}">{{ iv.title | escape }}</a>
         {%- if vid_id != "" %}
         <div class="embeds">
-          <iframe class="emb-video" src="https://www.youtube-nocookie.com/embed/{{ vid_id }}" title="Video: {{ iv.title | escape }}" loading="lazy" allow="encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          <button type="button" class="embed-lite lite-video" data-src="https://www.youtube-nocookie.com/embed/{{ vid_id }}?autoplay=1" aria-label="Play video: {{ iv.title | escape }}">
+            <img src="https://i.ytimg.com/vi/{{ vid_id }}/hqdefault.jpg" alt="" loading="lazy">
+            <span class="lite-tag">Video</span>
+            <span class="lite-play" aria-hidden="true">▶</span>
+          </button>
         </div>
         {%- endif %}
       </td>
@@ -86,3 +130,27 @@ description: "All of Tim 'mithro' Ansell's talks and presentations, 2012–prese
   </table>
   </div>
 </section>
+
+<script>
+  // Not every deck/video has a fetchable thumbnail (e.g. access-restricted
+  // decks) — drop broken preview images and let the plain tile show.
+  document.querySelectorAll('.embed-lite img').forEach(function (i) {
+    var drop = function () { i.remove(); };
+    i.addEventListener('error', drop);
+    if (i.complete && i.naturalWidth === 0) drop();
+  });
+  // Swap a preview tile for the real embed only when it is clicked.
+  document.querySelectorAll('.embed-lite').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var f = document.createElement('iframe');
+      f.src = b.dataset.src;
+      f.title = b.getAttribute('aria-label');
+      f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+      f.referrerPolicy = 'strict-origin-when-cross-origin';
+      f.allowFullscreen = true;
+      f.className = b.classList.contains('lite-video') ? 'emb-video' : 'emb-slides';
+      b.replaceWith(f);
+      f.focus();
+    }, { once: true });
+  });
+</script>

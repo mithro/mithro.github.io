@@ -41,7 +41,7 @@ description: "Tim 'mithro' Ansell — building open source silicon ecosystems: S
         {% if talk.slides != "" and talk.slides %}<a href="{{ talk.slides | escape }}">{{ talk.title | escape }}</a>{% else %}{{ talk.title | escape }}{% endif %}
         {% if talk.video != "" and talk.video %} <a class="vid" href="{{ talk.video | escape }}"><span aria-hidden="true">▶</span> video</a>{% endif %}
       </td>
-      <td class="ev"><span>{{ talk.event | escape }}</span></td>
+      <td class="ev"><span>{% if talk.event_url %}<a href="{{ talk.event_url | escape }}">{{ talk.event | escape }}</a>{% else %}{{ talk.event | escape }}{% endif %}</span></td>
     </tr>
     {% endfor %}
     </tbody>
