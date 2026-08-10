@@ -5,3 +5,9 @@ vendor/
 tmp/
 Gemfile.lock
 .bundle/
+
+# Contains full target URLs (and titles) for PRIVATE short links — must
+# never be committed to this public repo. Regenerate locally with
+# scripts/fetch_bitly.py; visibility source of truth is the private
+# "mith.ro short links" Google Sheet.
+_data/shortlinks.yaml
