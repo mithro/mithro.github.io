@@ -13,6 +13,7 @@
 
 - title: ISPD 2023 - Build custom silicon with Google!
   event: International Symposium on Physical Design 2023 (ISPD)
+  event_url: https://web.archive.org/web/20230330055413/https://ispd.cc/ispd2023/index.php
   year: 2023
   date: 29 Mar 2023
   slides: https://bit.ly/ispd23-goog
@@ -22,6 +23,7 @@
   sort_date: '2023-03-29'
 - title: COINFLIPS / Sandia (DoE Lab) - Why is Google Investing in Fully Open Source IC Design and What is Next?
   event: COINFLIPS Seminar Series
+  event_url: https://web.archive.org/web/20231205190936/https://coinflipscomputing.org/output
   year: 2023
   date: 17 Jan 2023
   slides: https://bit.ly/cf23-goog
@@ -31,6 +33,7 @@
   sort_date: '2023-01-17'
 - title: VSDOpen 2022 - Build custom silicon with Google!
   event: VSDOpen Conference (2022)
+  event_url: https://www.vlsisystemdesign.com/vsdopen2022/
   year: 2022
   date: 15 Oct 2022
   slides: https://bit.ly/vsdopen22-goog
@@ -50,6 +53,7 @@
   sort_date: '2022-08-31'
 - title: Open silicon science - NIST Integrated Circuits for Metrology Workshop
   event: NIST Integrated Circuits for Metrology Workshop
+  event_url: https://www.nist.gov/news-events/events/2022/09/nist-integrated-circuits-metrology-workshop
   year: 2022
   date: 20 Sep 2022
   slides: https://bit.ly/opensilicon-nist22
@@ -59,6 +63,7 @@
   sort_date: '2022-09-20'
 - title: RIOS Open Source Hardware IP Licensing [2022] - Google
   event: RIOS Open-source hardware IP licensing and policy workshop
+  event_url: https://www.rioslab.org/2022/07/01/open-source-hardware-ip-licensing-and-policy-workshop/
   year: 2022
   date: 30 Jun 2022
   slides: https://bit.ly/rios22-ip-goog
@@ -67,6 +72,7 @@
   sort_date: '2022-06-30'
 - title: VLSI Symposium - Why is Google Investing in Fully Open Source IC Design and What is Next?
   event: 2022 IEEE Symposium on VLSI technology & circuits
+  event_url: https://web.archive.org/web/20220615002320/https://www.vlsisymposium.org/
   year: 2022
   date: 16 Jun 2022
   slides: https://bit.ly/vlsi22-goog
@@ -76,6 +82,7 @@
   sort_date: '2022-06-16'
 - title: RISC-V Days Japan (2022 Spring) -- Latest statistics from Google's no cost shuttle program for open source designs with SkyWater Technologies and eFabless
   event: RISC-V Days Japan (2022 Spring)
+  event_url: https://riscv.or.jp/en/risc-v-days-tokyo-2022-spring/
   year: 2022
   date: 2 Jun 2022
   slides: https://bit.ly/rvd22-sky130
@@ -85,6 +92,7 @@
   sort_date: '2022-06-02'
 - title: CHIPS Alliance Spring 2022 Update -- Latest statistics from Google's no cost shuttle program for open source designs with SkyWater Technologies and eFabless
   event: CHIPS Alliance Spring 2022 Update
+  event_url: https://chipsalliance.org/events/
   year: 2022
   date: 19 Apr 2022
   slides: https://bit.ly/ca22-sky130
@@ -94,6 +102,7 @@
   sort_date: '2022-04-19'
 - title: 'SPIE: Advanced Lithography + Patterning - Why is Google Investing in Fully Open Source IC Design and What is Next?'
   event: 'SPIE: Advanced Lithography + Patterning'
+  event_url: https://web.archive.org/web/20220402212647/https://spie.org/conferences-and-exhibitions/advanced-lithography-and-patterning
   year: 2022
   date: 25 Apr 2022
   slides: https://bit.ly/spie22-goog
@@ -121,6 +130,7 @@
   sort_date: '2021-10-15'
 - title: Spring MOS-AK Workshop - Update on the SkyWater MPW program (and what is next?)
   event: Spring MOS-AK Workshop
+  event_url: https://www.mos-ak.org/spring_2022/
   year: 2022
   date: 29 Apr 2022
   slides: https://bit.ly/mosak22-goog
@@ -130,6 +140,7 @@
   sort_date: '2022-04-29'
 - title: CICC 2022 Educational - Why is Google Investing in Fully Open Source IC Design and What is Next?
   event: CICC 2022 Educational
+  event_url: https://web.archive.org/web/20220419210642/https://www.ieee-cicc.org/
   year: 2022
   date: 24 Apr 2022
   slides: https://bit.ly/cicc22-edu-goog
@@ -148,6 +159,7 @@
   sort_date: '2022-04-19'
 - title: OpenPOWER Summit 2021 - A fully FOSS memory controller with LPDDR4/5 support for FPGA and ASICs
   event: OpenPOWER Summit 2021
+  event_url: https://web.archive.org/web/20211027194446/https://events.linuxfoundation.org/openpower-summit-north-america/
   year: 2021
   date: 28 Oct 2021
   slides: https://bit.ly/ops21-litedram
@@ -159,6 +171,7 @@
   sort_date: '2021-10-28'
 - title: 'OpenTapeOut 2021 - Open down to the transistor: A fully open source, manufacturable PDK for 130nm process for IC Creation Silicon Down to the Transistor - Tim Ansell, Google'
   event: OpenTapeOut 2021
+  event_url: https://web.archive.org/web/20211104195336/https://www.opentapeout.dev/
   year: 2021
   date: 6 Nov 2021
   slides: https://j.mp/oto21-sky130
@@ -226,6 +239,7 @@
   sort_date: '2021-12-17'
 - title: 'COSCUP - Open down to the transistor: A fully open source, manufacturable PDK for 130nm process for IC Creation Silicon Down to the Transistor - Tim Ansell, Google'
   event: COSCUP x RubyConfTW 2021
+  event_url: https://coscup.org/2021/
   year: 2021
   date: 1 Aug 2021
   slides: https://j.mp/coscup21-sky130
@@ -248,6 +262,7 @@
   sort_date: '2021-06-09'
 - title: 'ESSCIRC ESSDERC 2021 - Open down to the transistor: A fully open source, manufacturable PDK for 130nm process for IC Creation Silicon Down to the Transistor - Tim Ansell, Google'
   event: ESSCIRC ESSDERC 2021
+  event_url: https://esscirc-essderc2021.org/
   year: 2021
   date: 21 Sep 2021
   slides: https://j.mp/esscxxrc21-sky130
@@ -275,6 +290,7 @@
   sort_date: '2021-09-21'
 - title: Fomu - CCCamp19
   event: CCCamp19
+  event_url: https://events.ccc.de/camp/2019/
   year: 2019
   date: 21 Aug 2019
   slides: https://j.mp/fomu-camp19
@@ -295,6 +311,7 @@
   sort_date: '2021-07-01'
 - title: 'SBCCI 2021 - Open down to the transistor: A fully open source, manufacturable PDK for 130nm process for IC Creation Silicon Down to the Transistor - Tim Ansell, Google'
   event: SBCCI 2021
+  event_url: https://sbmicro.org.br/chip-in-the-fields-2021/SBCCI2021
   year: 2021
   date: 23 Aug 2021
   slides: https://j.mp/sbcci21-sky130
@@ -322,6 +339,7 @@
   sort_date: '0000-01-01'
 - title: 'Solid-State Circuits Directions Workshop: Democratizing IC Design - Fully Open Silicon Down to the Transistor - Tim Ansell, Google'
   event: Solid-State Circuits Directions Workshop
+  event_url: https://web.archive.org/web/20210713202113/https://sscs.ieee.org/about/solid-state-circuits-directions/sscd-events?eid=617&m=5b6d4ad59751d76ea28ad2861bf887e1
   year: 2021
   date: 7 Apr 2021
   slides: https://j.mp/sscd21-sky130
@@ -349,6 +367,7 @@
   sort_date: '0000-01-01'
 - title: Love Rusty 3K - LCA2018 FPGA Project Miniconf
   event: LCA2018
+  event_url: https://web.archive.org/web/20180127143252/http://lca2018.linux.org.au/
   year: 2018
   date: 23 Jan 2018
   slides: https://docs.google.com/presentation/d/1Lw4l4uZKTiymLV6uO-w0zHtxZ7iaUEH0GTLcmeFnp1w
@@ -358,6 +377,7 @@
   sort_date: '2018-01-23'
 - title: CHIPS Alliance Spring Workshop - Fully Open Silicon Down to the Transistor - Tim Ansell, Google
   event: CHIPS Alliance Spring Workshop
+  event_url: https://web.archive.org/web/20210330153740/https://events.linuxfoundation.org/chips-alliance-spring-workshop/
   year: 2021
   date: 30 Mar 2021
   slides: https://j.mp/ca21-sky130
@@ -405,6 +425,7 @@
   sort_date: '2020-12-16'
 - title: google/skywater-pdk - Manufacturable Open Source 130nm PDK - RISC-V Summit 2020
   event: RISC-V Summit 2020
+  event_url: https://web.archive.org/web/20201130105336/https://riscv.org/event/risc-v-summit/
   year: 2020
   date: Dec 2020
   slides: https://docs.google.com/presentation/d/162f5qDoM8ndd-aIJHhiOL57tochxX5aTtYXs3oWrR-4
@@ -416,6 +437,7 @@
   sort_date: '2020-12-01'
 - title: 'ICCAD20 - The Missing Pieces of Open Design Enablement: A Recent History of Google Efforts'
   event: ICCAD20
+  event_url: https://web.archive.org/web/20201101130041/https://iccad.com/
   year: 2020
   date: 3 Nov 2020
   slides: https://bit.ly/iccad20-goog-miss
@@ -426,6 +448,7 @@
   sort_date: '2020-11-03'
 - title: google/skywater-pdk - Manufacturable Open Source 130nm PDK - FOSSi Foundation Dialup Talk Series
   event: FOSSi Foundation Dialup Talk Series
+  event_url: https://web.archive.org/web/20200707124528/https://fossi-foundation.org/dial-up/
   year: 2020
   date: 30 Jun 2020
   slides: https://j.mp/du20-sky130
@@ -464,6 +487,7 @@
   sort_date: '2020-01-01'
 - title: 'Eating Rabbits: A guide to using Python to conquer FPGA video systems'
   event: Teardown
+  event_url: https://www.crowdsupply.com/teardown/portland-2018
   year: 2018
   date: 12 May 2018
   slides: https://docs.google.com/presentation/d/1C6OVyv6tFeKrRPNCX0WCjVNiWqTL1vgzUcFECrUz-B8
@@ -475,6 +499,7 @@
   sort_date: '2018-05-12'
 - title: Fomu - RISC-V Summit 2019
   event: RISC-V Summit 2019
+  event_url: https://web.archive.org/web/20191210071825/https://tmt.knect365.com/risc-v-summit/
   year: 2019
   date: 12 Dec 2019
   slides: https://docs.google.com/presentation/d/1ea_FEC7TAWe5bfHVYYN6BFrdF34jELIfh7QgQKg0Ndc
@@ -486,6 +511,7 @@
   sort_date: '2019-12-12'
 - title: SymbiFlow - Xilinx Series 7 FPGAs now have a fully Open Source toolchain! - HAD2019
   event: HAD2019
+  event_url: https://web.archive.org/web/20191115234804/https://hackaday.io/superconference/
   year: 2019
   date: 17 Nov 2019
   slides: https://docs.google.com/presentation/d/1YQZELnTiVDw7GGsNk-h_ojh-vMDLk23WXathY7sPudQ
@@ -497,6 +523,7 @@
   sort_date: '2019-11-17'
 - title: OrConf19 - SymbiFlow Combined Slides
   event: OrConf19
+  event_url: https://orconf.org/2019/
   year: 2019
   date: 28 Sep 2019
   slides: https://docs.google.com/presentation/d/11diLJ7RY9z9h9UPnWGvczLXCcom9a8loNPUZsbzsHBc
@@ -506,6 +533,7 @@
   sort_date: '2019-09-28'
 - title: OrConf19 - v2x - Generation of VPR Architecture from Verilog Files
   event: OrConf19
+  event_url: https://orconf.org/2019/
   year: 2019
   date: 28 Sep 2019
   slides: https://docs.google.com/presentation/d/1KKjIJHskaowFeJR7Llllrg0Dua_DpE9BIdZTlpoVTRk
@@ -515,6 +543,7 @@
   sort_date: '2019-09-28'
 - title: OrConf19 - Status of Artix 7 support in SymbiFlow
   event: OrConf19
+  event_url: https://orconf.org/2019/
   year: 2019
   date: 28 Sep 2019
   slides: https://docs.google.com/presentation/d/1EBpThE64ci4nNbQaO5n_Uc7QmDGpcb1Rm-iNAyd7fUw
@@ -553,6 +582,7 @@
   sort_date: '0000-01-01'
 - title: Tim has too many projects - PyOhio19 Version
   event: PyOhio19
+  event_url: https://www.pyohio.org/2019/
   year: 2019
   date: 27 Jul 2019
   slides: https://j.mp/timtoomany-pyo19
@@ -562,6 +592,7 @@
   sort_date: '2019-07-27'
 - title: ERI Summit POSH/IDEA - Open Source 102
   event: DARPA ERI Summit
+  event_url: https://web.archive.org/web/20190717193653/http://eri-summit.com/
   year: 2019
   date: 17 Jul 2019
   slides: https://j.mp/eri19-foss102
@@ -571,6 +602,7 @@
   sort_date: '2019-07-17'
 - title: ERI Summit POSH/IDEA - Open Source 101
   event: DARPA ERI Summit
+  event_url: https://web.archive.org/web/20190717193653/http://eri-summit.com/
   year: 2019
   date: 17 Jul 2019
   slides: https://j.mp/eri19-foss101
@@ -580,6 +612,7 @@
   sort_date: '2019-07-17'
 - title: I'm Tomu - Microprocessor which fits *inside* your USB slot (33C3 Version) -- Original?
   event: 33C3
+  event_url: https://fahrplan.events.ccc.de/congress/2016/Fahrplan/index.html
   year: 2016
   date: 29 Dec 2016
   slides: https://docs.google.com/presentation/d/12oJ6TG7MS-XbXDMtXsnExupP8yQ20YIIXUq6H64rTFs
@@ -607,6 +640,7 @@
   sort_date: '0000-01-01'
 - title: Tim has too many projects - LatchUp18 Version
   event: Latch-Up 2019
+  event_url: https://web.archive.org/web/20190507122353/https://fossi-foundation.org/latchup/
   year: 2019
   date: 5 May 2019
   slides: https://docs.google.com/presentation/d/1BqQDv7261i9DfhcXhXZVtFqAFz9sO72qg0QGKSCrroI
@@ -618,6 +652,7 @@
   sort_date: '2019-05-05'
 - title: SymbiFlow - Finally the GCC of FPGAs! - 35c3
   event: 35C3
+  event_url: https://fahrplan.events.ccc.de/congress/2018/Fahrplan/index.html
   year: 2018
   date: 28 Dec 2018
   slides: https://docs.google.com/presentation/d/18HM63VXKigypJy6vniqfk6a7QaTu4Yj8YdmyqVBVYtY
@@ -629,6 +664,7 @@
   sort_date: '2018-12-28'
 - title: Cool and awesome projects you should work on! (aka Tim has too many projects) - LCA2017 Version
   event: LCA2017
+  event_url: https://web.archive.org/web/20170116173021/https://linux.conf.au/
   year: 2017
   date: 20 Jan 2017
   slides: https://docs.google.com/presentation/d/1wM-dOx_KsP71fZYps2aXOUPeLxYSfxQNk14m6N-CKnc
@@ -638,6 +674,7 @@
   sort_date: '2017-01-20'
 - title: SymbiFlow - Finally the GCC of FPGAs! - LCA2019
   event: LCA2019
+  event_url: https://web.archive.org/web/20190228172232/https://lca2019.linux.org.au/
   year: 2019
   date: 24 Jan 2019
   slides: https://docs.google.com/presentation/d/1mIrmFpAtgkGCKa5nMawT_pBeOVps4VuxmHJHEP6VaBc
@@ -649,6 +686,7 @@
   sort_date: '2019-01-24'
 - title: I'm Tomu - Microprocessor which fits *inside* your USB slot (LCA2019)
   event: LCA2019
+  event_url: https://web.archive.org/web/20190228172232/https://lca2019.linux.org.au/
   year: 2019
   date: 21 Jan 2019
   slides: https://docs.google.com/presentation/d/16cimTC7QCa0OUeBbc7PX8p_nroaZcObBp6hROyasmR4
@@ -658,6 +696,7 @@
   sort_date: '2019-01-21'
 - title: I'm Tomu - Microprocessor which fits *inside* your USB slot (HackADay SuperCon 2018)
   event: HackADay SuperCon 2018
+  event_url: https://web.archive.org/web/20181104151652/https://hackaday.io/superconference/
   year: 2018
   date: 3 Nov 2018
   slides: https://docs.google.com/presentation/d/1f3kR6iMGiKx3irbp2zQhVYaf9nDm7wP0OUxZTF-p1is
@@ -669,6 +708,7 @@
   sort_date: '2018-11-03'
 - title: Snakes and Rabbits - How CCC shaped an open hardware success
   event: 35C3
+  event_url: https://fahrplan.events.ccc.de/congress/2018/Fahrplan/index.html
   year: 2018
   date: 28 Dec 2018
   slides: https://docs.google.com/presentation/d/1knUj0soo94Sr_tOWjYDGG0KJNwEIrc8BQMA0C_Qs-pY
@@ -680,6 +720,7 @@
   sort_date: '2018-12-28'
 - title: An update on SymbiFlow - a multiplatform FPGA project
   event: OrConf 2018
+  event_url: https://archive.orconf.org/2018/
   year: 2018
   date: 22 Sep 2018
   slides: https://docs.google.com/presentation/d/1GZrZCDr59AObbs6rtPOdraIlhRz1YNychQ8M0NbOQlQ
@@ -709,6 +750,7 @@
   sort_date: '0000-01-01'
 - title: Tim has too many projects - CCCamp15 Version
   event: CCCamp15
+  event_url: https://events.ccc.de/camp/2015/
   year: 2015
   date: 14 Aug 2015
   slides: https://docs.google.com/presentation/d/1565UnU3ApvMtouKnc6jfM7NSn1hG1t4im9B7-5GWSso
@@ -720,6 +762,7 @@
   sort_date: '2015-08-14'
 - title: FuPy - FPGAs and MicroPython! (SF Python)
   event: SF Python
+  event_url: https://www.meetup.com/sfpython/
   year: 0
   date: ''
   slides: https://docs.google.com/presentation/d/1ASVlDdQft_it-PCYlAvPYADBTLZLGEpxbn6hrQ_TB6Q
@@ -756,6 +799,7 @@
   sort_date: '0000-01-01'
 - title: I'm Tomu - Microprocessor which fits *inside* your USB slot (LCA2017 Version)
   event: LCA2017
+  event_url: https://web.archive.org/web/20170116173021/https://linux.conf.au/
   year: 2017
   date: 17 Jan 2017
   slides: https://j.mp/tomu-lca2017
@@ -765,6 +809,7 @@
   sort_date: '2017-01-17'
 - title: Using Python for creating hardware to record FOSS conferences! (PyCon AU 2017)
   event: PyCon AU 2017
+  event_url: https://2017.pycon-au.org/
   year: 2017
   date: 4 Aug 2017
   slides: https://docs.google.com/presentation/d/1u65J6-3jZ_cdUvahtfg6FsTmzVIBRMkFg5GJ_CEjN6A
@@ -776,6 +821,7 @@
   sort_date: '2017-08-04'
 - title: Using Python for creating FPGA based hardware to record FOSS conferences! (HGGD28 - 2018)
   event: HDDG 28
+  event_url: https://web.archive.org/web/20170818121727/http://www.meetup.com/Hardware-Developers-Didactic-Galactic/
   year: 2018
   date: 22 Mar 2018
   slides: https://docs.google.com/presentation/d/1hRumYrks6HfgYkFBngvo0eDLq9l7MnemlEOondn2JMQ
@@ -787,6 +833,7 @@
   sort_date: '2018-03-22'
 - title: Being an effective FPGA Dev - LCA2018 FPGA Project Miniconf
   event: LCA2018
+  event_url: https://web.archive.org/web/20180127143252/http://lca2018.linux.org.au/
   year: 2018
   date: 23 Jan 2018
   slides: https://docs.google.com/presentation/d/16gKGk759063-wo-orZ8akO6C9KCMyi-SJcrS1oqBsIo
@@ -796,6 +843,7 @@
   sort_date: '2018-01-23'
 - title: LED Flashing - LCA2018 FPGA Project Miniconf
   event: LCA2018
+  event_url: https://web.archive.org/web/20180127143252/http://lca2018.linux.org.au/
   year: 2018
   date: 23 Jan 2018
   slides: https://docs.google.com/presentation/d/1M7f6QoIcNFKd9qSij50gUCezrbUYetuJ4U9-c09R7fg
@@ -805,6 +853,7 @@
   sort_date: '2018-01-23'
 - title: Introduction - LCA2018 FPGA Project Miniconf
   event: LCA2018
+  event_url: https://web.archive.org/web/20180127143252/http://lca2018.linux.org.au/
   year: 2018
   date: 23 Jan 2018
   slides: https://docs.google.com/presentation/d/1AQK8YwrnqPDqBglcrjPeqQ5nr9XnTg1suGp1kb1970k
@@ -814,6 +863,7 @@
   sort_date: '2018-01-23'
 - title: MicroPython on FPGAs
   event: PyCon AU 2017
+  event_url: https://2017.pycon-au.org/
   year: 2017
   date: 5 Aug 2017
   slides: https://j.mp/fupy-pycon2017
@@ -823,6 +873,7 @@
   sort_date: '2017-08-05'
 - title: Using Python for creating hardware to record FOSS conferences! (LCA2017)
   event: LCA2017
+  event_url: https://web.archive.org/web/20170116173021/https://linux.conf.au/
   year: 2017
   date: 19 Jan 2017
   slides: https://docs.google.com/presentation/d/1dnwTf-pOnXshMV1v-fxlpRy8g3MTQgsH3T7eJRU1AUo
@@ -834,6 +885,7 @@
   sort_date: '2017-01-19'
 - title: Tim has too many projects - PyConAU15 Version
   event: PyCon AU 2015
+  event_url: https://2015.pycon-au.org/
   year: 2015
   date: 1 Aug 2015
   slides: https://docs.google.com/presentation/d/12LK397OSnFd1X5g-iSAFK-ovA90LFzaQVzyanTEGu0I
@@ -843,6 +895,7 @@
   sort_date: '2015-08-01'
 - title: Dissecting HDMI - Developing open, FPGA-based capture hardware for conference & user group recording [33C3]
   event: 33C3
+  event_url: https://fahrplan.events.ccc.de/congress/2016/Fahrplan/index.html
   year: 2016
   date: 29 Dec 2016
   slides: https://docs.google.com/presentation/d/1HQT8JVzwX2CtzUHpIGvvL7kSYMYstzjOwrZHSHhUfL0
@@ -854,6 +907,7 @@
   sort_date: '2016-12-29'
 - title: I'm Tomu - Microprocessor which fits *inside* your USB slot (33C3 Version)
   event: 33C3
+  event_url: https://fahrplan.events.ccc.de/congress/2016/Fahrplan/index.html
   year: 2016
   date: 29 Dec 2016
   slides: https://docs.google.com/presentation/d/1XT5oWsYzFATEelErZnxvSWVnVSFUm2gO2fWi31SKbWI
@@ -863,6 +917,7 @@
   sort_date: '2016-12-29'
 - title: I'm Tomu - Microprocessor which fits *inside* your USB slot (CyptoParty, Sydney, October 2016)
   event: CyptoParty, Sydney
+  event_url: https://web.archive.org/web/20161002052345/https://www.cryptoparty.in/sydney
   year: 2016
   date: Oct 2016
   slides: https://docs.google.com/presentation/d/1BIs-_TyDVwslrIBCsOALj73NRvq6Fjja8x0y50SZn4k
@@ -872,33 +927,37 @@
   sort_date: '2016-10-01'
 - title: Random Talk about HDMI, Python and FPGAs (TT2016)
   event: TT2016
+  event_url: https://web.archive.org/web/20170305091151/http://wiki.madebymikal.com/index.php?title=Technical_Topics:December_2016
   year: 2016
-  date: ''
+  date: Dec 2016
   slides: https://docs.google.com/presentation/d/1PvIlhWfax8tKt0FlZ18NDdvT06vBr2YywLVgxwRYwqs
   slides_embed: https://docs.google.com/presentation/d/1PvIlhWfax8tKt0FlZ18NDdvT06vBr2YywLVgxwRYwqs/embed
   slides_edit: https://docs.google.com/presentation/d/1PvIlhWfax8tKt0FlZ18NDdvT06vBr2YywLVgxwRYwqs
   source: sheet
-  sort_date: '2016-07-01'
+  sort_date: '2016-12-01'
 - title: I'm Tomu - Microprocessor which fits *inside* your USB slot (TT2016 Version)
   event: TT2016
+  event_url: https://web.archive.org/web/20170305091151/http://wiki.madebymikal.com/index.php?title=Technical_Topics:December_2016
   year: 2016
-  date: ''
+  date: Dec 2016
   slides: https://docs.google.com/presentation/d/1hEEN705elNplHNoyttJaSHqFrE-rLkGn2M8LLpmHvs0
   slides_embed: https://docs.google.com/presentation/d/1hEEN705elNplHNoyttJaSHqFrE-rLkGn2M8LLpmHvs0/embed
   slides_edit: https://docs.google.com/presentation/d/1hEEN705elNplHNoyttJaSHqFrE-rLkGn2M8LLpmHvs0
   source: sheet
-  sort_date: '2016-07-01'
+  sort_date: '2016-12-01'
 - title: Cool and awesome projects you should work on! (aka Tim has too many projects) - TT2016 Version
   event: TT2016
+  event_url: https://web.archive.org/web/20170305091151/http://wiki.madebymikal.com/index.php?title=Technical_Topics:December_2016
   year: 2016
-  date: ''
+  date: Dec 2016
   slides: https://docs.google.com/presentation/d/1wmmM8vzBwNVZlv6pqCPUptwxGMzbDlj_HfJAPXIIP-U
   slides_embed: https://docs.google.com/presentation/d/1wmmM8vzBwNVZlv6pqCPUptwxGMzbDlj_HfJAPXIIP-U/embed
   slides_edit: https://docs.google.com/presentation/d/1wmmM8vzBwNVZlv6pqCPUptwxGMzbDlj_HfJAPXIIP-U
   source: sheet
-  sort_date: '2016-07-01'
+  sort_date: '2016-12-01'
 - title: Designing Hardware with Python (SyPy 2015)
   event: SyPy (Sydney Python User Group)
+  event_url: https://www.meetup.com/sydneypython/
   year: 2015
   date: 1 Oct 2015
   slides: https://docs.google.com/presentation/d/1zYAACfGHJgC99R8z367V15zajuZISrzZes2d2cguYm8
@@ -910,6 +969,7 @@
   sort_date: '2015-10-01'
 - title: Designing Hardware with Python (PyCon AU 2016)
   event: PyCon AU 2016
+  event_url: https://2016.pycon-au.org/
   year: 2016
   date: 13 Aug 2016
   slides: https://docs.google.com/presentation/d/15hsBGf7nvxl3VBNiXJJV9zRASovTK5Xmp3QktwtheVc
@@ -921,6 +981,7 @@
   sort_date: '2016-08-13'
 - title: Debugging HDMI & other tales from developing conference capture hardware....
   event: PyCon AU 2016
+  event_url: https://2016.pycon-au.org/
   year: 2016
   date: 14 Aug 2016
   slides: https://j.mp/hdmi-pyconau2016
@@ -930,6 +991,7 @@
   sort_date: '2016-08-14'
 - title: slidelint
   event: LCA 2014
+  event_url: https://web.archive.org/web/20140110100423/https://lca2014.linux.org.au/
   year: 2014
   date: 10 Jan 2014
   slides: https://docs.google.com/presentation/d/13gF-Z_C_JYEdg2UIhL6fokMNYNUzKlWKfBKrr4GJyNw
@@ -941,6 +1003,7 @@
   sort_date: '2014-01-10'
 - title: Tim has too many projects
   event: PyCon AU 2014
+  event_url: https://2014.pycon-au.org/
   year: 2014
   date: 3 Aug 2014
   slides: https://docs.google.com/presentation/d/1IG0wbCLwuqmlmupwbjb8EBHlytnE8Lwg_kBgu7_9cHk
@@ -952,6 +1015,7 @@
   sort_date: '2014-08-03'
 - title: TimVideos HDMI2USB and WebRTC
   event: WebRTC Sydney Meetup
+  event_url: https://web.archive.org/web/20151016225107/http://www.meetup.com/WebRTC-Sydney/
   year: 2015
   date: 19 Oct 2015
   slides: https://docs.google.com/presentation/d/16ryX2U2I5_iIUeQPoo63pbHeBpMsdtfQ3ItvmKqV-bg
@@ -963,6 +1027,7 @@
   sort_date: '2015-10-19'
 - title: Tim has too many projects - DebConf15 Version
   event: DebConf15
+  event_url: https://debconf15.debconf.org/
   year: 2015
   date: 20 Aug 2015
   slides: https://docs.google.com/presentation/d/1dBbUrQIMc8AGMfL3II-vVEDRYvjNEbW-B4K2v_5mU_Q
@@ -981,6 +1046,7 @@
   sort_date: '2015-07-01'
 - title: Other Things! - LCA 2014
   event: LCA 2014
+  event_url: https://web.archive.org/web/20140110100423/https://lca2014.linux.org.au/
   year: 2014
   date: 10 Jan 2014
   slides: https://docs.google.com/presentation/d/1bQEGZLKoRJGlcIzhVPFaJp8RLY7x6y0z5OjcHMTC18I
@@ -990,6 +1056,7 @@
   sort_date: '2014-01-10'
 - title: Other Things! - PyCon AU 2013
   event: PyCon AU 2013
+  event_url: https://2013.pycon-au.org/
   year: 2013
   date: 7 Jul 2013
   slides: https://docs.google.com/presentation/d/1rOUVeid8n2cu0FHFl0gzABSr32yRzKn-4pO7Wa_bEis
@@ -999,6 +1066,7 @@
   sort_date: '2013-07-07'
 - title: Linux.conf.au and TimVideos - Live Streaming
   event: LCA 2014
+  event_url: https://web.archive.org/web/20140110100423/https://lca2014.linux.org.au/
   year: 2014
   date: 7 Jan 2014
   slides: https://docs.google.com/presentation/d/1VrHdjbKqjr70qH-SmKGDoM2SjGfy1dc5LbKuL3VKeF0
@@ -1010,6 +1078,7 @@
   sort_date: '2014-01-07'
 - title: Making Video Streaming Interactive
   event: LCA 2012
+  event_url: https://web.archive.org/web/20120106163630/http://linux.conf.au/
   year: 2012
   date: 19 Jan 2012
   slides: https://docs.google.com/presentation/d/17qB_kT0wWE_jRR4YHqMUnyNbfnD5vgf23EYC9Gktyl0
@@ -1039,6 +1108,7 @@
   sort_date: '0000-01-01'
 - title: PyCon AU - 2013 - 10 Projects, 5 minutes
   event: PyCon AU 2013
+  event_url: https://2013.pycon-au.org/
   year: 2013
   date: 6 Jul 2013
   slides: https://docs.google.com/presentation/d/1Nc16Ho4qYlqPGenXMhgInkgz3EcsvSlhGAOxmXb2ijc
@@ -1048,6 +1118,7 @@
   sort_date: '2013-07-06'
 - title: Fun with gstreamer pipelines - Python
   event: LCA2013
+  event_url: https://web.archive.org/web/20130119013015/https://lca2013.linux.org.au/
   year: 2013
   date: 28 Jan 2013
   slides: https://docs.google.com/presentation/d/1Kn1qsBpQEDCtdoEFAmsRZ9n4E4p8dnI8VfvqoFvmtZA
@@ -1059,6 +1130,7 @@
   sort_date: '2013-01-28'
 - title: Other Things! - PyCon AU 2012
   event: PyCon AU 2012
+  event_url: https://2012.pycon-au.org/
   year: 2012
   date: 19 Aug 2012
   slides: https://docs.google.com/presentation/d/1XJ02OwvkJb0WV5bUrTWayQg8FKjIYL7x-TpYZ8NpZYk
@@ -1086,6 +1158,7 @@
   sort_date: '0000-01-01'
 - title: 'Discussion Panel: the open way for making chips and its impact!'
   event: COSCUP x RubyConfTW 2021
+  event_url: https://coscup.org/2021/
   year: 2021
   date: 1 Aug 2021
   video: https://youtu.be/2vPqqKYUebE
@@ -1094,6 +1167,7 @@
   sort_date: '2021-08-01'
 - title: '"3 Talks for the Price of 1!" - Tim Ansell (LCA 2020)'
   event: LCA 2020
+  event_url: https://web.archive.org/web/20200321215720/https://lca2020.linux.org.au/
   year: 2020
   date: 13 Jan 2020
   video: https://youtu.be/jygZtVzbcek
@@ -1102,12 +1176,13 @@
   sort_date: '2020-01-13'
 - title: Lightning Talk given at PyCon AU
   event: PyCon AU
-  year: 0
-  date: ''
+  event_url: https://web.archive.org/web/20110825100753/http://pycon-au.org/2011/about/
+  year: 2011
+  date: Aug 2011
   video: https://youtu.be/XlsaALzn7No
   video_title: Lightning Talk given at PyCon AU
   source: sheet
-  sort_date: '0000-01-01'
+  sort_date: '2011-08-01'
 - title: Google Lightning Talks (2009-07) - Write a game in 5 minutes
   event: Google Internal
   year: 2009
@@ -1118,6 +1193,7 @@
   sort_date: '2009-07-01'
 - title: Google Tech Talk (2008-06) - Gaming For Freedom
   event: Google Tech Talk
+  event_url: https://www.youtube.com/user/GoogleTechTalks
   year: 2008
   date: 5 Jun 2008
   video: https://youtu.be/ekrypMxEB44
@@ -1126,6 +1202,7 @@
   sort_date: '2008-06-05'
 - title: 'wafer.space: Silicon now $4 USD, get inspired from Run #1!'
   event: Hackware hardware meetup, Singapore
+  event_url: https://luma.com/myyz0ab6
   year: 2026
   date: 2 Apr 2026
   video: https://www.youtube.com/watch?v=t6Z0_Krhshc
@@ -1135,6 +1212,7 @@
   slides_embed: https://docs.google.com/presentation/d/1rxkuZUQ4PWsyyaC8cx8P8C96ZEm0XDM42W2A2Rgo3rE/embed
 - title: A brain dump on open source silicon (FPGAs, ASICs and similar)
   event: Lawrence Berkeley National Laboratory (LBNL) seminar
+  event_url: https://en.wikipedia.org/wiki/Lawrence_Berkeley_National_Laboratory
   year: 2025
   date: May 2025
   slides: https://bit.ly/mithro-lbnl25
@@ -1143,6 +1221,7 @@
   sort_date: '2025-05-01'
 - title: wafer.space - Budget silicon manufacturing (lightning talk)
   event: Latch-Up 2025, UC Santa Barbara
+  event_url: https://fossi-foundation.org/latch-up/2025
   year: 2025
   date: 3 May 2025
   source: compiled
@@ -1159,6 +1238,7 @@
   sort_date: '2025-03-14'
 - title: So you wanna make a chip? Open Source Silicon
   event: <d/acc day> @ UC Berkeley
+  event_url: https://luma.com/o99rcou9
   year: 2025
   date: 13 Mar 2025
   slides: https://bit.ly/open-silicon-dacc
@@ -1167,6 +1247,7 @@
   sort_date: '2025-03-13'
 - title: Open-source silicon enabling HEP-IC opportunities
   event: High Energy Physics IC Workshop (HEP-IC 2024), Brookhaven National Laboratory
+  event_url: https://indico.bnl.gov/event/22551/
   year: 2024
   date: 2 May 2024
   slides: https://bit.ly/mithro-hepic24
@@ -1175,6 +1256,7 @@
   sort_date: '2024-05-02'
 - title: Will open source design be the future direction? (panelist)
   event: IEEE Custom Integrated Circuits Conference (CICC) 2024, Denver
+  event_url: https://web.archive.org/web/20240422155606/https://www.ieee-cicc.org/
   year: 2024
   date: 22 Apr 2024
   slides: https://bit.ly/mithro-cicc24
@@ -1183,6 +1265,7 @@
   sort_date: '2024-04-22'
 - title: Tim's Silicon Presentations
   event: Latch-Up 2024, MIT
+  event_url: https://fossi-foundation.org/latch-up/2024
   year: 2024
   date: 19 Apr 2024
   slides: https://bit.ly/tim-silicon-2024
@@ -1209,6 +1292,7 @@
   sort_date: '2023-07-01'
 - title: wafer.space - COSCUP 2026
   event: COSCUP 2026
+  event_url: https://coscup.org/2026/
   year: 2026
   date: ''
   slides: https://docs.google.com/presentation/d/1OwQk496IsRp-9S61GmK5Ew7lkc1Qf1SRQ3MvaJn9Fsc
@@ -1217,6 +1301,7 @@
   sort_date: '2026-08-08'
 - title: wafer.space - Hack-A-Day Europe 2026
   event: Hackaday Europe 2026
+  event_url: https://hackaday.io/europe2026/
   year: 2026
   date: ''
   slides: https://docs.google.com/presentation/d/19B_h0WY9UAcuUAcgJF6T_YBWIk7LCmVd9yK6ZmSfHk4
@@ -1225,6 +1310,7 @@
   sort_date: '2026-05-16'
 - title: wafer.space - Silicon Sprint AUC 2026
   event: Silicon Sprint AUC 2026
+  event_url: https://www.asic-hub.org/silicon-sprint
   year: 2026
   date: ''
   slides: https://docs.google.com/presentation/d/1PF5bVWQY2wML1B6cTRs9q0EVngTXpYYBdOQMwuvrHx4
@@ -1233,6 +1319,7 @@
   sort_date: '2026-04-06'
 - title: wafer.space - Down Underflow 2026
   event: Down Underflow 2026
+  event_url: https://fossi-foundation.org/downunderflow/2026
   year: 2026
   date: ''
   slides: https://docs.google.com/presentation/d/1rm-qfeo2sq3mF7M_VMgdgMnmqoOVOsmlqGDwuwcfNG0
@@ -1241,6 +1328,7 @@
   sort_date: '2026-02-27'
 - title: wafer.space - Hackware 2025
   event: Hackware hardware meetup, Singapore
+  event_url: https://luma.com/vo80eh5p
   year: 2025
   date: ''
   slides: https://docs.google.com/presentation/d/1w7wblALt7JnNUvFwazbV_eICCFPlBI-f8cd3xUwHwZM
@@ -1249,6 +1337,7 @@
   sort_date: '2025-10-09'
 - title: ESSCIRC workshop 2022 presentation
   event: ESSCIRC ESSDERC 2022
+  event_url: https://web.archive.org/web/20220916072719/https://www.esscirc-essderc2022.org/
   year: 2022
   date: ''
   slides: https://docs.google.com/presentation/d/17PmLMICwDsupvkcZhJs-43lX7KdScTgKq_0T_QwlIo4
