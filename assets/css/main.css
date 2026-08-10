@@ -59,7 +59,7 @@ a { color: var(--gold); }
   max-width: 52ch; font-family: var(--sans);
 }
 .hero-photo { position: relative; min-height: 340px; border-left: 1px solid var(--gold-dim); }
-.hero-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%; }
+.hero-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; }
 .hero-photo .cap {
   position: absolute; left: 0; right: 0; bottom: 0;
   background: rgba(14,15,17,.82);
