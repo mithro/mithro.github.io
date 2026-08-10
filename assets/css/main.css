@@ -175,6 +175,19 @@ a { color: var(--gold); }
 .err h1 { color: var(--gold); font-size: 2rem; }
 .err .prose { margin: 0 auto; }
 
+/* Below this width the two-column talk table can't fit, so instead of
+   horizontal scrolling each row stacks: title, then event · date. */
+@media (max-width: 640px) {
+  .talks-table { min-width: 0; }
+  .talks-table thead { display: none; }
+  .talks-table, .talks-table tbody, .talks-table tr, .talks-table td { display: block; }
+  .talks-table tr { border-top: 1px solid var(--line); padding: .55rem 0; }
+  .talks-table td { border-top: 0; padding: 0; }
+  .talks-table td.ev { text-align: left; }
+  .talks-table td.ev > span { max-width: none; margin-left: 0; font-size: .78rem; margin-top: .15rem; }
+  .talks-table td.ev .ev-none { display: none; }
+}
+
 @media (max-width: 760px) {
   .hero { grid-template-columns: 1fr; }
   .hero-photo { border-left: 0; border-top: 1px solid var(--gold-dim); min-height: 240px; }
