@@ -11,3 +11,6 @@ Gemfile.lock
 # scripts/fetch_bitly.py; visibility source of truth is the private
 # "mith.ro short links" Google Sheet.
 _data/shortlinks.yaml
+
+# Playwright MCP session artifacts (screenshots, logs)
+.playwright-mcp/
