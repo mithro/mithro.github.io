@@ -18,6 +18,9 @@
   album: "wafer.space Run #1 - Customer Photos"
   album_url: "https://photos.app.goo.gl/2vo4baXmki3fGFdb7"
   source_url: "https://lh3.googleusercontent.com/pw/AP1GczPUQfpMW1m8tASXoPAjuSZQzsh0TK_r-EMZftDczSxkLXGjg1gDu8ihfhWtdS5734OaExmqQZMRjLBpDke7ggWLUD2sjIjirIKU67PyM4Bqv4Bk6ZgC"
+- file: tim-ansell.jpg
+  source_url: "https://wafer.space/assets/images/people/tim.jpg"
+  note: "Portrait from the wafer.space about page (Tim's own site)."
 - file: og-image.jpg
   derived_from: die-scan.jpg
   generator: scripts/make_og_image.py
