@@ -108,18 +108,10 @@ a { color: var(--gold); }
 .talks-table td.ev { color: var(--muted); text-align: right; }
 .talks-table td.ev > span { display: block; max-width: 28rem; margin-left: auto; text-wrap: pretty; }
 .talks-table .vid { color: var(--blue); font-size: .78rem; text-decoration: none; white-space: nowrap; }
-.vid-embed { display: inline-block; }
-.vid-embed summary {
-  color: var(--blue); font-size: .78rem; cursor: pointer; list-style: none;
-  display: inline; user-select: none;
-}
-.vid-embed summary::-webkit-details-marker { display: none; }
-.vid-embed summary:hover, .vid-embed summary:focus-visible { color: var(--gold); }
-.vid-embed[open] { display: block; }
-.vid-embed .vid-frame iframe {
-  display: block; width: 100%; max-width: 560px; aspect-ratio: 16 / 9;
-  border: 1px solid var(--line); border-radius: 4px; margin: .55rem 0 .3rem;
-}
+.embeds { display: flex; flex-wrap: wrap; gap: .6rem; margin: .55rem 0 .3rem; }
+.embeds iframe { display: block; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); }
+.embeds .emb-video { width: min(100%, 420px); aspect-ratio: 16 / 9; }
+.embeds .emb-slides { width: min(100%, 420px); aspect-ratio: 960 / 569; }
 .table-scroll { overflow-x: auto; }
 
 .gallery {
@@ -205,3 +197,50 @@ a { color: var(--gold); }
 
 .year-head { font-family: var(--mono); color: var(--silk); font-size: 1rem; margin: 1.6rem 0 .4rem; }
 .ev-none { opacity: .35; }
+
+/* ---- Print ----------------------------------------------------------
+   The resume page prints like the canonical resume Google Doc: black
+   Arial on white, plain section headings, name + contact masthead.
+   The masthead exists only in resume/index.html; the rest of these
+   rules also give the other pages a sane light printout. */
+.print-head { display: none; }
+
+@page { margin: 1.6cm; }
+
+@media print {
+  body {
+    background: #fff; color: #000;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10.5pt; line-height: 1.35;
+  }
+  .topline, .footer, .no-print { display: none !important; }
+  a { color: #000; }
+
+  .print-head {
+    display: block; text-align: center;
+    border-bottom: 2pt solid #000;
+    margin: 0 0 10pt; padding-bottom: 6pt;
+  }
+  .print-head h1 { font-size: 20pt; margin: 0 0 3pt; }
+  .print-head .print-contact { margin: 0; font-size: 10pt; }
+
+  .sect { max-width: none; padding: 0; }
+  .sect h2 {
+    color: #000; font-size: 13pt; letter-spacing: .02em;
+    border-bottom: 1.5pt solid #000; padding-bottom: 2pt;
+    margin: 14pt 0 6pt;
+  }
+  .sect h2 [aria-hidden="true"] { display: none; } /* emoji: screen-only */
+
+  .prose { max-width: none; color: #000; font-family: inherit; font-size: 10.5pt; break-inside: avoid; }
+  .prose h3 { color: #000; font-family: inherit; font-size: 11pt; margin: 8pt 0 2pt; }
+  .prose.meta, .prose .meta { color: #333; font-family: inherit; font-size: 9.5pt; }
+  .sect .prose + .prose { border-top: 0; margin-top: 6pt; padding-top: 0; }
+  .prose a, .papers-list .ti a { color: #000; border-bottom: 0; text-decoration: none; }
+
+  .papers-list { max-width: none; }
+  .papers-list li { border-top: 0; padding: 3pt 0; break-inside: avoid; }
+  .papers-list .au, .papers-list .ve { color: #333; }
+  .skills-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .embeds { display: none; } /* iframes can't print */
+}
