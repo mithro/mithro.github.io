@@ -17,7 +17,8 @@ import shutil
 
 import yaml
 
-RESERVED = {"talks", "papers", "resume", "about", "assets", "docs", "scripts", "404"}
+RESERVED = {"talks", "papers", "projects", "resume", "about", "assets",
+            "docs", "scripts", "404"}
 
 links = yaml.safe_load(open("_data/shortlinks.yaml"))
 outdir = pathlib.Path("redirects")
@@ -26,20 +27,26 @@ if outdir.exists():
 outdir.mkdir()
 
 count = 0
+seen: set[str] = set()
 for e in links:
     if not e["include"]:
         continue
-    kw = e["keyword"]
-    if kw.lower() in RESERVED:
-        print(f"SKIP reserved: {kw}")
-        continue
-    stub = outdir / f"{kw}.md"
-    stub.write_text(
-        "---\n"
-        f"permalink: /{kw}/\n"
-        f"redirect_to: \"{e['long_url']}\"\n"
-        "sitemap: false\n"
-        "---\n"
-    )
-    count += 1
+    customs = [u.rsplit("/", 1)[-1] for u in e.get("custom_bitlinks") or []]
+    # A stub for the keyword and for every custom alias of the link.
+    for name in [e["keyword"], *customs]:
+        if name.lower() in RESERVED:
+            print(f"SKIP reserved: {name}")
+            continue
+        if name in seen:
+            continue
+        seen.add(name)
+        stub = outdir / f"{name}.md"
+        stub.write_text(
+            "---\n"
+            f"permalink: /{name}/\n"
+            f"redirect_to: \"{e['long_url']}\"\n"
+            "sitemap: false\n"
+            "---\n"
+        )
+        count += 1
 print(f"Wrote {count} redirect stubs")

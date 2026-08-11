@@ -217,6 +217,35 @@ def resolve(url: str) -> tuple[str, str, str]:
         return url, f"error: {type(exc).__name__}", ""
 
 
+def wayback(url: str, created: str) -> str | None:
+    """Closest Internet Archive snapshot to the created date, if any."""
+    import time
+    ts = (created or "").replace("-", "") or "2020"
+    for attempt in range(4):
+        try:
+            r = requests.get("https://archive.org/wayback/available",
+                             params={"url": url, "timestamp": ts},
+                             headers={"User-Agent": UA}, timeout=20)
+            if r.status_code == 429:
+                time.sleep(5 * (attempt + 1))
+                continue
+            snap = r.json().get("archived_snapshots", {}).get("closest", {})
+            if snap.get("available"):
+                return snap["url"].replace("http://", "https://", 1)
+            return None
+        except requests.RequestException:
+            time.sleep(3)
+    return None
+
+
+# Dead statuses that warrant an Internet Archive fallback (401/403/429
+# mean auth-walled, bot-blocked or throttled — the page itself may live).
+def is_dead(status: str) -> bool:
+    return (status.startswith("error:")
+            or (status.startswith("HTTP")
+                and status not in ("HTTP 401", "HTTP 403", "HTTP 429")))
+
+
 def do_audit(s: requests.Session) -> None:
     from concurrent.futures import ThreadPoolExecutor
 
@@ -244,6 +273,16 @@ def do_audit(s: requests.Session) -> None:
 
     with ThreadPoolExecutor(16) as pool:
         resolved = list(pool.map(lambda e: resolve(e["long_url"]), keep))
+
+    # Dead pages: swap in the closest Internet Archive snapshot when one
+    # exists (sequential — archive.org rate-limits aggressively).
+    archived = 0
+    for i, (e, (final, status, title)) in enumerate(zip(keep, resolved)):
+        if is_dead(status):
+            snap = wayback(e["long_url"], str(e.get("created") or ""))
+            if snap:
+                resolved[i] = (snap, f"{status} → archived", title)
+                archived += 1
 
     # Fresh visibility straight from the live sheet (Tim may be reviewing);
     # duplicate rows may still exist there — "public" wins for a given key.
@@ -292,7 +331,7 @@ def do_audit(s: requests.Session) -> None:
 
     reqs = drop_conditional_rules(sheet_id, old_rules)
     reqs += header_and_dims(sheet_id, n_cols, n_rows,
-                            [300, 90, 380, 100, 480, 110, 170, 300],
+                            [300, 90, 380, 100, 480, 170, 170, 300],
                             "short links", frozen_cols=1)
     vis_range = {"sheetId": sheet_id, "startRowIndex": 1, "endRowIndex": n_rows,
                  "startColumnIndex": 1, "endColumnIndex": 2}
@@ -319,9 +358,11 @@ def do_audit(s: requests.Session) -> None:
         "cell": {"userEnteredFormat": {"wrapStrategy": "WRAP"}},
         "fields": "userEnteredFormat.wrapStrategy"}})
     RED = {"red": 0xF4 / 255, "green": 0xCC / 255, "blue": 0xCC / 255}
+    AMBER = {"red": 0xFF / 255, "green": 0xF2 / 255, "blue": 0xCC / 255}
     rules = [(vis_range, "TEXT_EQ", "public", GREEN),
              (vis_range, "TEXT_EQ", "private", GREY),
              (status_range, "TEXT_EQ", "OK", GREEN),
+             (status_range, "TEXT_CONTAINS", "archived", AMBER),
              (status_range, "TEXT_CONTAINS", "HTTP", RED),
              (status_range, "TEXT_CONTAINS", "error", RED)]
     for rng, cond, value, color in rules:
@@ -333,6 +374,7 @@ def do_audit(s: requests.Session) -> None:
                 "format": {"backgroundColor": color}}}}})
     # URL column mirrors the Status colour (formula refers to column F).
     for formula, color in (('=$F2="OK"', GREEN),
+                           ('=REGEXMATCH($F2,"archived")', AMBER),
                            ('=AND($F2<>"OK",$F2<>"")', RED)):
         reqs.append({"addConditionalFormatRule": {"rule": {
             "ranges": [alias_range],
@@ -366,6 +408,51 @@ def do_talks(s: requests.Session) -> None:
     print("talks: formatted in place (values untouched)", file=sys.stderr)
 
 
+def do_sync(s: requests.Session) -> None:
+    """Sheet Visibility -> _data/shortlinks.yaml include flags (two-way)."""
+    from datetime import date
+
+    links = yaml.safe_load(pathlib.Path("_data/shortlinks.yaml").read_text())
+    grid = check(s.get(f"{SHEETS}/{SHORTLINKS_SHEET}/values/A2:G100000")
+                 ).get("values", [])
+    public_aliases: set[str] = set()
+    for row in grid:
+        if len(row) >= 2 and row[1] == "public":
+            public_aliases.add(row[0].removeprefix("bit.ly/"))
+            if len(row) >= 7 and row[6]:
+                public_aliases.update(a.strip() for a in row[6].split(","))
+
+    by_keyword = {e["keyword"] for e in links}
+    stamp = date.today().isoformat()
+    changed = 0
+    for e in links:
+        customs = [u.rsplit("/", 1)[-1] for u in e.get("custom_bitlinks") or []]
+        names = {e["keyword"], *customs}
+        public = bool(names & public_aliases)
+        twin = next((a for a in customs
+                     if a != e["keyword"] and a in by_keyword), None)
+        include = public and not twin  # the standalone alias entry carries it
+        if e["include"] != include:
+            e["include"] = include
+            e["reason"] = (f"sheet review {stamp}: "
+                           f"{'public' if include else 'private'}")
+            changed += 1
+
+    ordered = []
+    for e in links:
+        item = {k: e[k] for k in ("keyword", "long_url", "title", "created",
+                                  "include", "reason") if k in e}
+        if e.get("custom_bitlinks"):
+            item["custom_bitlinks"] = e["custom_bitlinks"]
+        ordered.append(item)
+    pathlib.Path("_data/shortlinks.yaml").write_text(
+        yaml.safe_dump(ordered, sort_keys=False, allow_unicode=True,
+                       width=4096))
+    total_pub = sum(1 for e in links if e["include"])
+    print(f"sync: {changed} entries changed; {total_pub} now include=true "
+          f"({len(public_aliases)} public aliases in sheet)", file=sys.stderr)
+
+
 def do_trash(s: requests.Session) -> None:
     for file_id, label in JUNK_FILES.items():
         resp = s.patch(f"{DRIVE}/{file_id}", json={"trashed": True})
@@ -375,7 +462,7 @@ def do_trash(s: requests.Session) -> None:
 
 def main() -> None:
     actions = {"shortlinks": do_shortlinks, "audit": do_audit,
-               "talks": do_talks, "trash-junk": do_trash}
+               "sync": do_sync, "talks": do_talks, "trash-junk": do_trash}
     if len(sys.argv) != 2 or sys.argv[1] not in actions:
         sys.exit(f"usage: {sys.argv[0]} {{{'|'.join(actions)}}}")
     actions[sys.argv[1]](session())
