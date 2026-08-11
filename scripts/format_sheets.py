@@ -292,7 +292,7 @@ def do_audit(s: requests.Session) -> None:
 
     reqs = drop_conditional_rules(sheet_id, old_rules)
     reqs += header_and_dims(sheet_id, n_cols, n_rows,
-                            [220, 90, 380, 100, 480, 110, 170, 300],
+                            [300, 90, 380, 100, 480, 110, 170, 300],
                             "short links", frozen_cols=1)
     vis_range = {"sheetId": sheet_id, "startRowIndex": 1, "endRowIndex": n_rows,
                  "startColumnIndex": 1, "endColumnIndex": 2}
