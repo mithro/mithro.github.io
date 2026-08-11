@@ -69,7 +69,8 @@
   year: 2022
   date: 30 Jun 2022
   slides: https://bit.ly/rios22-ip-goog
-  slides_embed: https://docs.google.com/presentation/d/e/2PACX-1vRSp47zE5K4f3eGF4-cO8np1GIU-4UxHejT2DcbxVzlHzipVDJ1ZFWjtFzMVRIuIxKfIHdwMdEIb4NS/embed
+  slides_embed: https://docs.google.com/presentation/d/1OapK_tSBW6rsrmXSnJLH8J0rvgPBSwAjwnAVw-QCPuU/embed
+  slides_edit: https://docs.google.com/presentation/d/1OapK_tSBW6rsrmXSnJLH8J0rvgPBSwAjwnAVw-QCPuU/edit
   source: sheet
   sort_date: '2022-06-30'
 - title: VLSI Symposium - Why is Google Investing in Fully Open Source IC Design and What is Next?
@@ -1211,15 +1212,16 @@
   source: compiled
   sort_date: '2026-04-02'
   slides: https://docs.google.com/presentation/d/1rxkuZUQ4PWsyyaC8cx8P8C96ZEm0XDM42W2A2Rgo3rE
-  slides_short: https://wafer.space/hw26
   slides_embed: https://docs.google.com/presentation/d/1rxkuZUQ4PWsyyaC8cx8P8C96ZEm0XDM42W2A2Rgo3rE/embed
+  slides_short: https://wafer.space/hw26
 - title: A brain dump on open source silicon (FPGAs, ASICs and similar)
   event: Lawrence Berkeley National Laboratory (LBNL) seminar
   event_url: https://en.wikipedia.org/wiki/Lawrence_Berkeley_National_Laboratory
   year: 2025
   date: May 2025
   slides: https://bit.ly/mithro-lbnl25
-  slides_embed: https://docs.google.com/presentation/d/e/2PACX-1vQ7oM01-qZMRRbWeTHUYjH067ADw5WMlyjaZ7gU4IJfvzEs69V8uAt4ObNqwEogPLRJXH8ApTmVeTPa/embed
+  slides_embed: https://docs.google.com/presentation/d/1Wp1v5kXZvh_-RRXhF3PiUDLn10l-HMtt7Y5VkuGKuvE/embed
+  slides_edit: https://docs.google.com/presentation/d/1Wp1v5kXZvh_-RRXhF3PiUDLn10l-HMtt7Y5VkuGKuvE/edit
   source: compiled
   sort_date: '2025-05-01'
 - title: wafer.space - Budget silicon manufacturing (lightning talk)
@@ -1228,8 +1230,8 @@
   year: 2025
   date: 3 May 2025
   slides: https://wafer.space/latchup25
-  slides_short: https://wafer.space/latchup25
   slides_embed: https://docs.google.com/presentation/d/1_pczLov3qvqhZhzFPIERLUElKfsyZdDfAlBjyz_e1G8/embed
+  slides_short: https://wafer.space/latchup25
   source: compiled
   sort_date: '2025-05-03'
 - title: So you wanna make a chip? Open Source Silicon
@@ -1237,7 +1239,8 @@
   year: 2025
   date: 14 Mar 2025
   slides: https://bit.ly/open-silicon-fbx
-  slides_embed: https://docs.google.com/presentation/d/e/2PACX-1vSpFm-NWLi7MBPMTPGedGgXtGUr04sB36RbRIEKMcbe_4t3lgP3LpDJEVrhFqgkD5z3B5O6CuZhoOes/embed
+  slides_embed: https://docs.google.com/presentation/d/1JX8-3zPXbZg4-yJViL4ATw7Fi5JJBkvHxr4lnv3cz80/embed
+  slides_edit: https://docs.google.com/presentation/d/1JX8-3zPXbZg4-yJViL4ATw7Fi5JJBkvHxr4lnv3cz80/edit
   source: compiled
   sort_date: '2025-03-14'
 - title: So you wanna make a chip? Open Source Silicon
@@ -1246,7 +1249,8 @@
   year: 2025
   date: 13 Mar 2025
   slides: https://bit.ly/open-silicon-dacc
-  slides_embed: https://docs.google.com/presentation/d/e/2PACX-1vQwukDcrusOadkvTYMrYvUsMj89CGa6AP0cs67HeFO7NMYmAYR0DMUN4qoyT16x-mebzJFtmxEcWojj/embed
+  slides_embed: https://docs.google.com/presentation/d/15XlMz07rVobYJ9Ok4_j8jeFbGhOvJx-cFwzTLcN5VVU/embed
+  slides_edit: https://docs.google.com/presentation/d/15XlMz07rVobYJ9Ok4_j8jeFbGhOvJx-cFwzTLcN5VVU/edit
   source: compiled
   sort_date: '2025-03-13'
 - title: Open-source silicon enabling HEP-IC opportunities
@@ -1255,7 +1259,8 @@
   year: 2024
   date: 2 May 2024
   slides: https://bit.ly/mithro-hepic24
-  slides_embed: https://docs.google.com/presentation/d/e/2PACX-1vRa9brVShNMFd7rxlgvrWLdNw1ywj_1K-qpmDsGOgeUIwrquudL9SOywV5BKsYTP-6RigPl09jfz7BS/embed
+  slides_embed: https://docs.google.com/presentation/d/1otCS_dSfJZIXHttB9vNYcoB2VEdwfsVDC5QOgpxrsUg/embed
+  slides_edit: https://docs.google.com/presentation/d/1otCS_dSfJZIXHttB9vNYcoB2VEdwfsVDC5QOgpxrsUg/edit
   source: compiled
   sort_date: '2024-05-02'
 - title: Will open source design be the future direction? (panelist)
@@ -1264,7 +1269,8 @@
   year: 2024
   date: 22 Apr 2024
   slides: https://bit.ly/mithro-cicc24
-  slides_embed: https://docs.google.com/presentation/d/e/2PACX-1vS80ZKPDS8_xz2Gs02N3UziAkPb43YR8PPJ40J-d1uUTqKZ2OuyAoXcycU4M_UqDyocA-oM24Mw4mi6/embed
+  slides_embed: https://docs.google.com/presentation/d/13Ocj8RroOLnEUEyG6whCWWbrIU-2urSUfEUXL-s7Tq8/embed
+  slides_edit: https://docs.google.com/presentation/d/13Ocj8RroOLnEUEyG6whCWWbrIU-2urSUfEUXL-s7Tq8/edit
   source: compiled
   sort_date: '2024-04-22'
 - title: Tim's Silicon Presentations
@@ -1273,7 +1279,8 @@
   year: 2024
   date: 19 Apr 2024
   slides: https://bit.ly/tim-silicon-2024
-  slides_embed: https://docs.google.com/presentation/d/e/2PACX-1vQGOcfn4grprFYpcq9YdRewjRPSr5Y_qwfi9fGv6HtlLC9Fq5Ace8o7lO1wVpsqP_Mkn9PlYAbTMy_E/embed
+  slides_embed: https://docs.google.com/presentation/d/1P83lp4B4rGg0LS4AZCKdBYWfmcfk2MPXh54GXM97neo/embed
+  slides_edit: https://docs.google.com/presentation/d/1P83lp4B4rGg0LS4AZCKdBYWfmcfk2MPXh54GXM97neo/edit
   video: https://www.youtube.com/watch?v=FDYfu0Mx__0
   video_title: '"Tim''s Silicon Presentations" - Tim Ansell (Latch_2024)'
   source: compiled
@@ -1283,7 +1290,8 @@
   year: 2023
   date: ''
   slides: https://bit.ly/goog-ic-edu
-  slides_embed: https://docs.google.com/presentation/d/e/2PACX-1vRgCWtyasdLWD7RQgY28cVCgwdjnw8ori8ikHAyW26mKEwsspPgCqNpeC0SykWRSiC_NZrlbw948H8k/embed
+  slides_embed: https://docs.google.com/presentation/d/1ds734ylS3ebnk2tZNTzZtvQAopX5Ny2VGN3xd40LzOc/embed
+  slides_edit: https://docs.google.com/presentation/d/1ds734ylS3ebnk2tZNTzZtvQAopX5Ny2VGN3xd40LzOc/edit
   source: compiled
   sort_date: '2023-07-01'
 - title: SERDES, PIPE and protocols - Pathway to fully open source implementations
@@ -1291,7 +1299,8 @@
   year: 2023
   date: ''
   slides: https://bit.ly/open-pipe-talk
-  slides_embed: https://docs.google.com/presentation/d/e/2PACX-1vSgIGVCZtNt8RdifZXOLOJDDCj7g05zxr9WS2NjmQtM_E0GfZKCBYhASCto4eURL-86uNwJaXfo1qMC/embed
+  slides_embed: https://docs.google.com/presentation/d/18cGRni3QDIsyWrTx8WWoPBjEgUObHTGIXYhfViZm7xw/embed
+  slides_edit: https://docs.google.com/presentation/d/18cGRni3QDIsyWrTx8WWoPBjEgUObHTGIXYhfViZm7xw/edit
   source: compiled
   sort_date: '2023-07-01'
 - title: wafer.space - TSRI 2026
@@ -1300,8 +1309,8 @@
   year: 2026
   date: 10 Aug 2026
   slides: https://wafer.space/tsri26
-  slides_short: https://wafer.space/tsri26
   slides_embed: https://docs.google.com/presentation/d/11nnm_RxjmEHT-fqz9OzON33oG2hRjsuFlwoQS18JGaI/embed
+  slides_short: https://wafer.space/tsri26
   source: compiled
   sort_date: '2026-08-10'
 - title: wafer.space - COSCUP 2026
@@ -1310,8 +1319,8 @@
   year: 2026
   date: ''
   slides: https://docs.google.com/presentation/d/1OwQk496IsRp-9S61GmK5Ew7lkc1Qf1SRQ3MvaJn9Fsc
-  slides_short: https://wafer.space/coscup26
   slides_embed: https://docs.google.com/presentation/d/1OwQk496IsRp-9S61GmK5Ew7lkc1Qf1SRQ3MvaJn9Fsc/embed
+  slides_short: https://wafer.space/coscup26
   source: drive
   sort_date: '2026-08-08'
 - title: wafer.space - Hack-A-Day Europe 2026
@@ -1320,8 +1329,8 @@
   year: 2026
   date: ''
   slides: https://docs.google.com/presentation/d/19B_h0WY9UAcuUAcgJF6T_YBWIk7LCmVd9yK6ZmSfHk4
-  slides_short: https://wafer.space/had26
   slides_embed: https://docs.google.com/presentation/d/19B_h0WY9UAcuUAcgJF6T_YBWIk7LCmVd9yK6ZmSfHk4/embed
+  slides_short: https://wafer.space/had26
   source: drive
   sort_date: '2026-05-16'
 - title: wafer.space - Silicon Sprint AUC 2026
@@ -1330,8 +1339,8 @@
   year: 2026
   date: ''
   slides: https://docs.google.com/presentation/d/1PF5bVWQY2wML1B6cTRs9q0EVngTXpYYBdOQMwuvrHx4
-  slides_short: https://wafer.space/auc26
   slides_embed: https://docs.google.com/presentation/d/1PF5bVWQY2wML1B6cTRs9q0EVngTXpYYBdOQMwuvrHx4/embed
+  slides_short: https://wafer.space/auc26
   source: drive
   sort_date: '2026-04-06'
 - title: wafer.space - Down Underflow 2026
@@ -1340,8 +1349,8 @@
   year: 2026
   date: ''
   slides: https://docs.google.com/presentation/d/1rm-qfeo2sq3mF7M_VMgdgMnmqoOVOsmlqGDwuwcfNG0
-  slides_short: https://wafer.space/du26
   slides_embed: https://docs.google.com/presentation/d/1rm-qfeo2sq3mF7M_VMgdgMnmqoOVOsmlqGDwuwcfNG0/embed
+  slides_short: https://wafer.space/du26
   source: drive
   sort_date: '2026-02-27'
 - title: wafer.space - Hackware 2025
@@ -1350,8 +1359,8 @@
   year: 2025
   date: ''
   slides: https://docs.google.com/presentation/d/1w7wblALt7JnNUvFwazbV_eICCFPlBI-f8cd3xUwHwZM
-  slides_short: https://wafer.space/hw25
   slides_embed: https://docs.google.com/presentation/d/1w7wblALt7JnNUvFwazbV_eICCFPlBI-f8cd3xUwHwZM/embed
+  slides_short: https://wafer.space/hw25
   source: drive
   sort_date: '2025-10-09'
 - title: ESSCIRC workshop 2022 presentation
