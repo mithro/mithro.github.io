@@ -10,7 +10,8 @@ description: "Scientific papers by Tim 'mithro' Ansell."
     h-index {{ site.data.papers.metrics.h_index }} ·
     i10-index {{ site.data.papers.metrics.i10_index }} ·
     snapshot {{ site.data.papers.metrics.snapshot_date }} ·
-    <a href="{{ site.data.papers.metrics.profile | escape }}">Google Scholar profile</a>
+    <a href="{{ site.data.papers.metrics.profile | escape }}">Google Scholar profile</a> ·
+    <a href="https://orcid.org/0000-0002-4179-8376">ORCID 0000-0002-4179-8376</a>
   </p>
   {% assign years = site.data.papers.papers | map: "year" | uniq %}
   {% for y in years %}
