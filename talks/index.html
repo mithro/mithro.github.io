@@ -33,7 +33,10 @@ description: "All of Tim 'mithro' Ansell's talks and presentations, 2012–prese
     {%- endif -%}
     {%- assign short_disp = "" -%}
     {%- assign slides_href = talk.slides -%}
-    {%- if talk.slides contains "bit.ly/" or talk.slides contains "j.mp/" -%}
+    {%- if talk.slides_short -%}
+      {%- assign short_disp = talk.slides_short | replace: "https://", "" | replace: "http://", "" -%}
+      {%- assign slides_href = talk.slides_short -%}
+    {%- elsif talk.slides contains "bit.ly/" or talk.slides contains "j.mp/" -%}
       {%- assign short_disp = talk.slides | replace: "https://", "" | replace: "http://", "" -%}
       {%- assign mith_alias = short_disp | split: "/" | last -%}
       {%- assign stub_path = "/" | append: mith_alias | append: "/" -%}
