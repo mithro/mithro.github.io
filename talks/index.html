@@ -5,8 +5,6 @@ description: "All of Tim 'mithro' Ansell's talks and presentations, 2012–prese
 ---
 <section class="sect">
   <h2><span aria-hidden="true">🎤</span> Talks &amp; presentations</h2>
-  <p class="prose">Slides links go to the deck for each talk; ▶ links go to
-  recordings. Click a preview tile to load the deck or recording in place.</p>
 
   {% assign talks_sorted = site.data.talks | sort: "sort_date" | reverse %}
   {% assign years = talks_sorted | map: "year" | uniq %}
@@ -34,8 +32,16 @@ description: "All of Tim 'mithro' Ansell's talks and presentations, 2012–prese
       {%- endif -%}
     {%- endif -%}
     {%- assign short_disp = "" -%}
+    {%- assign slides_href = talk.slides -%}
     {%- if talk.slides contains "bit.ly/" or talk.slides contains "j.mp/" -%}
       {%- assign short_disp = talk.slides | replace: "https://", "" | replace: "http://", "" -%}
+      {%- assign mith_alias = short_disp | split: "/" | last -%}
+      {%- assign stub_path = "/" | append: mith_alias | append: "/" -%}
+      {%- assign stub = site.pages | where: "permalink", stub_path | first -%}
+      {%- if stub -%}
+        {%- assign slides_href = stub_path | relative_url -%}
+        {%- assign short_disp = "mith.ro/" | append: mith_alias -%}
+      {%- endif -%}
     {%- endif -%}
     {%- assign pres_id = "" -%}
     {%- if talk.slides_embed and talk.slides_embed contains "/presentation/d/" -%}
@@ -45,48 +51,47 @@ description: "All of Tim 'mithro' Ansell's talks and presentations, 2012–prese
     {%- endif %}
     <tr>
       <td class="ti">
-        {% if talk.slides != "" and talk.slides %}<a href="{{ talk.slides | escape }}">{{ talk.title | escape }}</a>{% else %}{{ talk.title | escape }}{% endif %}
+        {% if talk.slides != "" and talk.slides %}<a href="{{ slides_href | escape }}">{{ talk.title | escape }}</a>{% else %}{{ talk.title | escape }}{% endif %}
         {%- if vid_id == "" and talk.video != "" and talk.video %} <a class="vid" href="{{ talk.video | escape }}"><span aria-hidden="true">▶</span> video</a>{% endif %}
         {%- if talk.slides_embed or vid_id != "" %}
         <div class="embeds">
           {% if talk.slides_embed %}
           {%- assign tile_n = tile_n | plus: 1 -%}
           {%- assign st = site.data.thumbs.slides[pres_id] %}
-          <button type="button" class="embed-lite lite-slides" data-src="{{ talk.slides_embed | escape }}" aria-label="Load slides: {{ talk.title | escape }}">
-            {% if st %}<img src="{{ '/assets/thumbs/slides/' | relative_url }}{{ pres_id }}-320.webp" srcset="{{ '/assets/thumbs/slides/' | relative_url }}{{ pres_id }}-320.webp 320w, {{ '/assets/thumbs/slides/' | relative_url }}{{ pres_id }}-640.webp {{ st.w }}w" sizes="(max-width: 640px) 92vw, 420px" width="{{ st.w }}" height="{{ st.h }}" alt="" {% if tile_n <= 2 %}fetchpriority="high"{% else %}loading="lazy"{% endif %} decoding="async">{% endif %}
-            <span class="lite-tag">Slides</span>
-            <span class="lite-play" aria-hidden="true">▶</span>
-          </button>
+          <div class="embed-col">
+            <a class="emb-cap" href="{{ slides_href | escape }}"><span aria-hidden="true">📑</span> {% if short_disp != "" %}{{ short_disp | escape }}{% else %}Slides{% endif %}</a>
+            <button type="button" class="embed-lite lite-slides" data-src="{{ talk.slides_embed | escape }}" aria-label="Load slides: {{ talk.title | escape }}">
+              {% if st %}<img src="{{ '/assets/thumbs/slides/' | relative_url }}{{ pres_id }}-320.webp" srcset="{{ '/assets/thumbs/slides/' | relative_url }}{{ pres_id }}-320.webp 320w, {{ '/assets/thumbs/slides/' | relative_url }}{{ pres_id }}-640.webp {{ st.w }}w" sizes="(max-width: 640px) 92vw, 420px" width="{{ st.w }}" height="{{ st.h }}" alt="" {% if tile_n <= 2 %}fetchpriority="high"{% else %}loading="lazy"{% endif %} decoding="async">{% endif %}
+              <span class="lite-play" aria-hidden="true">▶</span>
+            </button>
+          </div>
           {% endif %}
           {% if vid_id != "" %}
           {%- assign tile_n = tile_n | plus: 1 -%}
           {%- assign vt = site.data.thumbs.video[vid_id] %}
-          <button type="button" class="embed-lite lite-video" data-src="https://www.youtube-nocookie.com/embed/{{ vid_id }}?autoplay=1{% if vid_start != '' %}&amp;start={{ vid_start }}{% endif %}" aria-label="Play video: {{ talk.title | escape }}">
-            {% if vt %}<img src="{{ '/assets/thumbs/video/' | relative_url }}{{ vid_id }}-320.webp" srcset="{{ '/assets/thumbs/video/' | relative_url }}{{ vid_id }}-320.webp 320w, {{ '/assets/thumbs/video/' | relative_url }}{{ vid_id }}-640.webp {{ vt.w }}w" sizes="(max-width: 640px) 92vw, 420px" width="{{ vt.w }}" height="{{ vt.h }}" alt="" {% if tile_n <= 2 %}fetchpriority="high"{% else %}loading="lazy"{% endif %} decoding="async">{% endif %}
-            <span class="lite-tag">Video</span>
-            <span class="lite-play" aria-hidden="true">▶</span>
-          </button>
+          <div class="embed-col">
+            <a class="emb-cap" href="{{ talk.video | escape }}"><span aria-hidden="true">▶</span> youtu.be/{{ vid_id }}</a>
+            <button type="button" class="embed-lite lite-video" data-src="https://www.youtube-nocookie.com/embed/{{ vid_id }}?autoplay=1{% if vid_start != '' %}&amp;start={{ vid_start }}{% endif %}" aria-label="Play video: {{ talk.title | escape }}">
+              {% if vt %}<img src="{{ '/assets/thumbs/video/' | relative_url }}{{ vid_id }}-320.webp" srcset="{{ '/assets/thumbs/video/' | relative_url }}{{ vid_id }}-320.webp 320w, {{ '/assets/thumbs/video/' | relative_url }}{{ vid_id }}-640.webp {{ vt.w }}w" sizes="(max-width: 640px) 92vw, 420px" width="{{ vt.w }}" height="{{ vt.h }}" alt="" {% if tile_n <= 2 %}fetchpriority="high"{% else %}loading="lazy"{% endif %} decoding="async">{% endif %}
+              <span class="lite-play" aria-hidden="true">▶</span>
+            </button>
+          </div>
           {% endif %}
         </div>
         {%- endif %}
       </td>
-      {%- assign has_evdate = false -%}
-      {%- if talk.event != "" and talk.event -%}{%- assign has_evdate = true -%}{%- endif -%}
-      {%- if talk.date != "" and talk.date -%}{%- assign has_evdate = true -%}{%- endif %}
       <td class="ev"><span>
         {%- if talk.event != "" and talk.event -%}
           {%- if talk.event_url -%}<a href="{{ talk.event_url | escape }}">{{ talk.event | escape }}</a>{%- else -%}{{ talk.event | escape }}{%- endif -%}
+          {%- if talk.date != "" and talk.date %} · {% endif -%}
         {%- endif -%}
         {%- if talk.date != "" and talk.date -%}
-          {%- if talk.event != "" and talk.event %} · {% endif -%}
           <span class="nowrap">{{ talk.date | escape }}</span>
         {%- endif -%}
-        {%- if short_disp != "" -%}
-          {%- if has_evdate %} · {% endif -%}
-          <a class="short-url nowrap" href="{{ talk.slides | escape }}">{{ short_disp | escape }}</a>
-        {%- endif -%}
-        {%- if has_evdate == false and short_disp == "" -%}
-          <span class="ev-none" aria-hidden="true">—</span>
+        {%- if talk.event == "" or talk.event == nil -%}
+          {%- if talk.date == "" or talk.date == nil -%}
+            <span class="ev-none" aria-hidden="true">—</span>
+          {%- endif -%}
         {%- endif -%}
       </span></td>
     </tr>
@@ -121,11 +126,13 @@ description: "All of Tim 'mithro' Ansell's talks and presentations, 2012–prese
         {%- if vid_id != "" %}
         {%- assign vt = site.data.thumbs.video[vid_id] %}
         <div class="embeds">
-          <button type="button" class="embed-lite lite-video" data-src="https://www.youtube-nocookie.com/embed/{{ vid_id }}?autoplay=1" aria-label="Play video: {{ iv.title | escape }}">
-            {% if vt %}<img src="{{ '/assets/thumbs/video/' | relative_url }}{{ vid_id }}-320.webp" srcset="{{ '/assets/thumbs/video/' | relative_url }}{{ vid_id }}-320.webp 320w, {{ '/assets/thumbs/video/' | relative_url }}{{ vid_id }}-640.webp {{ vt.w }}w" sizes="(max-width: 640px) 92vw, 420px" width="{{ vt.w }}" height="{{ vt.h }}" alt="" loading="lazy" decoding="async">{% endif %}
-            <span class="lite-tag">Video</span>
-            <span class="lite-play" aria-hidden="true">▶</span>
-          </button>
+          <div class="embed-col">
+            <a class="emb-cap" href="{{ iv.video | escape }}"><span aria-hidden="true">▶</span> youtu.be/{{ vid_id }}</a>
+            <button type="button" class="embed-lite lite-video" data-src="https://www.youtube-nocookie.com/embed/{{ vid_id }}?autoplay=1" aria-label="Play video: {{ iv.title | escape }}">
+              {% if vt %}<img src="{{ '/assets/thumbs/video/' | relative_url }}{{ vid_id }}-320.webp" srcset="{{ '/assets/thumbs/video/' | relative_url }}{{ vid_id }}-320.webp 320w, {{ '/assets/thumbs/video/' | relative_url }}{{ vid_id }}-640.webp {{ vt.w }}w" sizes="(max-width: 640px) 92vw, 420px" width="{{ vt.w }}" height="{{ vt.h }}" alt="" loading="lazy" decoding="async">{% endif %}
+              <span class="lite-play" aria-hidden="true">▶</span>
+            </button>
+          </div>
         </div>
         {%- endif %}
       </td>
