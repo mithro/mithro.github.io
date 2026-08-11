@@ -68,6 +68,8 @@ def main() -> None:
     out, stats = [], {"direct": 0, "alias": 0, "none": 0}
     unresolved: list[str] = []
     for chunk in chunks:
+        old_embed = next((l for l in chunk.splitlines(keepends=True)
+                          if l.startswith("  slides_embed:")), None)
         lines = [l for l in chunk.splitlines(keepends=True)
                  if not l.startswith("  slides_embed:")]
         fields = dict(re.findall(r"^  (\w+): (.+)$", "".join(lines), re.M))
@@ -88,10 +90,12 @@ def main() -> None:
         stats[how] += 1
         if not embed and fields.get("slides"):
             unresolved.append(f"{fields.get('title', '?')[:60]} — {fields['slides']}")
-        if embed:
+        embed_line = (f"  slides_embed: {embed}\n" if embed
+                      else old_embed)  # keep hand-added embeds we can't derive
+        if embed_line:
             anchor = next(i for i, l in enumerate(lines)
                           if l.startswith(("  slides_edit:", "  slides:")))
-            lines.insert(anchor + 1, f"  slides_embed: {embed}\n")
+            lines.insert(anchor + 1, embed_line)
         out.append("".join(lines))
 
     TALKS.write_text(head + "".join(out))
