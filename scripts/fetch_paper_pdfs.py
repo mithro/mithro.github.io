@@ -1,7 +1,7 @@
 # /// script
 # requires-python = ">=3.11"
 # ///
-"""Mirror open-access PDFs of Tim's papers into assets/papers/.
+"""Mirror open-access PDFs of Tim's papers into papers/.
 
 Sources verified 2026-08-09 (see _data/papers.yaml pdf fields). The two
 ACM open-access PDFs are Cloudflare-guarded against non-browser clients
@@ -23,7 +23,7 @@ PDFS = {
     "missing-pieces-iccad20.pdf": "https://drive.google.com/uc?export=download&id=1GuwtsMjl40JIwpL6kzYGk7VVheVOJ8nm",
 }
 
-outdir = pathlib.Path("assets/papers")
+outdir = pathlib.Path("papers")
 outdir.mkdir(parents=True, exist_ok=True)
 failures = []
 for name, url in PDFS.items():

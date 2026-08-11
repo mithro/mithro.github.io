@@ -27,27 +27,27 @@ papers:
   venue: IEEE Solid-State Circuits Magazine 16 (4)
   year: 2024
   citations: 0
-  pdf: /assets/papers/sscm-2024-index.pdf
+  pdf: /papers/sscm-2024-index.pdf
   url: https://doi.org/10.1109/MSSC.2024.3500532
 - title: Fully integrated multifunctional sensor and open-source ASIC for flexible wearables
   authors: A Li, H Wu, AA Fadila, C Kye, A Balijepalli, J Euphrosine, T Ansell, et al.
   venue: IEEE Solid-State Circuits Magazine 16 (2)
   year: 2024
   citations: 0
-  pdf: /assets/papers/rapid-prototyping-lig-sensors.pdf
+  pdf: /papers/rapid-prototyping-lig-sensors.pdf
 - title: 'Rapid Prototyping of Laser-Induced Graphene Sensors With Open-Source Silicon: Paving the Way for Low-Cost and Robust Flexible Wearable Sensing'
   authors: A Li, H Wu, M Lingamguntla, AA Fadila, CH Kye, A Balijepalli, T Ansell, et al.
   venue: IEEE Solid-State Circuits Magazine 16 (2), 49-57
   year: 2024
   citations: 0
-  pdf: /assets/papers/rapid-prototyping-lig-sensors.pdf
+  pdf: /papers/rapid-prototyping-lig-sensors.pdf
   url: https://doi.org/10.1109/MSSC.2024.3380586
 - title: 'CFU Playground: Full-stack open-source framework for tiny machine learning (tinyML) acceleration on FPGAs'
   authors: S Prakash, T Callahan, J Bushagour, C Banbury, AV Green, P Warden, et al.
   venue: 2023 IEEE International Symposium on Performance Analysis of Systems and Software (ISPASS)
   year: 2023
   citations: 69
-  pdf: /assets/papers/cfu-playground.pdf
+  pdf: /papers/cfu-playground.pdf
   url: https://doi.org/10.1109/ISPASS57527.2023.00024
 - title: 'OpenFASoC: An open platform towards analog and mixed-signal automation and acceleration of chip design'
   authors: A Hammoud, V Shankar, R Mains, T Ansell, J Matres, M Saligane
@@ -61,7 +61,7 @@ papers:
   year: 2023
   citations: 6
   url: https://ieeexplore.ieee.org/abstract/document/10137093
-  pdf: /assets/papers/cfu-playground.pdf
+  pdf: /papers/cfu-playground.pdf
 - title: Google investment in open source custom hardware development including no-cost shuttle program
   authors: T Ansell
   venue: Proceedings of the 2023 International Symposium on Physical Design, 207
@@ -74,7 +74,7 @@ papers:
   venue: Proceedings of the 2023 ACM/SIGDA International Symposium on Field-Programmable Gate Arrays
   year: 2023
   citations: 0
-  pdf: /assets/papers/open-source-and-fpgas-fpga23.pdf
+  pdf: /papers/open-source-and-fpgas-fpga23.pdf
   url: https://doi.org/10.1145/3543622.3579026
 - title: An open-source and autonomous temperature sensor generator verified with 64 instances in SkyWater 130 nm for comprehensive design space exploration
   authors: Q Zhang, W Duan, T Edwards, T Ansell, D Blaauw, D Sylvester, et al.
@@ -82,14 +82,14 @@ papers:
   year: 2022
   citations: 27
   url: https://ieeexplore.ieee.org/abstract/document/9816083
-  pdf: /assets/papers/temp-sensor-generator.pdf
+  pdf: /papers/temp-sensor-generator.pdf
 - title: 'CFU Playground: Full-stack open-source framework for tiny machine learning (tinyML) acceleration on FPGAs'
   authors: S Prakash, T Callahan, J Bushagour, C Banbury, AV Green, P Warden, et al.
   venue: arXiv preprint arXiv:2201.01863
   year: 2022
   citations: 6
   url: https://arxiv.org/abs/2201.01863
-  pdf: /assets/papers/cfu-playground.pdf
+  pdf: /papers/cfu-playground.pdf
 - title: Why is Google investing in fully open source PDKs?
   authors: T Ansell
   venue: Novel Patterning Technologies 2022, PC120540A
@@ -101,18 +101,18 @@ papers:
   venue: US Department of Energy (USDOE), Office of Science
   year: 2021
   citations: 1
-  pdf: /assets/papers/ascr-reimagining-codesign.pdf
+  pdf: /papers/ascr-reimagining-codesign.pdf
 - title: 'SymbiFlow and VPR: An open-source design flow for commercial and novel FPGAs'
   authors: KE Murray, MA Elgammal, V Betz, T Ansell, K Rothman, A Comodi
   venue: IEEE Micro 40 (4), 49-57
   year: 2020
   citations: 68
   url: https://ieeexplore.ieee.org/document/9103284
-  pdf: /assets/papers/symbiflow-and-vpr.pdf
+  pdf: /papers/symbiflow-and-vpr.pdf
 - title: 'The missing pieces of open design enablement: A recent history of Google efforts'
   authors: T Ansell, M Saligane
   venue: Proceedings of the 39th International Conference on Computer-Aided Design, 1-8
   year: 2020
   citations: 49
   url: https://j.mp/iccad20-goog-miss-paper
-  pdf: /assets/papers/missing-pieces-iccad20.pdf
+  pdf: /papers/missing-pieces-iccad20.pdf
