@@ -12,8 +12,17 @@ Auth comes from gcloud user credentials with Drive scope:
 Then:
 
     uv run scripts/format_sheets.py shortlinks   # rewrite + format the short-links sheet
+    uv run scripts/format_sheets.py audit        # resolve/verify every link, retitle, sort
     uv run scripts/format_sheets.py talks        # format the talks-additions sheet
     uv run scripts/format_sheets.py trash-junk   # trash leftover xlsx/test files
+
+"audit" rebuilds the short-links sheet sorted by created date (newest
+first) with the primary bit.ly alias as the first column, resolves
+every target URL through its redirect chain, verifies the final page
+responds (Status column: OK, HTTP nnn, or error), and replaces titles
+with each destination's real <title>. Visibility is re-read from the
+live sheet immediately before writing so in-progress review edits are
+preserved.
 
 If the API complains about an unregistered caller / quota project, set
 GOOGLE_QUOTA_PROJECT to one of your GCP projects that has the Sheets
@@ -84,15 +93,18 @@ def first_sheet_id(s: requests.Session, spreadsheet: str) -> tuple[int, int]:
 
 
 def header_and_dims(sheet_id: int, n_cols: int, n_rows: int,
-                    widths: list[int], tab_title: str) -> list[dict]:
+                    widths: list[int], tab_title: str,
+                    frozen_cols: int = 0) -> list[dict]:
     """batchUpdate requests shared by both sheets."""
     reqs = [
         {"updateSheetProperties": {
             "properties": {"sheetId": sheet_id, "title": tab_title,
                            "gridProperties": {"rowCount": n_rows,
                                               "columnCount": n_cols,
-                                              "frozenRowCount": 1}},
-            "fields": "title,gridProperties(rowCount,columnCount,frozenRowCount)"}},
+                                              "frozenRowCount": 1,
+                                              "frozenColumnCount": frozen_cols}},
+            "fields": ("title,gridProperties(rowCount,columnCount,"
+                       "frozenRowCount,frozenColumnCount)")}},
         {"repeatCell": {
             "range": {"sheetId": sheet_id, "startRowIndex": 0, "endRowIndex": 1},
             "cell": {"userEnteredFormat": {
@@ -172,6 +184,125 @@ def do_shortlinks(s: requests.Session) -> None:
           file=sys.stderr)
 
 
+UA = ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+      "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36")
+TITLE_RE = None  # compiled lazily in resolve()
+
+
+def resolve(url: str) -> tuple[str, str, str]:
+    """Follow redirects; return (final_url, status, page_title)."""
+    global TITLE_RE
+    import html as html_mod
+    import re
+    if TITLE_RE is None:
+        TITLE_RE = re.compile(r"<title[^>]*>(.*?)</title>",
+                              re.IGNORECASE | re.DOTALL)
+    try:
+        r = requests.get(url, headers={"User-Agent": UA}, timeout=20,
+                         allow_redirects=True, stream=True)
+        final = r.url
+        if r.status_code >= 400:
+            r.close()
+            return final, f"HTTP {r.status_code}", ""
+        ctype = r.headers.get("content-type", "")
+        title = ""
+        if "html" in ctype:
+            chunk = next(r.iter_content(131072, decode_unicode=False), b"")
+            m = TITLE_RE.search(chunk.decode(r.encoding or "utf-8", "replace"))
+            if m:
+                title = html_mod.unescape(" ".join(m.group(1).split()))[:250]
+        r.close()
+        return final, "OK", title
+    except requests.RequestException as exc:
+        return url, f"error: {type(exc).__name__}", ""
+
+
+def do_audit(s: requests.Session) -> None:
+    from concurrent.futures import ThreadPoolExecutor
+
+    links = yaml.safe_load(pathlib.Path("_data/shortlinks.yaml").read_text())
+    with ThreadPoolExecutor(16) as pool:
+        resolved = list(pool.map(lambda e: resolve(e["long_url"]), links))
+
+    # Fresh visibility straight from the live sheet (Tim may be reviewing).
+    grid = check(s.get(f"{SHEETS}/{SHORTLINKS_SHEET}/values/A2:B100000")
+                 ).get("values", [])
+    vis = {row[0].removeprefix("bit.ly/"): row[1]
+           for row in grid if len(row) >= 2}
+
+    header = ["URL", "Visibility", "Title", "Created", "Final URL",
+              "Status", "Other aliases", "Notes"]
+    body = []
+    ok = 0
+    for e, (final, status, title) in zip(links, resolved):
+        customs = [u.rsplit("/", 1)[-1] for u in e.get("custom_bitlinks") or []]
+        alias = customs[0] if customs else e["keyword"]
+        others = [a for a in [e["keyword"]] + customs if a != alias]
+        ok += status == "OK"
+        visibility = (vis.get(e["keyword"]) or vis.get(alias)
+                      or ("public" if e["include"] else "private"))
+        if status in ("HTTP 403", "HTTP 404"):
+            visibility = "private"  # broken links must not get redirects
+        body.append([f"bit.ly/{alias}",
+                     visibility,
+                     title or e.get("title") or "",
+                     str(e.get("created") or ""),
+                     final, status, ", ".join(others),
+                     e.get("reason") or ""])
+    body.sort(key=lambda r: r[3], reverse=True)  # created date, newest first
+    rows = [header] + body
+    n_rows, n_cols = len(rows), len(header)
+
+    sheet_id, old_rules = first_sheet_id(s, SHORTLINKS_SHEET)
+    check(s.post(f"{SHEETS}/{SHORTLINKS_SHEET}/values/A1:ZZ100000:clear"))
+    check(s.put(f"{SHEETS}/{SHORTLINKS_SHEET}/values/A1",
+                params={"valueInputOption": "RAW"}, json={"values": rows}))
+
+    reqs = drop_conditional_rules(sheet_id, old_rules)
+    reqs += header_and_dims(sheet_id, n_cols, n_rows,
+                            [220, 90, 380, 100, 480, 110, 170, 300],
+                            "short links", frozen_cols=1)
+    vis_range = {"sheetId": sheet_id, "startRowIndex": 1, "endRowIndex": n_rows,
+                 "startColumnIndex": 1, "endColumnIndex": 2}
+    status_range = dict(vis_range, startColumnIndex=5, endColumnIndex=6)
+    reqs.append({"setDataValidation": {
+        "range": vis_range,
+        "rule": {"condition": {"type": "ONE_OF_LIST",
+                               "values": [{"userEnteredValue": "public"},
+                                          {"userEnteredValue": "private"}]},
+                 "strict": True, "showCustomUi": True}}})
+    for rng in (vis_range, status_range):
+        reqs.append({"repeatCell": {
+            "range": rng,
+            "cell": {"userEnteredFormat": {"horizontalAlignment": "CENTER"}},
+            "fields": "userEnteredFormat.horizontalAlignment"}})
+    alias_range = dict(vis_range, startColumnIndex=0, endColumnIndex=1)
+    reqs.append({"repeatCell": {
+        "range": alias_range,
+        "cell": {"userEnteredFormat": {"textFormat": {"fontFamily": "Roboto Mono"}}},
+        "fields": "userEnteredFormat.textFormat.fontFamily"}})
+    RED = {"red": 0xF4 / 255, "green": 0xCC / 255, "blue": 0xCC / 255}
+    rules = [(vis_range, "TEXT_EQ", "public", GREEN),
+             (vis_range, "TEXT_EQ", "private", GREY),
+             (status_range, "TEXT_EQ", "OK", GREEN),
+             (status_range, "TEXT_CONTAINS", "HTTP", RED),
+             (status_range, "TEXT_CONTAINS", "error", RED)]
+    for rng, cond, value, color in rules:
+        reqs.append({"addConditionalFormatRule": {"rule": {
+            "ranges": [rng],
+            "booleanRule": {
+                "condition": {"type": cond,
+                              "values": [{"userEnteredValue": value}]},
+                "format": {"backgroundColor": color}}}}})
+    check(s.post(f"{SHEETS}/{SHORTLINKS_SHEET}:batchUpdate",
+                 json={"requests": reqs}))
+    broken = [(r[0], r[5]) for r in body if r[5] != "OK"]
+    print(f"audit: {len(body)} links, {ok} OK, {len(broken)} not OK; "
+          "sorted newest-first", file=sys.stderr)
+    for alias, status in broken:
+        print(f"  {status:22s} {alias}", file=sys.stderr)
+
+
 def do_talks(s: requests.Session) -> None:
     sheet_id, old_rules = first_sheet_id(s, TALKS_SHEET)
     n_rows, n_cols = 18, 8  # header + 17 talks
@@ -197,8 +328,8 @@ def do_trash(s: requests.Session) -> None:
 
 
 def main() -> None:
-    actions = {"shortlinks": do_shortlinks, "talks": do_talks,
-               "trash-junk": do_trash}
+    actions = {"shortlinks": do_shortlinks, "audit": do_audit,
+               "talks": do_talks, "trash-junk": do_trash}
     if len(sys.argv) != 2 or sys.argv[1] not in actions:
         sys.exit(f"usage: {sys.argv[0]} {{{'|'.join(actions)}}}")
     actions[sys.argv[1]](session())
