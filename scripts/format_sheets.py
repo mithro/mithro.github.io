@@ -281,6 +281,11 @@ def do_audit(s: requests.Session) -> None:
         "range": alias_range,
         "cell": {"userEnteredFormat": {"textFormat": {"fontFamily": "Roboto Mono"}}},
         "fields": "userEnteredFormat.textFormat.fontFamily"}})
+    title_range = dict(vis_range, startColumnIndex=2, endColumnIndex=3)
+    reqs.append({"repeatCell": {
+        "range": title_range,
+        "cell": {"userEnteredFormat": {"wrapStrategy": "WRAP"}},
+        "fields": "userEnteredFormat.wrapStrategy"}})
     RED = {"red": 0xF4 / 255, "green": 0xCC / 255, "blue": 0xCC / 255}
     rules = [(vis_range, "TEXT_EQ", "public", GREEN),
              (vis_range, "TEXT_EQ", "private", GREY),
