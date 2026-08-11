@@ -5,6 +5,7 @@ lang: en
 
 plugins:
   - jekyll-redirect-from
+  - jekyll-sitemap
 
 # Redirect stubs are generated files; everything else is hand-written.
 exclude:
