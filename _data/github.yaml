@@ -1,0 +1,48 @@
+# Snapshot of github.com/mithro — regenerate with scripts/fetch_github.py
+snapshot_date: '2026-08-11'
+profile:
+  login: mithro
+  url: https://github.com/mithro
+  followers: 978
+  public_repos: 568
+  member_since: '2008'
+orgs:
+- thousandparsec
+- sydney-linux-user-group
+- timvideos
+- sydney-linux-user-group-dependencies
+- events-everywhere
+- freecores
+- im-tomu
+- fupy
+- SymbiFlow
+- litex-hub
+- hdl
+top_repos:
+- name: kicad-mini-pci-express
+  url: https://github.com/mithro/kicad-mini-pci-express
+  stars: 109
+  description: KiCad library and templates for creating designs with Mini-PCI-express
+    cards (both the cards and sockets).
+- name: autolabeler
+  url: https://github.com/mithro/autolabeler
+  stars: 105
+  description: Add labels to Pull Requests based on matched file patterns
+- name: actions-includes
+  url: https://github.com/mithro/actions-includes
+  stars: 73
+  description: Allows including an action inside another action (by preprocessing
+    the Yaml file). This is how composite actions should have worked.
+- name: kicad-pmod
+  url: https://github.com/mithro/kicad-pmod
+  stars: 43
+  description: KiCad Library to make it easy to create both host boards and expansion
+    boards and which are compatible with the Digilent "PMOD" specification.
+- name: python-datetime-tz
+  url: https://github.com/mithro/python-datetime-tz
+  stars: 36
+  description: Drop-in replacement for Python datetime which deeply cares about timezones.
+- name: kicad-length-matching-checks
+  url: https://github.com/mithro/kicad-length-matching-checks
+  stars: 27
+  description: Couple of scripts which checks length matching of your KiCad design.
