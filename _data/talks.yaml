@@ -1229,11 +1229,9 @@
   date: 3 May 2025
   slides: https://wafer.space/latchup25
   slides_short: https://wafer.space/latchup25
-  slides_embed: https://docs.google.com/presentation/d/e/2PACX-1vR3n4AlTw3b6LRgNY82UZ63RM29jdp2DoLwhI-b7m2XkAuLZlWIPBg1BxnaIJQesk6seqtbBJCke1am/embed
+  slides_embed: https://docs.google.com/presentation/d/1_pczLov3qvqhZhzFPIERLUElKfsyZdDfAlBjyz_e1G8/embed
   source: compiled
   sort_date: '2025-05-03'
-  slides: https://docs.google.com/presentation/d/1_pczLov3qvqhZhzFPIERLUElKfsyZdDfAlBjyz_e1G8
-  slides_embed: https://docs.google.com/presentation/d/1_pczLov3qvqhZhzFPIERLUElKfsyZdDfAlBjyz_e1G8/embed
 - title: So you wanna make a chip? Open Source Silicon
   event: Flashbots_X, San Francisco
   year: 2025
