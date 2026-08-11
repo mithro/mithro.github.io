@@ -36,9 +36,10 @@ OUT.mkdir(exist_ok=True)
 for stem in PHOTOS:
     src = SRC / f"{stem}.jpg"
     img = Image.open(src)
-    w480 = rendition(img, 480, OUT / f"{stem}-480.webp")
-    w960 = rendition(img, 960, OUT / f"{stem}-960.webp")
+    widths = []
+    for w in (480, 720, 960):
+        widths.append(rendition(img, w, OUT / f"{stem}-{w}.webp"))
     kb = lambda p: (OUT / p).stat().st_size // 1024
-    print(f"{stem}: {w480}w ({kb(f'{stem}-480.webp')}KB), "
-          f"{w960}w ({kb(f'{stem}-960.webp')}KB)  [src {img.width}w]",
-          file=sys.stderr)
+    detail = ", ".join(f"{tw}w ({kb(f'{stem}-{fw}.webp')}KB)"
+                       for fw, tw in zip((480, 720, 960), widths))
+    print(f"{stem}: {detail}  [src {img.width}w]", file=sys.stderr)
