@@ -1296,6 +1296,16 @@
   slides_embed: https://docs.google.com/presentation/d/e/2PACX-1vSgIGVCZtNt8RdifZXOLOJDDCj7g05zxr9WS2NjmQtM_E0GfZKCBYhASCto4eURL-86uNwJaXfo1qMC/embed
   source: compiled
   sort_date: '2023-07-01'
+- title: wafer.space - TSRI 2026
+  event: Taiwan Semiconductor Research Institute (TSRI), Tainan
+  event_url: https://www.tsri.org.tw/
+  year: 2026
+  date: 10 Aug 2026
+  slides: https://wafer.space/tsri26
+  slides_short: https://wafer.space/tsri26
+  slides_embed: https://docs.google.com/presentation/d/11nnm_RxjmEHT-fqz9OzON33oG2hRjsuFlwoQS18JGaI/embed
+  source: compiled
+  sort_date: '2026-08-10'
 - title: wafer.space - COSCUP 2026
   event: COSCUP 2026
   event_url: https://coscup.org/2026/

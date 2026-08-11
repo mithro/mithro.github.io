@@ -42,12 +42,13 @@ PRES_RE = re.compile(r"presentation/d/(?!e/)([\w-]+)")
 RKEY_RE = re.compile(r"resourcekey=([\w-]+)")
 
 
-ALIAS_RE = re.compile(r"https?://(?:bit\.ly|j\.mp)/([\w-]+)")
+ALIAS_RE = re.compile(r"https?://(?:bit\.ly|j\.mp|wafer\.space)/([\w-]+)")
 
 
 def collect() -> tuple[set[str], dict[str, tuple[str | None, str]]]:
     """Videos and slides. Slide thumbnails are named by the talk's short
-    link alias when it has one (readable file names), else the deck id."""
+    link alias when it has one (readable file names), else the deck id.
+    slides_short (wafer.space) wins over a bit.ly/j.mp slides link."""
     videos: set[str] = set()
     slides: dict[str, tuple[str | None, str]] = {}
     talks = yaml.safe_load(pathlib.Path("_data/talks.yaml").read_text())
@@ -60,7 +61,8 @@ def collect() -> tuple[set[str], dict[str, tuple[str | None, str]]]:
         m = PRES_RE.search(embed)
         if m:
             rk = RKEY_RE.search(embed)
-            am = ALIAS_RE.match(entry.get("slides") or "")
+            am = (ALIAS_RE.match(entry.get("slides_short") or "")
+                  or ALIAS_RE.match(entry.get("slides") or ""))
             name = am.group(1) if am else m.group(1)
             slides.setdefault(m.group(1),
                               (rk.group(1) if rk else None, name))
