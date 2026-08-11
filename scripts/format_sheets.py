@@ -331,6 +331,15 @@ def do_audit(s: requests.Session) -> None:
                 "condition": {"type": cond,
                               "values": [{"userEnteredValue": value}]},
                 "format": {"backgroundColor": color}}}}})
+    # URL column mirrors the Status colour (formula refers to column F).
+    for formula, color in (('=$F2="OK"', GREEN),
+                           ('=AND($F2<>"OK",$F2<>"")', RED)):
+        reqs.append({"addConditionalFormatRule": {"rule": {
+            "ranges": [alias_range],
+            "booleanRule": {
+                "condition": {"type": "CUSTOM_FORMULA",
+                              "values": [{"userEnteredValue": formula}]},
+                "format": {"backgroundColor": color}}}}})
     check(s.post(f"{SHEETS}/{SHORTLINKS_SHEET}:batchUpdate",
                  json={"requests": reqs}))
     broken = [(r[0], r[5]) for r in body if r[5] != "OK"]
