@@ -188,6 +188,22 @@ def main() -> None:
         + yaml.safe_dump(manifest, sort_keys=True, allow_unicode=True))
     print(f"videos: {len(vids)}/{len(videos)}  "
           f"slides: {len(decks)}/{len(slides)}", file=sys.stderr)
+    # Coverage check: every talk with an embed should end up with a
+    # thumbnail — published-form (/d/e/) embeds silently escape the
+    # collector, which is exactly how tiles go black. Shout about it.
+    talks = yaml.safe_load(pathlib.Path("_data/talks.yaml").read_text())
+    have = set(manifest["slides"])
+    for t in talks:
+        embed = t.get("slides_embed") or ""
+        if "/presentation/d/e/" in embed:
+            print(f"WARNING: published-form embed (no thumbnail possible): "
+                  f"{t['title'][:60]} — set slides_edit to the file id",
+                  file=sys.stderr)
+        else:
+            m = PRES_RE.search(embed)
+            if m and m.group(1) not in have:
+                print(f"WARNING: no thumbnail for {t['title'][:60]}",
+                      file=sys.stderr)
 
 
 if __name__ == "__main__":
