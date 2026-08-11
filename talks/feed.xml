@@ -1,0 +1,27 @@
+---
+layout: null
+permalink: /talks/feed.xml
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tim 'mithro' Ansell — Talks</title>
+    <link>{{ '/talks/' | absolute_url }}</link>
+    <atom:link href="{{ '/talks/feed.xml' | absolute_url }}" rel="self" type="application/rss+xml" />
+    <description>Talks and presentations by Tim 'mithro' Ansell — open source silicon, FPGAs, EDA and more.</description>
+    <language>{{ site.lang }}</language>
+    <lastBuildDate>{{ site.time | date_to_rfc822 }}</lastBuildDate>
+    {%- assign talks_sorted = site.data.talks | sort: "sort_date" | reverse %}
+    {%- for talk in talks_sorted %}
+    {%- if talk.sort_date == '0000-01-01' %}{% continue %}{% endif %}
+    {%- assign talk_link = talk.slides | default: talk.video | default: '' %}
+    <item>
+      <title>{{ talk.title | escape }}</title>
+      <link>{% if talk_link != '' %}{{ talk_link | escape }}{% else %}{{ '/talks/' | absolute_url }}{% endif %}</link>
+      <guid isPermaLink="false">mith.ro-talk-{{ talk.sort_date }}-{{ talk.title | slugify }}-{{ talk.event | slugify }}</guid>
+      <pubDate>{{ talk.sort_date | date_to_rfc822 }}</pubDate>
+      <description>{{ talk.event | escape }}{% if talk.date != '' and talk.date %} · {{ talk.date | escape }}{% endif %}{% if talk.video != '' and talk.video %} · recording: {{ talk.video | escape }}{% endif %}</description>
+    </item>
+    {%- endfor %}
+  </channel>
+</rss>
