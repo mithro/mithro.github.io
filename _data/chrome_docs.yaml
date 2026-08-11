@@ -1,0 +1,16 @@
+# Public Chromium design documents authored/co-authored by Tim during
+# his Chrome team years (2014-2018, Sydney — Animation, Input &
+# Scheduling). Authorship verified against each doc's own byline in a
+# research pass on 11 Aug 2026; rendered on /papers/. An exhaustive
+# sweep of BlinkOn 2-9 recordings and Chrome Dev Summit / GTAC speaker
+# pages found no public Chrome-era conference talks by Tim.
+- title: 'Blink LayoutTests on Swarming: Design Sketch'
+  authors: T Ansell (tansell@chromium.org)
+  venue: Chromium design documentation
+  year: 2016
+  url: https://docs.google.com/document/d/1MzQrrUMnWexZPjrkodDnPAfvS_ZcsPOepMsUrMtWWLE/edit
+- title: Content Tagging in Chromium Design Sketch (for detecting content mixing issues)
+  authors: T Ansell, N Gordon
+  venue: Chromium design documentation
+  year: 2015
+  url: https://docs.google.com/document/d/1UBmUgbGsalhvWoshuuPJSh7LGNqreg4kBPXK1uavMmU/edit

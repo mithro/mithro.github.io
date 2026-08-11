@@ -26,3 +26,18 @@ description: "Scientific papers by Tim 'mithro' Ansell."
   </ul>
   {% endfor %}
 </section>
+
+<section class="sect">
+  <h2><span aria-hidden="true">🌐</span> Chrome design documents</h2>
+  <p class="prose">Public design docs from Tim's years on the Chrome team
+  (2014–2018, Sydney — animation, input &amp; scheduling).</p>
+  <ul class="papers-list" role="list">
+    {% for doc in site.data.chrome_docs %}
+    <li>
+      <span class="ti"><a href="{{ doc.url | escape }}">{{ doc.title | escape }}</a></span>
+      <span class="au">{{ doc.authors | escape }}</span>
+      <span class="ve">{{ doc.venue | escape }} · {{ doc.year }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
