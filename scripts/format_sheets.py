@@ -221,26 +221,58 @@ def do_audit(s: requests.Session) -> None:
     from concurrent.futures import ThreadPoolExecutor
 
     links = yaml.safe_load(pathlib.Path("_data/shortlinks.yaml").read_text())
-    with ThreadPoolExecutor(16) as pool:
-        resolved = list(pool.map(lambda e: resolve(e["long_url"]), links))
 
-    # Fresh visibility straight from the live sheet (Tim may be reviewing).
+    # bit.ly exports a custom-aliased link as TWO bitlinks: the canonical
+    # hash (carrying custom_bitlinks) and the alias itself. Fold each hash
+    # twin into its standalone alias entry so the sheet shows one row per
+    # actual link; the hash keyword lands in "Other aliases".
+    by_keyword = {e["keyword"] for e in links}
+    folded: dict[str, list[str]] = {}
+    folded_public: set[str] = set()
+    keep = []
+    for e in links:
+        customs = [u.rsplit("/", 1)[-1] for u in e.get("custom_bitlinks") or []]
+        target = next((a for a in customs
+                       if a != e["keyword"] and a in by_keyword), None)
+        if target:
+            folded.setdefault(target, []).append(e["keyword"])
+            folded[target].extend(a for a in customs if a != target)
+            if e["include"]:
+                folded_public.add(target)
+            continue
+        keep.append(e)
+
+    with ThreadPoolExecutor(16) as pool:
+        resolved = list(pool.map(lambda e: resolve(e["long_url"]), keep))
+
+    # Fresh visibility straight from the live sheet (Tim may be reviewing);
+    # duplicate rows may still exist there — "public" wins for a given key.
     grid = check(s.get(f"{SHEETS}/{SHORTLINKS_SHEET}/values/A2:B100000")
                  ).get("values", [])
-    vis = {row[0].removeprefix("bit.ly/"): row[1]
-           for row in grid if len(row) >= 2}
+    vis: dict[str, str] = {}
+    for row in grid:
+        if len(row) >= 2:
+            key = row[0].removeprefix("bit.ly/")
+            if vis.get(key) != "public":
+                vis[key] = row[1]
 
     header = ["URL", "Visibility", "Title", "Created", "Final URL",
               "Status", "Other aliases", "Notes"]
     body = []
     ok = 0
-    for e, (final, status, title) in zip(links, resolved):
+    for e, (final, status, title) in zip(keep, resolved):
         customs = [u.rsplit("/", 1)[-1] for u in e.get("custom_bitlinks") or []]
         alias = customs[0] if customs else e["keyword"]
-        others = [a for a in [e["keyword"]] + customs if a != alias]
+        others = sorted(set([e["keyword"]] + customs + folded.get(alias, []))
+                        - {alias})
         ok += status == "OK"
-        visibility = (vis.get(e["keyword"]) or vis.get(alias)
-                      or ("public" if e["include"] else "private"))
+        keys = [alias, e["keyword"], *others]
+        if any(vis.get(k) == "public" for k in keys):
+            visibility = "public"
+        else:
+            visibility = (next((vis[k] for k in keys if k in vis), None)
+                          or ("public" if e["include"] or alias in folded_public
+                              else "private"))
         if status in ("HTTP 403", "HTTP 404"):
             visibility = "private"  # broken links must not get redirects
         body.append([f"bit.ly/{alias}",
