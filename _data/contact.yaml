@@ -1,9 +1,11 @@
 email: me@mith.ro
 phones:
   - label: US
+    flag: "🇺🇸"
     number: "+1 774 264 8476"
     href: "tel:+17742648476"
   - label: AU
+    flag: "🇦🇺"
     number: "+61 421 968 221"
     href: "tel:+61421968221"
 links:
