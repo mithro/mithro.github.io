@@ -119,6 +119,7 @@ a { color: var(--gold); }
 .embed-col { display: flex; flex-direction: column; gap: .3rem; flex: 1 1 300px; max-width: 420px; min-width: 0; }
 .emb-cap { font-size: .75rem; color: var(--muted); text-decoration: none; align-self: flex-start; padding: .15rem 0; }
 .emb-cap:hover, .emb-cap:focus-visible { color: var(--gold); }
+.emb-cap .ci-icon svg { width: .95em; height: .95em; fill: currentColor; vertical-align: -0.1em; }
 .embeds iframe { display: block; width: 100%; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); }
 .embeds .emb-video { aspect-ratio: 16 / 9; }
 .embeds .emb-slides { aspect-ratio: 960 / 569; }
@@ -212,6 +213,7 @@ a { color: var(--gold); }
   .talks-table thead { display: none; }
   .talks-table, .talks-table tbody, .talks-table tr, .talks-table td { display: block; }
   .talks-table tr { border-top: 1px solid var(--line); padding: .55rem 0; }
+  .talks-table tr.embrow { border-top: 0; padding-top: 0; }
   .talks-table td { border-top: 0; padding: 0; }
   .talks-table td.ev { text-align: left; }
   .talks-table td.ev > span { max-width: none; margin-left: 0; font-size: .78rem; margin-top: .15rem; }
@@ -237,6 +239,8 @@ a { color: var(--gold); }
 
 .year-head { font-family: var(--mono); color: var(--silk); font-size: 1rem; margin: 1.6rem 0 .4rem; }
 .ev-none { opacity: .35; }
+/* The embeds sit in their own full-width row attached to the talk above. */
+.talks-table tr.embrow td { border-top: 0; padding-top: 0; }
 
 /* ---- Print ----------------------------------------------------------
    The resume page prints like the canonical resume Google Doc: black
