@@ -195,7 +195,7 @@ a { color: var(--gold); }
 .papers-list .au { display: block; color: var(--muted); font-size: .8rem; font-family: var(--sans); }
 .papers-list .ve { display: block; color: var(--muted); font-size: .78rem; }
 .papers-list .ci { color: var(--gold); font-size: .78rem; }
-.papers-list .pdf { color: var(--blue); text-decoration: none; white-space: nowrap; }
+.papers-list .pdf { color: var(--blue); text-decoration: underline; text-underline-offset: 2px; white-space: nowrap; }
 .papers-list .pdf:hover, .papers-list .pdf:focus-visible { color: var(--gold); }
 
 .err {
