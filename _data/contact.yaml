@@ -29,6 +29,10 @@ links:
     url: https://bsky.app/profile/mith.ro
     handle: "@mith.ro"
     icon: bluesky
+  - label: ORCID
+    url: https://orcid.org/0000-0002-4179-8376
+    handle: 0000-0002-4179-8376
+    icon: orcid
   - label: Blog
     url: https://blog.mithis.net/
     handle: blog.mithis.net
