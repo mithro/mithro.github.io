@@ -59,6 +59,15 @@ def collect() -> tuple[set[str], dict[str, str | None]]:
     return videos, slides
 
 
+def existing(base: pathlib.Path) -> dict | None:
+    """Reuse committed renditions instead of refetching (delete to force)."""
+    large = pathlib.Path(f"{base}-640.webp")
+    if large.exists() and pathlib.Path(f"{base}-320.webp").exists():
+        with Image.open(large) as img:
+            return {"w": img.width, "h": img.height}
+    return None
+
+
 def emit(img: Image.Image, base: pathlib.Path) -> dict:
     img = img.convert("RGB")
     large = img if img.width <= 640 else img.resize(
@@ -72,6 +81,8 @@ def emit(img: Image.Image, base: pathlib.Path) -> dict:
 
 def fetch_video(vid: str) -> tuple[str, dict] | None:
     base = VIDEO_DIR / vid
+    if (have := existing(base)):
+        return vid, have
     for name in ("hq720.jpg", "hqdefault.jpg"):
         r = requests.get(f"https://i.ytimg.com/vi/{vid}/{name}", timeout=20)
         if r.ok and r.content[:3] == b"\xff\xd8\xff":
@@ -83,31 +94,72 @@ def fetch_video(vid: str) -> tuple[str, dict] | None:
     return None
 
 
+_TOKEN: str | None = None
+
+
+def token() -> str:
+    """gcloud user token with Drive scope (gcloud auth login --enable-gdrive-access)."""
+    global _TOKEN
+    if _TOKEN is None:
+        import subprocess
+        _TOKEN = subprocess.run(["gcloud", "auth", "print-access-token"],
+                                capture_output=True, text=True,
+                                check=True).stdout.strip()
+    return _TOKEN
+
+
 def fetch_slides(item: tuple[str, str | None]) -> tuple[str, dict] | None:
-    pid, rkey = item
-    url = f"https://drive.google.com/thumbnail?id={pid}&sz=w640"
-    if rkey:
-        url += f"&resourcekey={rkey}"
-    r = requests.get(url, timeout=20, allow_redirects=True)
-    if r.ok and r.content[:4] in (b"\xff\xd8\xff\xe0", b"\xff\xd8\xff\xdb",
-                                  b"\x89PNG", b"RIFF") or (
-            r.ok and r.headers.get("content-type", "").startswith("image/")):
-        try:
-            img = Image.open(io.BytesIO(r.content))
-        except Exception as exc:
-            print(f"slides {pid}: undecodable ({exc})", file=sys.stderr)
-            return None
-        return pid, emit(img, SLIDES_DIR / pid)
-    print(f"slides {pid}: HTTP {r.status_code}", file=sys.stderr)
-    return None
+    """First-slide PNG via the Slides API — the anonymous
+    drive.google.com/thumbnail endpoint bounces many PUBLIC decks to a
+    sign-in page, so authenticated rendering is the reliable path.
+    The Slides API demands a quota project (enable slides.googleapis.com
+    on it once): defaults to mithro-drive-backup, override with
+    GOOGLE_QUOTA_PROJECT."""
+    import os
+    import time
+    pid, _rkey = item
+    if (have := existing(SLIDES_DIR / pid)):
+        return pid, have
+    time.sleep(1.5)  # getThumbnail has a tight per-minute render quota
+    hdr = {"Authorization": f"Bearer {token()}",
+           "X-Goog-User-Project": os.environ.get("GOOGLE_QUOTA_PROJECT",
+                                                 "mithro-drive-backup")}
+    r = requests.get(f"https://slides.googleapis.com/v1/presentations/{pid}",
+                     params={"fields": "slides.objectId"}, headers=hdr,
+                     timeout=30)
+    if not r.ok or not r.json().get("slides"):
+        print(f"slides {pid}: metadata HTTP {r.status_code}", file=sys.stderr)
+        return None
+    page = r.json()["slides"][0]["objectId"]
+    r = requests.get(
+        f"https://slides.googleapis.com/v1/presentations/{pid}"
+        f"/pages/{page}/thumbnail",
+        params={"thumbnailProperties.thumbnailSize": "MEDIUM"},
+        headers=hdr, timeout=30)
+    if not r.ok:
+        print(f"slides {pid}: thumbnail HTTP {r.status_code}", file=sys.stderr)
+        return None
+    img_r = requests.get(r.json()["contentUrl"], timeout=30)
+    if not img_r.ok:
+        print(f"slides {pid}: contentUrl HTTP {img_r.status_code}",
+              file=sys.stderr)
+        return None
+    try:
+        img = Image.open(io.BytesIO(img_r.content))
+    except Exception as exc:
+        print(f"slides {pid}: undecodable ({exc})", file=sys.stderr)
+        return None
+    return pid, emit(img, SLIDES_DIR / pid)
 
 
 def main() -> None:
     VIDEO_DIR.mkdir(parents=True, exist_ok=True)
     SLIDES_DIR.mkdir(parents=True, exist_ok=True)
     videos, slides = collect()
+    token()  # resolve once before threading
     with ThreadPoolExecutor(8) as pool:
         vids = [r for r in pool.map(fetch_video, sorted(videos)) if r]
+    with ThreadPoolExecutor(4) as pool:  # Slides API: stay under read quota
         decks = [r for r in pool.map(fetch_slides, sorted(slides.items())) if r]
     manifest = {
         "video": {k: v for k, v in sorted(vids)},
