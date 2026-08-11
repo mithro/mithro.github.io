@@ -1,0 +1,49 @@
+---
+layout: default
+title: Projects
+description: "Open source and open hardware projects Tim 'mithro' Ansell founded, built or contributed to — from wafer.space back to OpenZaurus."
+---
+<section class="sect">
+  <h2><span aria-hidden="true">🚀</span> Active projects</h2>
+  {% for p in site.data.projects %}{% if p.status == "active" %}
+  <div class="prose">
+    <h3><a href="{{ p.url | escape }}">{{ p.name | escape }}</a> · <span class="nowrap">{{ p.years | escape }}</span></h3>
+    <p class="meta">{{ p.role | escape }}</p>
+    <p>{{ p.blurb | escape }}</p>
+  </div>
+  {% endif %}{% endfor %}
+</section>
+
+<section class="sect">
+  <h2><span aria-hidden="true">📦</span> Past projects</h2>
+  <p class="prose">Things built, shipped and handed on — no longer actively
+  working on these.</p>
+  {% for p in site.data.projects %}{% if p.status == "past" %}
+  <div class="prose">
+    <h3><a href="{{ p.url | escape }}">{{ p.name | escape }}</a> · <span class="nowrap">{{ p.years | escape }}</span></h3>
+    <p class="meta">{{ p.role | escape }}</p>
+    <p>{{ p.blurb | escape }}</p>
+  </div>
+  {% endif %}{% endfor %}
+</section>
+
+<section class="sect">
+  <h2><span aria-hidden="true">🐙</span> On GitHub</h2>
+  <p class="prose"><a href="{{ site.data.github.profile.url }}">@{{ site.data.github.profile.login }}</a>
+  since {{ site.data.github.profile.member_since }} —
+  {{ site.data.github.profile.public_repos }} public repositories,
+  {{ site.data.github.profile.followers }} followers, and member of
+  {{ site.data.github.orgs | size }} organizations including
+  {% for o in site.data.github.orgs limit: 6 %}<a href="https://github.com/{{ o }}">{{ o }}</a>{% unless forloop.last %}, {% endunless %}{% endfor %}.</p>
+  <ul class="papers-list" role="list">
+    {% for r in site.data.github.top_repos %}
+    <li>
+      <span class="ti"><a href="{{ r.url | escape }}">{{ r.name | escape }}</a></span>
+      <span class="ci">★ {{ r.stars }}</span>
+      <span class="au">{{ r.description | escape }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+  <p class="prose meta">Snapshot from {{ site.data.github.snapshot_date }} —
+  refresh with scripts/fetch_github.py.</p>
+</section>

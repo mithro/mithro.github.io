@@ -1,0 +1,89 @@
+# Open source / open hardware projects for the /projects/ page.
+# status: active | past — rendered as separate sections in file order.
+- name: wafer.space
+  url: https://wafer.space
+  role: Founder & CEO
+  years: 2025 - Present
+  status: active
+  blurb: >-
+    Community silicon pooling service — GF180MCU multi-project wafer runs
+    that get custom chips manufactured from a few dollars per die,
+    rebuilding low-cost fab access after the collapse of Efabless.
+- name: fpgas.online
+  url: http://fpgas.online
+  role: Co-conspirator (with Carl Karsten)
+  years: Present
+  status: active
+  blurb: >-
+    A remote FPGA lab anyone can use from a browser — a rack of real
+    Arty dev boards with live camera views of the LEDs, free for
+    experimenting with real hardware right now.
+- name: TimVideos.us / HDMI2USB
+  url: https://hdmi2usb.tv
+  role: Founder
+  years: 2011 - 2020
+  status: past
+  blurb: >-
+    Open hardware and software for recording and live-streaming
+    conferences — the HDMI2USB firmware and the Numato Opsis open video
+    capture board, used to record events like linux.conf.au and PyCon AU.
+- name: F4PGA (formerly SymbiFlow)
+  url: https://f4pga.org
+  role: Founder
+  years: 2015 - 2022
+  status: past
+  blurb: >-
+    The "GCC of FPGAs" — fully open source FPGA toolchains built on
+    reverse-engineered bitstream documentation for Xilinx 7-series,
+    Lattice iCE40 and ECP5 parts.
+- name: LiteX ecosystem
+  url: https://github.com/enjoy-digital/litex
+  role: Contributor & ecosystem builder
+  years: 2015 - 2023
+  status: past
+  blurb: >-
+    Python-based SoC builder used across the open FPGA world; drove its
+    adoption in HDMI2USB, Fomu and Google's open-silicon work, and
+    helped build the litex-hub community around it.
+- name: Tomu / Fomu / Somu / Qomu
+  url: https://tomu.im
+  role: Creator of Tomu; produced the family with Sean 'xobs' Cross
+  years: 2015 - 2021
+  status: past
+  blurb: >-
+    A family of tiny open hardware boards that fit entirely inside a USB
+    port — Tomu (ARM), Fomu (an FPGA that runs Python), Somu (FIDO2) and
+    Qomu — all crowdfunded through to production.
+- name: FuPy — MicroPython on FPGAs
+  url: https://github.com/fupy
+  role: Co-founder
+  years: 2017 - 2019
+  status: past
+  blurb: >-
+    MicroPython running on soft-CPU SoCs (LiteX/Migen) so Python
+    programmers could drive FPGA hardware directly.
+- name: PyCon AU
+  url: https://pycon-au.org
+  role: Founder & lead organizer
+  years: 2010 - 2018
+  status: past
+  blurb: >-
+    Created Australia's national Python conference and organized it as
+    it grew past 500 attendees.
+- name: Thousand Parsec
+  url: https://github.com/thousandparsec
+  role: Co-founder
+  years: 2002 - 2010
+  status: past
+  blurb: >-
+    A framework for building turn-based 4X space-empire strategy games,
+    with multiple Google Summer of Code student generations.
+- name: OpenZaurus / OpenEmbedded / BitBake
+  url: https://www.openembedded.org/
+  role: Core contributor
+  years: 2002 - 2008
+  status: past
+  blurb: >-
+    Early community embedded-Linux distribution for Sharp Zaurus PDAs
+    and the OpenEmbedded/BitBake build ecosystem that grew out of it
+    (which today powers the Yocto Project).
