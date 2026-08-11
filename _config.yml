@@ -7,6 +7,12 @@ plugins:
   - jekyll-redirect-from
   - jekyll-sitemap
 
+# Jekyll drops underscore-prefixed files by default; YouTube video ids
+# can start with an underscore, so force those thumbnails in.
+include:
+  - _7jSh04LzhA-320.webp
+  - _7jSh04LzhA-640.webp
+
 # Redirect stubs are generated files; everything else is hand-written.
 exclude:
   - Gemfile
