@@ -2,14 +2,6 @@
 # w/h are the -640 rendition's true pixel size (for srcset/width);
 # slides entries carry the thumbnail file basename in 'name'.
 slides:
-  1-KFJR-z9OymfW3i10MnglGO6HiaPS2wSvBdIOLvpmks:
-    h: 360
-    name: 1-KFJR-z9OymfW3i10MnglGO6HiaPS2wSvBdIOLvpmks
-    w: 640
-  11diLJ7RY9z9h9UPnWGvczLXCcom9a8loNPUZsbzsHBc:
-    h: 360
-    name: 11diLJ7RY9z9h9UPnWGvczLXCcom9a8loNPUZsbzsHBc
-    w: 640
   11nnm_RxjmEHT-fqz9OzON33oG2hRjsuFlwoQS18JGaI:
     h: 360
     name: tsri26
@@ -50,10 +42,6 @@ slides:
     h: 360
     name: 15hsBGf7nvxl3VBNiXJJV9zRASovTK5Xmp3QktwtheVc
     w: 640
-  16-V2Da231pwogZE8Q3g-_TQmJ72oQJnkx4eXOWpC3W4:
-    h: 360
-    name: 16-V2Da231pwogZE8Q3g-_TQmJ72oQJnkx4eXOWpC3W4
-    w: 640
   162f5qDoM8ndd-aIJHhiOL57tochxX5aTtYXs3oWrR-4:
     h: 360
     name: 162f5qDoM8ndd-aIJHhiOL57tochxX5aTtYXs3oWrR-4
@@ -69,10 +57,6 @@ slides:
   16ryX2U2I5_iIUeQPoo63pbHeBpMsdtfQ3ItvmKqV-bg:
     h: 360
     name: 16ryX2U2I5_iIUeQPoo63pbHeBpMsdtfQ3ItvmKqV-bg
-    w: 640
-  17PmLMICwDsupvkcZhJs-43lX7KdScTgKq_0T_QwlIo4:
-    h: 360
-    name: 17PmLMICwDsupvkcZhJs-43lX7KdScTgKq_0T_QwlIo4
     w: 640
   17qB_kT0wWE_jRR4YHqMUnyNbfnD5vgf23EYC9Gktyl0:
     h: 480
@@ -101,10 +85,6 @@ slides:
   19WdMF1leAXrAz4K_yr8H6jKMRhXsWcJEWeX92-MrNok:
     h: 360
     name: byu21-goog
-    w: 640
-  19a1ziWXvWxLnxhTRB6R98pnabYTnzAG2IvQ6RoaNXv4:
-    h: 480
-    name: 19a1ziWXvWxLnxhTRB6R98pnabYTnzAG2IvQ6RoaNXv4
     w: 640
   1A0BcUsXpnhlw9gJHMkvn99ps-y6vTfl6EcpW3abQSl0:
     h: 360
@@ -142,10 +122,6 @@ slides:
     h: 360
     name: mosak22-goog
     w: 640
-  1DYq-LeLIdhn7IwKf7egkjqXiuGm-s5QQMcuCzGBm3Q8:
-    h: 360
-    name: 1DYq-LeLIdhn7IwKf7egkjqXiuGm-s5QQMcuCzGBm3Q8
-    w: 640
   1EBpThE64ci4nNbQaO5n_Uc7QmDGpcb1Rm-iNAyd7fUw:
     h: 360
     name: 1EBpThE64ci4nNbQaO5n_Uc7QmDGpcb1Rm-iNAyd7fUw
@@ -161,10 +137,6 @@ slides:
   1F33hwpIZuHeliCYmYt-kdfl2RPxw7fDX3A0zLuMdbwY:
     h: 360
     name: opensilicon-nist22
-    w: 640
-  1F4rhn5bWoBu9yv-lk576TbogFqUwdJ-JNdKl6P4Rovk:
-    h: 360
-    name: 1F4rhn5bWoBu9yv-lk576TbogFqUwdJ-JNdKl6P4Rovk
     w: 640
   1F9i-x-7Hl1ZUGAByBf5bHPwoskI6MQmHJBoja78a8uU:
     h: 360
@@ -190,10 +162,6 @@ slides:
     h: 480
     name: 1IG0wbCLwuqmlmupwbjb8EBHlytnE8Lwg_kBgu7_9cHk
     w: 640
-  1KKjIJHskaowFeJR7Llllrg0Dua_DpE9BIdZTlpoVTRk:
-    h: 360
-    name: 1KKjIJHskaowFeJR7Llllrg0Dua_DpE9BIdZTlpoVTRk
-    w: 640
   1Kn1qsBpQEDCtdoEFAmsRZ9n4E4p8dnI8VfvqoFvmtZA:
     h: 480
     name: 1Kn1qsBpQEDCtdoEFAmsRZ9n4E4p8dnI8VfvqoFvmtZA
@@ -202,10 +170,6 @@ slides:
     h: 360
     name: timtoomany-pyo19
     w: 640
-  1LvZWaHsITUq_yJ-7QxeYYcJa9lLkS4nIjeskLPoZLss:
-    h: 360
-    name: 1LvZWaHsITUq_yJ-7QxeYYcJa9lLkS4nIjeskLPoZLss
-    w: 640
   1Lw4l4uZKTiymLV6uO-w0zHtxZ7iaUEH0GTLcmeFnp1w:
     h: 360
     name: 1Lw4l4uZKTiymLV6uO-w0zHtxZ7iaUEH0GTLcmeFnp1w
@@ -213,10 +177,6 @@ slides:
   1M7f6QoIcNFKd9qSij50gUCezrbUYetuJ4U9-c09R7fg:
     h: 360
     name: 1M7f6QoIcNFKd9qSij50gUCezrbUYetuJ4U9-c09R7fg
-    w: 640
-  1M8vO8msXnrJGaQjpWS5l-05celftKEjhPvOoBloCxm4:
-    h: 360
-    name: 1M8vO8msXnrJGaQjpWS5l-05celftKEjhPvOoBloCxm4
     w: 640
   1NIB4-o_qRvWKUx6PqdQNIpIj1M0Mut6FE4Z8dZAjk14:
     h: 360
@@ -233,10 +193,6 @@ slides:
   1Nc16Ho4qYlqPGenXMhgInkgz3EcsvSlhGAOxmXb2ijc:
     h: 480
     name: 1Nc16Ho4qYlqPGenXMhgInkgz3EcsvSlhGAOxmXb2ijc
-    w: 640
-  1Odulf22CnW576RIPK5_x6CcOJw3WHR4THHecVht29HM:
-    h: 360
-    name: 1Odulf22CnW576RIPK5_x6CcOJw3WHR4THHecVht29HM
     w: 640
   1OwQk496IsRp-9S61GmK5Ew7lkc1Qf1SRQ3MvaJn9Fsc:
     h: 360
@@ -257,10 +213,6 @@ slides:
   1QxDs5OkS0DG1trDXAbMWCQuwPmjn_qxwyGKH53CC25c:
     h: 360
     name: ops21-litedram
-    w: 640
-  1RlOPCLYUmtRTCkiuVoWcpJLZ16ldXngDGlA-q4AvkuU:
-    h: 360
-    name: 1RlOPCLYUmtRTCkiuVoWcpJLZ16ldXngDGlA-q4AvkuU
     w: 640
   1SSvxKwCfgXClHw6Ow6LqKrSCYF_wkZp6SN6YaW8NNLU:
     h: 360
@@ -346,10 +298,6 @@ slides:
     h: 360
     name: goog-ic-edu
     w: 640
-  1e_k5ukdn2xLE_vf3Q7gv120XKRQGTYwt_YItGfIXdrk:
-    h: 360
-    name: 1e_k5ukdn2xLE_vf3Q7gv120XKRQGTYwt_YItGfIXdrk
-    w: 640
   1ea_FEC7TAWe5bfHVYYN6BFrdF34jELIfh7QgQKg0Ndc:
     h: 360
     name: 1ea_FEC7TAWe5bfHVYYN6BFrdF34jELIfh7QgQKg0Ndc
@@ -373,10 +321,6 @@ slides:
   1gDiBQQh-tDRVXDqRisf16Vtjatb1XGBxAC8lcCzQKeM:
     h: 360
     name: 1gDiBQQh-tDRVXDqRisf16Vtjatb1XGBxAC8lcCzQKeM
-    w: 640
-  1gGskn9MyZ-92hFa8NqcvqhAVxZfJ_2Ce1aO_l53Ln6Q:
-    h: 360
-    name: 1gGskn9MyZ-92hFa8NqcvqhAVxZfJ_2Ce1aO_l53Ln6Q
     w: 640
   1gmXXHhAS6aSrZ2nvwqmAKM2e25FnsbgHS1u--dcp0rk:
     h: 360
@@ -462,10 +406,6 @@ slides:
     h: 360
     name: 1wM-dOx_KsP71fZYps2aXOUPeLxYSfxQNk14m6N-CKnc
     w: 640
-  1wTZowU46lKCnjKwBb5B_p0_rqfvL33PibzEND4QB0VY:
-    h: 360
-    name: 1wTZowU46lKCnjKwBb5B_p0_rqfvL33PibzEND4QB0VY
-    w: 640
   1wmmM8vzBwNVZlv6pqCPUptwxGMzbDlj_HfJAPXIIP-U:
     h: 360
     name: 1wmmM8vzBwNVZlv6pqCPUptwxGMzbDlj_HfJAPXIIP-U
@@ -473,10 +413,6 @@ slides:
   1xDMm1wXNTRJuFOUt-u1CYaGQkaowfdLPNqzUf5Oy2A8:
     h: 360
     name: cf23-goog
-    w: 640
-  1ytlKMWrt4XYk-JVxCn1pN4bAojBsT1oWuKu3KRJtbZU:
-    h: 360
-    name: 1ytlKMWrt4XYk-JVxCn1pN4bAojBsT1oWuKu3KRJtbZU
     w: 640
   1zIp9_smnaV4Tyxrs7z6DTrMCLztruGQ6sMmRdI6_23o:
     h: 360

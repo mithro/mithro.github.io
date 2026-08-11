@@ -222,15 +222,6 @@
   slides_edit: https://docs.google.com/presentation/d/1iJA2enHVLyj0FMoLURZZ07Z87If1PAZGzBZDlBToJ70
   source: sheet
   sort_date: '2022-03-07'
-- title: OSD Presentation
-  event: ''
-  year: 0
-  date: ''
-  slides: https://docs.google.com/presentation/d/1DYq-LeLIdhn7IwKf7egkjqXiuGm-s5QQMcuCzGBm3Q8
-  slides_embed: https://docs.google.com/presentation/d/1DYq-LeLIdhn7IwKf7egkjqXiuGm-s5QQMcuCzGBm3Q8/embed
-  slides_edit: https://docs.google.com/presentation/d/1DYq-LeLIdhn7IwKf7egkjqXiuGm-s5QQMcuCzGBm3Q8
-  source: sheet
-  sort_date: '0000-01-01'
 - title: NIST Presentation - Enabling New Science Using Google's Investment in Fully Open Source Silicon - PML Alternative Computing Group
   event: ''
   year: 2021
@@ -292,7 +283,7 @@
   source: sheet
   sort_date: '2021-09-21'
 - title: Fomu - CCCamp19
-  event: CCCamp19
+  event: CCCamp19 — with Sean 'xobs' Cross
   event_url: https://events.ccc.de/camp/2019/
   year: 2019
   date: 21 Aug 2019
@@ -306,12 +297,12 @@
 - title: Google and Open Source hardware Toolchains & Ecosystem (BYU 2021 Presentation)
   event: ''
   year: 2021
-  date: ''
+  date: Jun 2021
   slides: https://j.mp/byu21-goog
   slides_embed: https://docs.google.com/presentation/d/19WdMF1leAXrAz4K_yr8H6jKMRhXsWcJEWeX92-MrNok/embed
   slides_edit: https://docs.google.com/presentation/d/19WdMF1leAXrAz4K_yr8H6jKMRhXsWcJEWeX92-MrNok
   source: sheet
-  sort_date: '2021-07-01'
+  sort_date: '2021-06-01'
 - title: 'SBCCI 2021 - Open down to the transistor: A fully open source, manufacturable PDK for 130nm process for IC Creation Silicon Down to the Transistor - Tim Ansell, Google'
   event: SBCCI 2021
   event_url: https://sbmicro.org.br/chip-in-the-fields-2021/SBCCI2021
@@ -323,23 +314,14 @@
   source: sheet
   sort_date: '2021-08-23'
 - title: Google - ERI POSH + IDEA Integration Exercise 2021 - Open Silicon Summary
-  event: ''
+  event: DARPA ERI POSH + IDEA Integration Exercise 2021
   year: 2021
-  date: ''
+  date: Feb 2021
   slides: https://docs.google.com/presentation/d/1gDiBQQh-tDRVXDqRisf16Vtjatb1XGBxAC8lcCzQKeM
   slides_embed: https://docs.google.com/presentation/d/1gDiBQQh-tDRVXDqRisf16Vtjatb1XGBxAC8lcCzQKeM/embed
   slides_edit: https://docs.google.com/presentation/d/1gDiBQQh-tDRVXDqRisf16Vtjatb1XGBxAC8lcCzQKeM
   source: sheet
-  sort_date: '2021-07-01'
-- title: Google SkyWater PDK Metrics
-  event: ''
-  year: 0
-  date: ''
-  slides: https://docs.google.com/presentation/d/1F4rhn5bWoBu9yv-lk576TbogFqUwdJ-JNdKl6P4Rovk
-  slides_embed: https://docs.google.com/presentation/d/1F4rhn5bWoBu9yv-lk576TbogFqUwdJ-JNdKl6P4Rovk/embed
-  slides_edit: https://docs.google.com/presentation/d/1F4rhn5bWoBu9yv-lk576TbogFqUwdJ-JNdKl6P4Rovk
-  source: sheet
-  sort_date: '0000-01-01'
+  sort_date: '2021-02-01'
 - title: 'Solid-State Circuits Directions Workshop: Democratizing IC Design - Fully Open Silicon Down to the Transistor - Tim Ansell, Google'
   event: Solid-State Circuits Directions Workshop
   event_url: https://web.archive.org/web/20210713202113/https://sscs.ieee.org/about/solid-state-circuits-directions/sscd-events?eid=617&m=5b6d4ad59751d76ea28ad2861bf887e1
@@ -350,24 +332,6 @@
   slides_edit: https://docs.google.com/presentation/d/1zIp9_smnaV4Tyxrs7z6DTrMCLztruGQ6sMmRdI6_23o
   source: sheet
   sort_date: '2021-04-07'
-- title: '[public / external] Wright''s Law'
-  event: ''
-  year: 0
-  date: ''
-  slides: https://docs.google.com/presentation/d/1e_k5ukdn2xLE_vf3Q7gv120XKRQGTYwt_YItGfIXdrk
-  slides_embed: https://docs.google.com/presentation/d/1e_k5ukdn2xLE_vf3Q7gv120XKRQGTYwt_YItGfIXdrk/embed
-  slides_edit: https://docs.google.com/presentation/d/1e_k5ukdn2xLE_vf3Q7gv120XKRQGTYwt_YItGfIXdrk
-  source: sheet
-  sort_date: '0000-01-01'
-- title: SymbiFlow Interchange Format Slides
-  event: ''
-  year: 0
-  date: ''
-  slides: https://docs.google.com/presentation/d/1Odulf22CnW576RIPK5_x6CcOJw3WHR4THHecVht29HM
-  slides_embed: https://docs.google.com/presentation/d/1Odulf22CnW576RIPK5_x6CcOJw3WHR4THHecVht29HM/embed
-  slides_edit: https://docs.google.com/presentation/d/1Odulf22CnW576RIPK5_x6CcOJw3WHR4THHecVht29HM
-  source: sheet
-  sort_date: '0000-01-01'
 - title: Love Rusty 3K - LCA2018 FPGA Project Miniconf
   event: LCA2018
   event_url: https://web.archive.org/web/20180127143252/http://lca2018.linux.org.au/
@@ -399,15 +363,6 @@
   video_title: Tim Ansell CAE Plenary talk
   source: sheet
   sort_date: '2021-03-12'
-- title: Copy of [July 2020] OpenROAD OpenSession
-  event: ''
-  year: 0
-  date: ''
-  slides: https://docs.google.com/presentation/d/1gGskn9MyZ-92hFa8NqcvqhAVxZfJ_2Ce1aO_l53Ln6Q
-  slides_embed: https://docs.google.com/presentation/d/1gGskn9MyZ-92hFa8NqcvqhAVxZfJ_2Ce1aO_l53Ln6Q/embed
-  slides_edit: https://docs.google.com/presentation/d/1gGskn9MyZ-92hFa8NqcvqhAVxZfJ_2Ce1aO_l53Ln6Q
-  source: sheet
-  sort_date: '0000-01-01'
 - title: 'RIOS21 Summit - The Missing Pieces of Open Design Enablement: A Recent History of Google Efforts'
   event: RIOS21 Summit
   year: 2021
@@ -462,14 +417,14 @@
   source: sheet
   sort_date: '2020-06-30'
 - title: ERI Panel - SymbiFlow + POSH/IDEA
-  event: ''
-  year: 0
-  date: ''
+  event: DARPA ERI Summit 2019 - POSH/IDEA Panel
+  year: 2019
+  date: Jul 2019
   slides: https://docs.google.com/presentation/d/13VzMFyAJVCZivpYNk_D4HyMPbM5xVacpFLlPFzQiiEM
   slides_embed: https://docs.google.com/presentation/d/13VzMFyAJVCZivpYNk_D4HyMPbM5xVacpFLlPFzQiiEM/embed
   slides_edit: https://docs.google.com/presentation/d/13VzMFyAJVCZivpYNk_D4HyMPbM5xVacpFLlPFzQiiEM
   source: sheet
-  sort_date: '0000-01-01'
+  sort_date: '2019-07-01'
 - title: Update on Open Source PDK & Shuttle Program - DARPA ERI POSH & Integration Exercise Jan 2020
   event: DARPA ERI POSH & Integration Exercise Jan 2020
   year: 2020
@@ -501,7 +456,7 @@
   source: sheet
   sort_date: '2018-05-12'
 - title: Fomu - RISC-V Summit 2019
-  event: RISC-V Summit 2019
+  event: RISC-V Summit 2019 — with Sean 'xobs' Cross & Michael Gielda
   event_url: https://web.archive.org/web/20191210071825/https://tmt.knect365.com/risc-v-summit/
   year: 2019
   date: 12 Dec 2019
@@ -524,26 +479,6 @@
   video_title: Timothy Ansell - Xilinx Series 7 FPGAs Now Have a Fully Open Source Toolchain!
   source: sheet
   sort_date: '2019-11-17'
-- title: OrConf19 - SymbiFlow Combined Slides
-  event: OrConf19
-  event_url: https://orconf.org/2019/
-  year: 2019
-  date: 28 Sep 2019
-  slides: https://docs.google.com/presentation/d/11diLJ7RY9z9h9UPnWGvczLXCcom9a8loNPUZsbzsHBc
-  slides_embed: https://docs.google.com/presentation/d/11diLJ7RY9z9h9UPnWGvczLXCcom9a8loNPUZsbzsHBc/embed
-  slides_edit: https://docs.google.com/presentation/d/11diLJ7RY9z9h9UPnWGvczLXCcom9a8loNPUZsbzsHBc
-  source: sheet
-  sort_date: '2019-09-28'
-- title: OrConf19 - v2x - Generation of VPR Architecture from Verilog Files
-  event: OrConf19
-  event_url: https://orconf.org/2019/
-  year: 2019
-  date: 28 Sep 2019
-  slides: https://docs.google.com/presentation/d/1KKjIJHskaowFeJR7Llllrg0Dua_DpE9BIdZTlpoVTRk
-  slides_embed: https://docs.google.com/presentation/d/1KKjIJHskaowFeJR7Llllrg0Dua_DpE9BIdZTlpoVTRk/embed
-  slides_edit: https://docs.google.com/presentation/d/1KKjIJHskaowFeJR7Llllrg0Dua_DpE9BIdZTlpoVTRk
-  source: sheet
-  sort_date: '2019-09-28'
 - title: OrConf19 - Status of Artix 7 support in SymbiFlow
   event: OrConf19
   event_url: https://orconf.org/2019/
@@ -556,33 +491,15 @@
   video_title: Status of Xilinx Artix 7 support in Symbiflow - Tim 'mithro' Ansell - ORConf 2019
   source: sheet
   sort_date: '2019-09-28'
-- title: OrConf19 - SystemVerilog Test Suite
-  event: ''
-  year: 2019
-  date: 28 Sep 2019
-  slides: https://docs.google.com/presentation/d/1ytlKMWrt4XYk-JVxCn1pN4bAojBsT1oWuKu3KRJtbZU
-  slides_embed: https://docs.google.com/presentation/d/1ytlKMWrt4XYk-JVxCn1pN4bAojBsT1oWuKu3KRJtbZU/embed
-  slides_edit: https://docs.google.com/presentation/d/1ytlKMWrt4XYk-JVxCn1pN4bAojBsT1oWuKu3KRJtbZU
-  source: sheet
-  sort_date: '2019-09-28'
 - title: OrConf - Yosys Synthesis Improvements
-  event: ''
-  year: 0
-  date: ''
+  event: ORConf 2019 (Bordeaux)
+  year: 2019
+  date: Sep 2019
   slides: https://docs.google.com/presentation/d/1lyIW8OLNznzongp_njMGiEq-t7tlyDXnlNR13tUmK7w
   slides_embed: https://docs.google.com/presentation/d/1lyIW8OLNznzongp_njMGiEq-t7tlyDXnlNR13tUmK7w/embed
   slides_edit: https://docs.google.com/presentation/d/1lyIW8OLNznzongp_njMGiEq-t7tlyDXnlNR13tUmK7w
   source: sheet
-  sort_date: '0000-01-01'
-- title: '[Original] I''m Tomu Slides'
-  event: ''
-  year: 0
-  date: ''
-  slides: https://docs.google.com/presentation/d/1-KFJR-z9OymfW3i10MnglGO6HiaPS2wSvBdIOLvpmks
-  slides_embed: https://docs.google.com/presentation/d/1-KFJR-z9OymfW3i10MnglGO6HiaPS2wSvBdIOLvpmks/embed
-  slides_edit: https://docs.google.com/presentation/d/1-KFJR-z9OymfW3i10MnglGO6HiaPS2wSvBdIOLvpmks
-  source: sheet
-  sort_date: '0000-01-01'
+  sort_date: '2019-09-01'
 - title: Tim has too many projects - PyOhio19 Version
   event: PyOhio19
   event_url: https://www.pyohio.org/2019/
@@ -623,24 +540,6 @@
   slides_edit: https://docs.google.com/presentation/d/12oJ6TG7MS-XbXDMtXsnExupP8yQ20YIIXUq6H64rTFs
   source: sheet
   sort_date: '2016-12-29'
-- title: FuPy - Supported Boards
-  event: ''
-  year: 0
-  date: ''
-  slides: https://docs.google.com/presentation/d/1M8vO8msXnrJGaQjpWS5l-05celftKEjhPvOoBloCxm4
-  slides_embed: https://docs.google.com/presentation/d/1M8vO8msXnrJGaQjpWS5l-05celftKEjhPvOoBloCxm4/embed
-  slides_edit: https://docs.google.com/presentation/d/1M8vO8msXnrJGaQjpWS5l-05celftKEjhPvOoBloCxm4
-  source: sheet
-  sort_date: '0000-01-01'
-- title: LiteX BuildEnv - Supported Boards
-  event: ''
-  year: 0
-  date: ''
-  slides: https://docs.google.com/presentation/d/1LvZWaHsITUq_yJ-7QxeYYcJa9lLkS4nIjeskLPoZLss
-  slides_embed: https://docs.google.com/presentation/d/1LvZWaHsITUq_yJ-7QxeYYcJa9lLkS4nIjeskLPoZLss/embed
-  slides_edit: https://docs.google.com/presentation/d/1LvZWaHsITUq_yJ-7QxeYYcJa9lLkS4nIjeskLPoZLss
-  source: sheet
-  sort_date: '0000-01-01'
 - title: Tim has too many projects - LatchUp18 Version
   event: Latch-Up 2019
   event_url: https://web.archive.org/web/20190507122353/https://fossi-foundation.org/latchup/
@@ -710,7 +609,7 @@
   source: sheet
   sort_date: '2018-11-03'
 - title: Snakes and Rabbits - How CCC shaped an open hardware success
-  event: 35C3
+  event: 35C3 — with Andrew 'bunnie' Huang
   event_url: https://fahrplan.events.ccc.de/congress/2018/Fahrplan/index.html
   year: 2018
   date: 28 Dec 2018
@@ -733,24 +632,15 @@
   video_title: An update on SymbiFlow - a multiplatform FPGA project - Tim Ansell - ORConf 2018
   source: sheet
   sort_date: '2018-09-22'
-- title: I'm Fomu - An FPGA which fits *inside* your USB slot details
-  event: ''
-  year: 0
-  date: ''
-  slides: https://docs.google.com/presentation/d/16-V2Da231pwogZE8Q3g-_TQmJ72oQJnkx4eXOWpC3W4
-  slides_embed: https://docs.google.com/presentation/d/16-V2Da231pwogZE8Q3g-_TQmJ72oQJnkx4eXOWpC3W4/embed
-  slides_edit: https://docs.google.com/presentation/d/16-V2Da231pwogZE8Q3g-_TQmJ72oQJnkx4eXOWpC3W4
-  source: sheet
-  sort_date: '0000-01-01'
 - title: Tim has too many projects - RISC-V Edition!
   event: ''
-  year: 0
-  date: ''
+  year: 2018
+  date: Nov 2018
   slides: https://docs.google.com/presentation/d/1ATdZPLjAPFNnc7yujlVksOf0BzNmLgB8rL_S_5K8Ej0
   slides_embed: https://docs.google.com/presentation/d/1ATdZPLjAPFNnc7yujlVksOf0BzNmLgB8rL_S_5K8Ej0/embed
   slides_edit: https://docs.google.com/presentation/d/1ATdZPLjAPFNnc7yujlVksOf0BzNmLgB8rL_S_5K8Ej0
   source: sheet
-  sort_date: '0000-01-01'
+  sort_date: '2018-11-01'
 - title: Tim has too many projects - CCCamp15 Version
   event: CCCamp15
   event_url: https://events.ccc.de/camp/2015/
@@ -764,42 +654,24 @@
   source: sheet
   sort_date: '2015-08-14'
 - title: FuPy - FPGAs and MicroPython! (SF Python)
-  event: SF Python
+  event: SF Python meetup (San Francisco)
   event_url: https://www.meetup.com/sfpython/
-  year: 0
-  date: ''
+  year: 2018
+  date: 10 Oct 2018
   slides: https://docs.google.com/presentation/d/1ASVlDdQft_it-PCYlAvPYADBTLZLGEpxbn6hrQ_TB6Q
   slides_embed: https://docs.google.com/presentation/d/1ASVlDdQft_it-PCYlAvPYADBTLZLGEpxbn6hrQ_TB6Q/embed
   slides_edit: https://docs.google.com/presentation/d/1ASVlDdQft_it-PCYlAvPYADBTLZLGEpxbn6hrQ_TB6Q
   source: sheet
-  sort_date: '0000-01-01'
+  sort_date: '2018-10-10'
 - title: FuPy - FPGAs and MicroPython! (2018)
   event: ''
   year: 2018
-  date: ''
+  date: Aug 2018
   slides: https://docs.google.com/presentation/d/1EaIt_TEz97ez7ao_--oPgL5TPJ0ktsthTF3bJmoF6es
   slides_embed: https://docs.google.com/presentation/d/1EaIt_TEz97ez7ao_--oPgL5TPJ0ktsthTF3bJmoF6es/embed
   slides_edit: https://docs.google.com/presentation/d/1EaIt_TEz97ez7ao_--oPgL5TPJ0ktsthTF3bJmoF6es
   source: sheet
-  sort_date: '2018-07-01'
-- title: Open FPGA Ecosystem
-  event: ''
-  year: 0
-  date: ''
-  slides: https://docs.google.com/presentation/d/1RlOPCLYUmtRTCkiuVoWcpJLZ16ldXngDGlA-q4AvkuU
-  slides_embed: https://docs.google.com/presentation/d/1RlOPCLYUmtRTCkiuVoWcpJLZ16ldXngDGlA-q4AvkuU/embed
-  slides_edit: https://docs.google.com/presentation/d/1RlOPCLYUmtRTCkiuVoWcpJLZ16ldXngDGlA-q4AvkuU
-  source: sheet
-  sort_date: '0000-01-01'
-- title: SymbiFlow Architecture Definitions work
-  event: ''
-  year: 0
-  date: ''
-  slides: https://docs.google.com/presentation/d/1wTZowU46lKCnjKwBb5B_p0_rqfvL33PibzEND4QB0VY
-  slides_embed: https://docs.google.com/presentation/d/1wTZowU46lKCnjKwBb5B_p0_rqfvL33PibzEND4QB0VY/embed
-  slides_edit: https://docs.google.com/presentation/d/1wTZowU46lKCnjKwBb5B_p0_rqfvL33PibzEND4QB0VY
-  source: sheet
-  sort_date: '0000-01-01'
+  sort_date: '2018-08-01'
 - title: I'm Tomu - Microprocessor which fits *inside* your USB slot (LCA2017 Version)
   event: LCA2017
   event_url: https://web.archive.org/web/20170116173021/https://linux.conf.au/
@@ -1041,12 +913,12 @@
 - title: Why you should use KiCad?
   event: ''
   year: 2015
-  date: ''
+  date: 13 Jan 2015
   slides: https://docs.google.com/presentation/d/1AC5EJgqszAcYQUq0s5rGs3JVY2nz0a7W1gLxTK1hWTs
   slides_embed: https://docs.google.com/presentation/d/1AC5EJgqszAcYQUq0s5rGs3JVY2nz0a7W1gLxTK1hWTs/embed
   slides_edit: https://docs.google.com/presentation/d/1AC5EJgqszAcYQUq0s5rGs3JVY2nz0a7W1gLxTK1hWTs
   source: sheet
-  sort_date: '2015-07-01'
+  sort_date: '2015-01-13'
 - title: Other Things! - LCA 2014
   event: LCA 2014
   event_url: https://web.archive.org/web/20140110100423/https://lca2014.linux.org.au/
@@ -1092,23 +964,23 @@
   source: sheet
   sort_date: '2012-01-19'
 - title: PyCon US Live Streaming
-  event: ''
-  year: 0
-  date: ''
+  event: PyCon US 2012 (Santa Clara)
+  year: 2012
+  date: 11 Mar 2012
   slides: https://docs.google.com/presentation/d/1b5P5mzb4qtQI-Mtdbyumqib9PfK2xoVnNmyaGZTlI2Y
   slides_embed: https://docs.google.com/presentation/d/1b5P5mzb4qtQI-Mtdbyumqib9PfK2xoVnNmyaGZTlI2Y/embed
   slides_edit: https://docs.google.com/presentation/d/1b5P5mzb4qtQI-Mtdbyumqib9PfK2xoVnNmyaGZTlI2Y
   source: sheet
-  sort_date: '0000-01-01'
+  sort_date: '2012-03-11'
 - title: python-datetime-tz
-  event: ''
-  year: 0
-  date: ''
+  event: PyCon AU 2012 (Hobart) — lightning talk (inferred; not SyPy)
+  year: 2012
+  date: 19 Aug 2012
   slides: https://docs.google.com/presentation/d/1QFq486uYPlq621XI_CvzFk9524Nkk2TruRu0tsIGJ_0
   slides_embed: https://docs.google.com/presentation/d/1QFq486uYPlq621XI_CvzFk9524Nkk2TruRu0tsIGJ_0/embed
   slides_edit: https://docs.google.com/presentation/d/1QFq486uYPlq621XI_CvzFk9524Nkk2TruRu0tsIGJ_0
   source: sheet
-  sort_date: '0000-01-01'
+  sort_date: '2012-08-19'
 - title: PyCon AU - 2013 - 10 Projects, 5 minutes
   event: PyCon AU 2013
   event_url: https://2013.pycon-au.org/
@@ -1148,15 +1020,6 @@
   slides: https://docs.google.com/presentation/d/1s6a5CMDAiycqK_sTi6ROoS4bNct-xRa_xe4kHJYb1eA
   slides_embed: https://docs.google.com/presentation/d/1s6a5CMDAiycqK_sTi6ROoS4bNct-xRa_xe4kHJYb1eA/embed
   slides_edit: https://docs.google.com/presentation/d/1s6a5CMDAiycqK_sTi6ROoS4bNct-xRa_xe4kHJYb1eA
-  source: sheet
-  sort_date: '0000-01-01'
-- title: PyGraphViz (external)
-  event: ''
-  year: 0
-  date: ''
-  slides: https://docs.google.com/presentation/d/19a1ziWXvWxLnxhTRB6R98pnabYTnzAG2IvQ6RoaNXv4
-  slides_embed: https://docs.google.com/presentation/d/19a1ziWXvWxLnxhTRB6R98pnabYTnzAG2IvQ6RoaNXv4/embed
-  slides_edit: https://docs.google.com/presentation/d/19a1ziWXvWxLnxhTRB6R98pnabYTnzAG2IvQ6RoaNXv4
   source: sheet
   sort_date: '0000-01-01'
 - title: 'Discussion Panel: the open way for making chips and its impact!'
@@ -1288,21 +1151,21 @@
 - title: Education and workforce development
   event: ''
   year: 2023
-  date: ''
+  date: Jun 2023
   slides: https://bit.ly/goog-ic-edu
   slides_embed: https://docs.google.com/presentation/d/1ds734ylS3ebnk2tZNTzZtvQAopX5Ny2VGN3xd40LzOc/embed
   slides_edit: https://docs.google.com/presentation/d/1ds734ylS3ebnk2tZNTzZtvQAopX5Ny2VGN3xd40LzOc/edit
   source: compiled
-  sort_date: '2023-07-01'
+  sort_date: '2023-06-01'
 - title: SERDES, PIPE and protocols - Pathway to fully open source implementations
   event: ''
-  year: 2023
-  date: ''
+  year: 2022
+  date: 11 Oct 2022
   slides: https://bit.ly/open-pipe-talk
   slides_embed: https://docs.google.com/presentation/d/18cGRni3QDIsyWrTx8WWoPBjEgUObHTGIXYhfViZm7xw/embed
   slides_edit: https://docs.google.com/presentation/d/18cGRni3QDIsyWrTx8WWoPBjEgUObHTGIXYhfViZm7xw/edit
   source: compiled
-  sort_date: '2023-07-01'
+  sort_date: '2022-10-11'
 - title: wafer.space - TSRI 2026
   event: Taiwan Semiconductor Research Institute (TSRI), Tainan
   event_url: https://www.tsri.org.tw/
@@ -1317,17 +1180,17 @@
   event: COSCUP 2026
   event_url: https://coscup.org/2026/
   year: 2026
-  date: ''
+  date: 9 Aug 2026
   slides: https://docs.google.com/presentation/d/1OwQk496IsRp-9S61GmK5Ew7lkc1Qf1SRQ3MvaJn9Fsc
   slides_embed: https://docs.google.com/presentation/d/1OwQk496IsRp-9S61GmK5Ew7lkc1Qf1SRQ3MvaJn9Fsc/embed
   slides_short: https://wafer.space/coscup26
   source: drive
-  sort_date: '2026-08-08'
+  sort_date: '2026-08-09'
 - title: wafer.space - Hack-A-Day Europe 2026
   event: Hackaday Europe 2026
   event_url: https://hackaday.io/europe2026/
   year: 2026
-  date: ''
+  date: 16 May 2026
   slides: https://docs.google.com/presentation/d/19B_h0WY9UAcuUAcgJF6T_YBWIk7LCmVd9yK6ZmSfHk4
   slides_embed: https://docs.google.com/presentation/d/19B_h0WY9UAcuUAcgJF6T_YBWIk7LCmVd9yK6ZmSfHk4/embed
   slides_short: https://wafer.space/had26
@@ -1337,7 +1200,7 @@
   event: Silicon Sprint AUC 2026
   event_url: https://www.asic-hub.org/silicon-sprint
   year: 2026
-  date: ''
+  date: 6 Apr 2026
   slides: https://docs.google.com/presentation/d/1PF5bVWQY2wML1B6cTRs9q0EVngTXpYYBdOQMwuvrHx4
   slides_embed: https://docs.google.com/presentation/d/1PF5bVWQY2wML1B6cTRs9q0EVngTXpYYBdOQMwuvrHx4/embed
   slides_short: https://wafer.space/auc26
@@ -1347,28 +1210,19 @@
   event: Down Underflow 2026
   event_url: https://fossi-foundation.org/downunderflow/2026
   year: 2026
-  date: ''
+  date: 28 Feb 2026
   slides: https://docs.google.com/presentation/d/1rm-qfeo2sq3mF7M_VMgdgMnmqoOVOsmlqGDwuwcfNG0
   slides_embed: https://docs.google.com/presentation/d/1rm-qfeo2sq3mF7M_VMgdgMnmqoOVOsmlqGDwuwcfNG0/embed
   slides_short: https://wafer.space/du26
   source: drive
-  sort_date: '2026-02-27'
+  sort_date: '2026-02-28'
 - title: wafer.space - Hackware 2025
   event: Hackware hardware meetup, Singapore
   event_url: https://luma.com/vo80eh5p
   year: 2025
-  date: ''
+  date: 9 Oct 2025
   slides: https://docs.google.com/presentation/d/1w7wblALt7JnNUvFwazbV_eICCFPlBI-f8cd3xUwHwZM
   slides_embed: https://docs.google.com/presentation/d/1w7wblALt7JnNUvFwazbV_eICCFPlBI-f8cd3xUwHwZM/embed
   slides_short: https://wafer.space/hw25
   source: drive
   sort_date: '2025-10-09'
-- title: ESSCIRC workshop 2022 presentation
-  event: ESSCIRC ESSDERC 2022
-  event_url: https://web.archive.org/web/20220916072719/https://www.esscirc-essderc2022.org/
-  year: 2022
-  date: ''
-  slides: https://docs.google.com/presentation/d/17PmLMICwDsupvkcZhJs-43lX7KdScTgKq_0T_QwlIo4
-  slides_embed: https://docs.google.com/presentation/d/17PmLMICwDsupvkcZhJs-43lX7KdScTgKq_0T_QwlIo4/embed
-  source: drive
-  sort_date: '2022-09-21'
