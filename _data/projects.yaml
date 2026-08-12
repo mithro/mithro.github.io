@@ -26,7 +26,9 @@
   blurb: >-
     Open hardware and software for recording and live-streaming
     conferences — the HDMI2USB firmware and the Numato Opsis open video
-    capture board, used to record events like linux.conf.au and PyCon AU.
+    capture board, used in production at linux.conf.au, PyCon AU,
+    DebConf, PyCon ZA and more; a Google Summer of Code mentoring
+    organization across six programs (2013-2019).
 - name: F4PGA (formerly SymbiFlow)
   url: https://f4pga.org
   role: Founder
@@ -70,14 +72,27 @@
   blurb: >-
     Created Australia's national Python conference and organized it as
     it grew past 500 attendees.
+- name: linux.conf.au miniconfs (Embedded, Gaming, FPGA)
+  url: https://web.archive.org/web/20180124051125/https://lca2018.linux.org.au/programme/miniconfs/fpga/
+  role: Founder & organizer
+  years: 2005 - 2018
+  status: past
+  blurb: >-
+    Founded the Embedded Miniconf (LCA2005 Canberra, LCA2006 Dunedin —
+    organized alongside the OpenEmbedded community), created and ran the
+    Gaming Miniconf (LCA2007-2008, recording and publishing the session
+    videos personally, four years before TimVideos), and organized the
+    sold-out FPGA Miniconf at LCA2018 — a full-day workshop that put a
+    Digilent Arty FPGA board in every attendee's hands.
 - name: Thousand Parsec
   url: https://github.com/thousandparsec
   role: Co-founder
   years: 2002 - 2010
   status: past
   blurb: >-
-    A framework for building turn-based 4X space-empire strategy games,
-    with multiple Google Summer of Code student generations.
+    A framework for building turn-based 4X space-empire strategy games;
+    led it as a Google Summer of Code mentoring organization in
+    2007-2008 with twelve funded students.
 - name: OpenZaurus / OpenEmbedded / BitBake
   url: https://www.openembedded.org/
   role: Core contributor
