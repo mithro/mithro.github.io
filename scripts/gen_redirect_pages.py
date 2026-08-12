@@ -17,8 +17,8 @@ import shutil
 
 import yaml
 
-RESERVED = {"talks", "papers", "projects", "resume", "about", "assets",
-            "docs", "scripts", "404"}
+RESERVED = {"talks", "interviews", "papers", "projects", "resume", "about",
+            "assets", "docs", "scripts", "404"}
 
 links = yaml.safe_load(open("_data/shortlinks.yaml"))
 outdir = pathlib.Path("redirects")

@@ -39,6 +39,7 @@
     <nav>
       <a href="{{ '/' | relative_url }}"{% if page.url == '/' %} class="on" aria-current="page"{% endif %}>About</a>
       <a href="{{ '/talks/' | relative_url }}"{% if page.url contains '/talks/' %} class="on" aria-current="page"{% endif %}>Talks</a>
+      <a href="{{ '/interviews/' | relative_url }}"{% if page.url contains '/interviews/' %} class="on" aria-current="page"{% endif %}>Interviews</a>
       <a href="{{ '/papers/' | relative_url }}"{% if page.url contains '/papers/' %} class="on" aria-current="page"{% endif %}>Papers</a>
       <a href="{{ '/projects/' | relative_url }}"{% if page.url contains '/projects/' %} class="on" aria-current="page"{% endif %}>Projects</a>
       <a href="{{ '/resume/' | relative_url }}"{% if page.url contains '/resume/' %} class="on" aria-current="page"{% endif %}>Resume</a>
