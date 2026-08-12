@@ -116,3 +116,10 @@ papers:
   citations: 49
   url: https://j.mp/iccad20-goog-miss-paper
   pdf: /papers/missing-pieces-iccad20.pdf
+- title: (Literal) World Domination
+  authors: T Ansell
+  venue: Open Source Developers' Conference (OSDC) 2008, Sydney
+  year: 2008
+  citations: 0
+  pdf: /papers/literal-world-domination-osdc08.pdf
+  url: https://blog.mithis.net/archives/games/99-osdc-orbital-death-better-late-then-never

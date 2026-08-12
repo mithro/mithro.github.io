@@ -1226,3 +1226,22 @@
   slides_short: https://wafer.space/hw25
   source: drive
   sort_date: '2025-10-09'
+- title: The best things in life are free
+  event: FreePlay — Independent Game Developers Conference, ACMI Melbourne
+  year: 2007
+  date: 18 Aug 2007
+  source: compiled
+  sort_date: '2007-08-18'
+- title: (Literal) World Domination
+  event: Open Source Developers' Conference 2008 (OSDC), Sydney
+  year: 2008
+  date: Dec 2008
+  slides: https://blog.mithis.net/assets/images/wp-content/uploads/2009/01/osdc-presentation.pdf
+  source: compiled
+  sort_date: '2008-12-01'
+- title: Making git usable with large media repositories
+  event: GitTogether '08, Googleplex, Mountain View
+  year: 2008
+  date: Oct 2008
+  source: compiled
+  sort_date: '2008-10-01'

@@ -13,6 +13,14 @@ technical_skills:
   - "Verilog, VHDL, Migen, Amaranth, & other HDLs"
   - "Strong experience with Javascript & CSS and web browser development"
 achievements:
+  - title: "Google Summer of Code — eight programs across two organizations"
+    role: "Mentoring-organization lead & mentor"
+    years: "2007 - 2019"
+    detail: "Led Thousand Parsec as a GSoC mentoring organization (2007-2008: twelve funded students — four in 2007, eight in 2008 — with Mentor Summits both years) and TimVideos.us (2013, 2014, 2016-2019), which by 2018 ran as an umbrella organization for recording and streaming projects. The 2017 TimVideos project ideas seeded FuPy, the MicroPython-on-FPGA effort."
+    links:
+      - { label: "TP accepted (2007)", url: "https://blog.mithis.net/archives/tp/27-summer-of-code-woo" }
+      - { label: "TP results", url: "https://blog.mithis.net/archives/tp/60-gsoc-results" }
+      - { label: "TimVideos GSoC 2016", url: "https://blog.mithis.net/archives/summer-of-code/2169-timvideos-us-and-google-summer-of-code-2016" }
   - title: "SKY130 & GF180MCU PDKs"
     role: "Creator, Manager & Project Lead"
     years: "2018 - 2024"
