@@ -123,7 +123,10 @@ a { color: var(--gold); }
 .talks-table td.ev { color: var(--muted); text-align: right; }
 .talks-table td.ev > span { display: block; max-width: 28rem; margin-left: auto; text-wrap: pretty; }
 .talks-table .vid, .talks-table td.ti a.vid { color: var(--blue); font-size: .78rem; text-decoration: none; white-space: nowrap; display: inline-block; padding: .4rem .3rem; }
-.embeds { display: flex; flex-wrap: wrap; gap: .6rem .8rem; margin: .55rem 0 .3rem; }
+.embeds { display: flex; flex-wrap: wrap; gap: .6rem .8rem; margin: .15rem 0 .3rem; }
+/* Pull the embed block up under its talk: drop the title row's bottom
+   padding when an embed row follows, so caption+tile read as one group. */
+.talks-table tr:has(+ tr.embrow) td { padding-bottom: .1rem; }
 .embed-col { display: flex; flex-direction: column; gap: .3rem; flex: 1 1 300px; max-width: 420px; min-width: 0; }
 .emb-cap { font-size: .75rem; color: var(--muted); text-decoration: none; align-self: flex-start; padding: .15rem 0; }
 .emb-cap:hover, .emb-cap:focus-visible { color: var(--gold); }
@@ -223,6 +226,8 @@ a { color: var(--gold); }
   .talks-table tr { border-top: 1px solid var(--line); padding: .55rem 0; }
   .talks-table tr.embrow { border-top: 0; padding-top: 0; }
   .talks-table td { border-top: 0; padding: 0; }
+  .talks-table tr:has(+ tr.embrow) { padding-bottom: .1rem; }
+  .talks-table tr:has(+ tr.embrow) td { padding-bottom: 0; }
   .talks-table td.ev { text-align: left; }
   .talks-table td.ev > span { max-width: none; margin-left: 0; font-size: .78rem; margin-top: .15rem; }
   .talks-table td.ev .ev-none { display: none; }
