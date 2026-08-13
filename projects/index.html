@@ -6,10 +6,12 @@ description: "Open source and open hardware projects Tim 'mithro' Ansell founded
 <section class="sect">
   <h2><span aria-hidden="true">🚀</span> Active projects</h2>
   {% for p in site.data.projects %}{% if p.status == "active" %}
-  <div class="prose">
-    <h3><a href="{{ p.url | escape }}">{{ p.name | escape }}</a> · <span class="nowrap">{{ p.years | escape }}</span></h3>
-    <p class="meta">{{ p.role | escape }}</p>
-    <p>{{ p.blurb | escape }}</p>
+  <div class="proj">
+    <div class="proj-head">
+      <h3><a href="{{ p.url | escape }}">{{ p.name | escape }}</a> · <span class="nowrap">{{ p.years | escape }}</span></h3>
+      <p class="meta">{{ p.role | escape }}</p>
+    </div>
+    <p class="proj-blurb">{{ p.blurb | escape }}</p>
   </div>
   {% endif %}{% endfor %}
 </section>
@@ -19,10 +21,12 @@ description: "Open source and open hardware projects Tim 'mithro' Ansell founded
   <p class="prose">Things built, shipped and handed on — no longer actively
   working on these.</p>
   {% for p in site.data.projects %}{% if p.status == "past" %}
-  <div class="prose">
-    <h3><a href="{{ p.url | escape }}">{{ p.name | escape }}</a> · <span class="nowrap">{{ p.years | escape }}</span></h3>
-    <p class="meta">{{ p.role | escape }}</p>
-    <p>{{ p.blurb | escape }}</p>
+  <div class="proj">
+    <div class="proj-head">
+      <h3><a href="{{ p.url | escape }}">{{ p.name | escape }}</a> · <span class="nowrap">{{ p.years | escape }}</span></h3>
+      <p class="meta">{{ p.role | escape }}</p>
+    </div>
+    <p class="proj-blurb">{{ p.blurb | escape }}</p>
   </div>
   {% endif %}{% endfor %}
 </section>
