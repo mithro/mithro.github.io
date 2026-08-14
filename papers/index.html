@@ -42,28 +42,34 @@ description: "Scientific papers by Tim 'mithro' Ansell."
 <section class="sect">
   <h2><span aria-hidden="true">🎓</span> Education</h2>
   {% for ed in site.data.resume.education %}
-  <div class="prose">
-    <h3>{{ ed.org | escape }}</h3>
-    <p class="meta">{{ ed.years | escape }}</p>
-    <ul>
+  <div class="proj">
+    <div class="proj-head">
+      <h3>{{ ed.org | escape }}</h3>
+      <p class="meta">{{ ed.years | escape }}</p>
+    </div>
+    <ul class="proj-blurb deg-list" role="list">
       {% for d in ed.degrees %}<li>{{ d | escape }}</li>{% endfor %}
     </ul>
   </div>
   {% endfor %}
-  <div class="prose">
-    <h3>Honours project: CFXS — an 8-line USB channel bank</h3>
-    <p>Final-year engineering honours project: a budget 8-line
-    computer-to-telephone (FXS) interface — "nothing more than a
-    glorified ADC/DAC device, the computer it's connected to does all
-    the work" — aiming for a US$150 device that could put real phones
-    through a whole house. Completed May 2007 with a live demonstration
-    across eight telephones, graded 94% (High Distinction), and
-    released as open source in 2008.</p>
-    <p class="meta">From the blog:
-    <a href="https://blog.mithis.net/archives/pcb/40-almost-there">Almost there..</a> ·
-    <a href="https://blog.mithis.net/archives/uni/41-cfxs-all-done">My Honours Project – All done!</a> ·
-    <a href="https://blog.mithis.net/archives/uni/44-freeatlast">I'm free!</a> ·
-    <a href="https://blog.mithis.net/archives/ideas/72-cfxs-free">CFXS free at last!</a></p>
+  <div class="proj">
+    <div class="proj-head">
+      <h3>Honours project: CFXS — an 8-line USB channel bank</h3>
+    </div>
+    <div class="proj-blurb">
+      <p>Final-year engineering honours project: a budget 8-line
+      computer-to-telephone (FXS) interface — "nothing more than a
+      glorified ADC/DAC device, the computer it's connected to does all
+      the work" — aiming for a US$150 device that could put real phones
+      through a whole house. Completed May 2007 with a live demonstration
+      across eight telephones, graded 94% (High Distinction), and
+      released as open source in 2008.</p>
+      <p class="meta">From the blog:
+      <a href="https://blog.mithis.net/archives/pcb/40-almost-there">Almost there..</a> ·
+      <a href="https://blog.mithis.net/archives/uni/41-cfxs-all-done">My Honours Project – All done!</a> ·
+      <a href="https://blog.mithis.net/archives/uni/44-freeatlast">I'm free!</a> ·
+      <a href="https://blog.mithis.net/archives/ideas/72-cfxs-free">CFXS free at last!</a></p>
+    </div>
   </div>
 </section>
 
