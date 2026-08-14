@@ -94,7 +94,7 @@ a { color: var(--gold); }
 .contact-icons .ci-emoji { font-size: 1.2rem; }
 
 .spec {
-  display: grid; grid-template-columns: repeat(3, 1fr);
+  display: grid; grid-template-columns: repeat(6, 1fr);
   max-width: 1080px; margin: 0 auto;
   border-bottom: 1px solid var(--line);
 }
@@ -253,8 +253,11 @@ ul.deg-list { padding-left: 0; list-style: none; }
   .hero { grid-template-columns: 1fr; }
   /* Photo first on phones: above the name, below the site header. */
   .hero-photo { order: -1; border-left: 0; border-bottom: 1px solid var(--gold-dim); min-height: 300px; }
-  /* Keep the three stat counters on a single line. */
+  /* Stat counters: two rows of three on phones. */
+  .spec { grid-template-columns: repeat(3, 1fr); }
   .spec > div { padding: .7rem .6rem; }
+  .spec > div:nth-child(-n+3) { border-bottom: 1px solid var(--line); }
+  .spec > div:nth-child(3) { border-right: 0; }
   .spec dt { font-size: .58rem; letter-spacing: .1em; }
   .spec dd { font-size: 1.15rem; }
   .gallery { grid-template-columns: 1fr; }
