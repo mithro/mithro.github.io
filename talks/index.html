@@ -83,7 +83,7 @@ description: "All of Tim 'mithro' Ansell's talks and presentations, 2012–prese
             <a class="emb-cap" href="{{ slides_href | escape }}"><span class="ci-icon" aria-hidden="true">{% include icons/googleslides.svg %}</span> {% if short_disp != "" %}{{ short_disp | escape }}{% else %}Slides{% endif %}</a>
             <button type="button" class="embed-lite lite-slides" data-src="{{ talk.slides_embed | escape }}" aria-label="Load slides: {{ talk.title | escape }}">
               {% if st %}<img src="{{ '/assets/thumbs/slides/' | relative_url }}{{ st.name }}-320.webp" srcset="{{ '/assets/thumbs/slides/' | relative_url }}{{ st.name }}-320.webp 320w, {{ '/assets/thumbs/slides/' | relative_url }}{{ st.name }}-640.webp {{ st.w }}w" sizes="(max-width: 640px) 92vw, 420px" width="{{ st.w }}" height="{{ st.h }}" alt="" {% if tile_n <= 2 %}fetchpriority="high"{% else %}loading="lazy"{% endif %} decoding="async">{% endif %}
-              <span class="lite-play" aria-hidden="true">▶</span>
+              <span class="lite-play" aria-hidden="true">{% include icons/slides-play.svg %}</span>
             </button>
           </div>
           {% endif %}
@@ -94,7 +94,7 @@ description: "All of Tim 'mithro' Ansell's talks and presentations, 2012–prese
             <a class="emb-cap" href="{{ talk.video | escape }}"><span class="ci-icon" aria-hidden="true">{% include icons/youtube.svg %}</span> youtu.be/{{ vid_id }}</a>
             <button type="button" class="embed-lite lite-video" data-src="https://www.youtube-nocookie.com/embed/{{ vid_id }}?autoplay=1{% if vid_start != '' %}&amp;start={{ vid_start }}{% endif %}" aria-label="Play video: {{ talk.title | escape }}">
               {% if vt %}<img src="{{ '/assets/thumbs/video/' | relative_url }}{{ vid_id }}-320.webp" srcset="{{ '/assets/thumbs/video/' | relative_url }}{{ vid_id }}-320.webp 320w, {{ '/assets/thumbs/video/' | relative_url }}{{ vid_id }}-640.webp {{ vt.w }}w" sizes="(max-width: 640px) 92vw, 420px" width="{{ vt.w }}" height="{{ vt.h }}" alt="" {% if tile_n <= 2 %}fetchpriority="high"{% else %}loading="lazy"{% endif %} decoding="async">{% endif %}
-              <span class="lite-play" aria-hidden="true">▶</span>
+              <span class="lite-play" aria-hidden="true">{% include icons/youtube-play.svg %}</span>
             </button>
           </div>
           {% endif %}
