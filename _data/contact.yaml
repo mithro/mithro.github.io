@@ -29,6 +29,9 @@ links:
     url: https://fosstodon.org/@mithro
     handle: "@mithro@fosstodon.org"
     icon: mastodon
+    # The fediverse address names the platform itself — show it bare
+    # (like the email entry) so the line stays short.
+    bare: true
   - label: Bluesky
     url: https://bsky.app/profile/mith.ro
     handle: "@mith.ro"

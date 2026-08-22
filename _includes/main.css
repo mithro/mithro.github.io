@@ -86,7 +86,7 @@ a { color: var(--gold); }
 /* Two independent columns read top-to-bottom: contact + professional
    profiles down the first, social + writing down the second. A wrapped
    entry only pushes its own column, never the neighbouring rows. */
-.hero-contact { columns: 2; column-gap: 1.2rem; }
+.hero-contact { columns: 13rem 2; column-gap: 1.2rem; }
 .hero-contact li { break-inside: avoid; margin-bottom: .3rem; }
 .hero-contact a { color: var(--silk); text-decoration: none; border-bottom: 1px solid var(--gold-dim); }
 .hero-contact a:hover, .hero-contact a:focus-visible { color: var(--gold); }
