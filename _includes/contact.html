@@ -16,7 +16,7 @@ envelope are monochrome SVGs, phone entries show their country flag. {% endcomme
   <li><a href="{{ phone.href }}"><span class="ci-emoji flag-tel" aria-hidden="true">{{ phone.flag }}<span class="flag-tel-badge">{% include icons/phone.svg %}</span></span> <span class="nowrap">{{ phone.number }}</span></a></li>
   {% endfor %}
   {% for link in site.data.contact.links %}
-  <li><a href="{{ link.url }}" rel="me">{% if link.icon %}<span class="ci-icon" aria-hidden="true">{% case link.icon %}{% when 'github' %}{% include icons/github.svg %}{% when 'linkedin' %}{% include icons/linkedin.svg %}{% when 'x' %}{% include icons/x.svg %}{% when 'mastodon' %}{% include icons/mastodon.svg %}{% when 'bluesky' %}{% include icons/bluesky.svg %}{% when 'orcid' %}{% include icons/orcid.svg %}{% when 'wordpress' %}{% include icons/wordpress.svg %}{% endcase %}</span> {% endif %}{{ link.label }}: {{ link.handle }}</a></li>
+  <li><a href="{{ link.url }}" rel="me">{% if link.icon %}<span class="ci-icon" aria-hidden="true">{% case link.icon %}{% when 'github' %}{% include icons/github.svg %}{% when 'linkedin' %}{% include icons/linkedin.svg %}{% when 'x' %}{% include icons/x.svg %}{% when 'mastodon' %}{% include icons/mastodon.svg %}{% when 'bluesky' %}{% include icons/bluesky.svg %}{% when 'orcid' %}{% include icons/orcid.svg %}{% when 'wordpress' %}{% include icons/wordpress.svg %}{% endcase %}</span> {% endif %}{% if link.bare %}{{ link.handle }}{% else %}{{ link.label }}: {{ link.handle }}{% endif %}</a></li>
   {% endfor %}
   {% endif %}
 </ul>
