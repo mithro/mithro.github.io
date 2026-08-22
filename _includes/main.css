@@ -83,7 +83,11 @@ a { color: var(--gold); }
   background: var(--bg); border: 1px solid var(--line); border-radius: 50%;
 }
 .flag-tel-badge svg { width: .6em; height: .6em; fill: currentColor; }
-.hero-contact { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .3rem 1.2rem; }
+/* Two independent columns read top-to-bottom: contact + professional
+   profiles down the first, social + writing down the second. A wrapped
+   entry only pushes its own column, never the neighbouring rows. */
+.hero-contact { columns: 2; column-gap: 1.2rem; }
+.hero-contact li { break-inside: avoid; margin-bottom: .3rem; }
 .hero-contact a { color: var(--silk); text-decoration: none; border-bottom: 1px solid var(--gold-dim); }
 .hero-contact a:hover, .hero-contact a:focus-visible { color: var(--gold); }
 .contact-inline { display: flex; flex-wrap: wrap; gap: .3rem 1.4rem; }
@@ -261,7 +265,7 @@ ul.deg-list { padding-left: 0; list-style: none; }
   .spec dt { font-size: .58rem; letter-spacing: .1em; }
   .spec dd { font-size: 1.15rem; }
   .gallery { grid-template-columns: 1fr; }
-  .hero-contact { grid-template-columns: 1fr; }
+  .hero-contact { columns: 1; }
   .skills-grid { grid-template-columns: 1fr; }
 }
 
