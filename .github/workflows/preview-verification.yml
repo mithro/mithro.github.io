@@ -127,6 +127,7 @@ jobs:
             --exclude=".*drive\.google\.com.*" \
             --exclude=".*doi\.org.*" \
             --exclude=".*dl\.acm\.org.*" \
+            --exclude=".*ieeexplore\.ieee\.org.*" \
             --exclude=".*electronics-lab\.com.*" \
             --exclude=".*bit\.ly.*" \
             --exclude=".*scholar\.google\.com.*" \
