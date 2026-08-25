@@ -1,0 +1,63 @@
+==================================================================
+https://keybase.io/mithro
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://mith.ro
+  * I am mithro (https://keybase.io/mithro) on keybase.
+  * I have a public key with fingerprint 76DA C924 D054 91E1 0805  2863 156E EC09 090A C729
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "0111828f59f665b4e1df400c24f89bcf197b0410e03b832c86a9fa51be8bdc872f710a",
+      "fingerprint": "76dac924d05491e108052863156eec09090ac729",
+      "host": "keybase.io",
+      "key_id": "156eec09090ac729",
+      "kid": "0111828f59f665b4e1df400c24f89bcf197b0410e03b832c86a9fa51be8bdc872f710a",
+      "uid": "32ea44b1e1eaa5c08eb2fe95cc11d500",
+      "username": "mithro"
+    },
+    "service": {
+      "hostname": "mith.ro",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 1
+  },
+  "ctime": 1787643211,
+  "expire_in": 157680000,
+  "prev": "7f598ce76a4a57c94e43ad3520c9acc3e13b4fb4acfb67b642ada5c9f8d83203",
+  "seqno": 47,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: Keybase OpenPGP v2.1.17
+Comment: https://keybase.io/crypto
+
+yMEeAnicrVLLihQxFC3fdIPgCIK4DAgjNEOSyrP2CqK/oE0eN91xZqrKqurWYRz8
+AhcuZq0ILn3sXSmCoB8g6FIQFJ0fEMSkUXDh0mQRcnPOybmH+/rkkWK8dqb+NhqN
+31w49O7l/UVx497FK7vINn4HVbtoE1YHbHnoh+lm9KhCmBCiqApcByG4ZUB8YBg7
+yoLS1gWipcWMYMClVSV1ShgdDCcWlPVOSRokwQZNUIj1DLq2i/WQZKXwxmnKPOZM
+EyBYYU6VKAkXAA7rtI2TVCfivOkzI5mzpoeN2KRaukxX9v6B/8++Fyu5koJhzCan
+YAx3WIGlATR3jhDPMc7AHrrabENCb8dh3jVob4JSbRkd5FhzH3+9b3S5kbZrhsY1
+W6k4H4a2rzJp2Gkz6hbY6W/+1MbapwATYwldH5saVSQh3RCzIJFKClZSQiYIbrex
+g2nMCC6Fwmnlf2CZY095KAdSGGa4dJoBK40vOcVOG+dKIKVlwTLjghXSCkaNT+3q
+oHwKCZcod3SzblDFZPJpZkmzj7PaDIsO0N6rS0eLtXFx/NjhPFjFeHTqz7j9ZMWD
+6+c+Hfy4+vzxnbsfXpw/8b3ZP/0UFQ8fvX+23D97MNLyyeW319a/fP76cf0X+dbR
+4Q==
+=Bn6t
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/mithro
+
+==================================================================
