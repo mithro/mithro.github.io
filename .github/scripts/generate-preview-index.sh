@@ -3,9 +3,8 @@ set -e  # Exit on any error
 
 # Generate the preview index page.
 # PREVIEW_ORIGIN sets the absolute URL shown under each entry; links
-# themselves are relative so the page works at any mount point
-# (https://mith.ro/preview.mith.ro/ today, a custom domain later).
-PREVIEW_ORIGIN="${PREVIEW_ORIGIN:-https://mith.ro/preview.mith.ro}"
+# themselves are relative so the page works at any mount point.
+PREVIEW_ORIGIN="${PREVIEW_ORIGIN:-https://preview.mith.ro}"
 TEMPLATE_FILE=".github/templates/preview-index.html"
 OUTPUT_FILE="index.html"
 

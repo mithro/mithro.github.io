@@ -1,18 +1,14 @@
 # PR Preview Deployment
 # Builds the Jekyll site for each pull request and publishes it to the
 # dedicated preview repository (mithro/preview.mith.ro), which GitHub
-# Pages serves under the mith.ro custom domain via project-pages
-# fall-through: https://mith.ro/preview.mith.ro/pr-<N>/
+# Pages serves at https://preview.mith.ro/pr-<N>/ via its custom domain
+# (Cloudflare DNS-only CNAME preview.mith.ro -> mithro.github.io).
 #
 # Setup required (one time):
-# 1. Preview repository mithro/preview.mith.ro with Pages enabled (main branch, /)
+# 1. Preview repository mithro/preview.mith.ro with Pages enabled
+#    (main branch, /) and custom domain preview.mith.ro
 # 2. A deploy key with write access on the preview repository
 # 3. The private half of that key as secret PREVIEW_KEY on this repository
-#
-# To move previews to a real subdomain later: add a DNS CNAME
-# preview.mith.ro -> mithro.github.io, set the custom domain on the
-# preview repository, and change PREVIEW_ORIGIN below to
-# https://preview.mith.ro (PREVIEW_PATH becomes empty automatically).
 name: PR Preview Deployment
 
 on:
@@ -27,7 +23,7 @@ permissions:
 
 env:
   PREVIEW_REPO: mithro/preview.mith.ro
-  PREVIEW_ORIGIN: https://mith.ro/preview.mith.ro
+  PREVIEW_ORIGIN: https://preview.mith.ro
 
 # One deployment at a time per PR; don't cancel in-progress pushes to
 # the preview repository (a killed push can leave it inconsistent).
@@ -123,13 +119,20 @@ jobs:
             echo "Created user-friendly redirect from $SLUG to $DIR"
           fi
 
-      - name: Ensure .nojekyll exists
+      - name: Ensure .nojekyll, CNAME and robots.txt exist
         run: |
           cd preview-repo
           # The preview repository holds already-built sites; without
           # .nojekyll, Pages would run Jekyll over them and drop files
           # whose names start with an underscore (e.g. video thumbnails).
           touch .nojekyll
+          # For branch-based Pages the CNAME file in the branch is what
+          # keeps the custom domain bound; losing it would unbind
+          # preview.mith.ro.
+          echo "preview.mith.ro" > CNAME
+          # Previews are transient work-in-progress copies of mith.ro and
+          # must never be crawled or indexed.
+          printf 'User-agent: *\nDisallow: /\n' > robots.txt
 
       - name: Regenerate preview index page
         run: |
