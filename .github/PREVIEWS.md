@@ -22,10 +22,11 @@ Modelled on wafer.space's CI
   directories whose PR has closed and marks their GitHub deployments
   inactive.
 
-Previews are served at `https://mith.ro/preview.mith.ro/pr-<N>/` — the
-`preview.mith.ro` repository has no custom domain, so GitHub Pages mounts it
-under the account's custom domain via project-pages fall-through. An index of
-active previews lives at `https://mith.ro/preview.mith.ro/`.
+Previews are served at `https://preview.mith.ro/pr-<N>/` — the
+`preview.mith.ro` repository has that custom domain configured, backed by a
+Cloudflare DNS-only CNAME (`preview` → `mithro.github.io`, matching the
+apex record). An index of active previews lives at
+`https://preview.mith.ro/`.
 
 The commit-hash meta tag comes from `site.github.build_revision`
 (jekyll-github-metadata, part of the github-pages gem), which works on the
@@ -43,15 +44,15 @@ failures.
 ## One-time setup (already done)
 
 1. Repository `mithro/preview.mith.ro` with Pages enabled (branch `main`,
-   root). Contains `.nojekyll` so built sites are served verbatim.
-2. An ed25519 deploy key with write access on `preview.mith.ro`; its private
+   root) and custom domain `preview.mith.ro`. Contains `.nojekyll` (so built
+   sites are served verbatim), `CNAME` (binds the custom domain — for
+   branch-based Pages the file in the branch is authoritative) and a
+   deny-all `robots.txt` (previews must not be crawled or indexed); the
+   deploy workflow re-creates all three every run.
+2. Cloudflare DNS: CNAME `preview` → `mithro.github.io`, DNS-only, in the
+   mith.ro zone.
+3. An ed25519 deploy key with write access on `preview.mith.ro`; its private
    half stored as the `PREVIEW_KEY` Actions secret on this repository.
 
-## Moving previews to a real subdomain (optional)
-
-1. Add a Cloudflare DNS CNAME: `preview.mith.ro` → `mithro.github.io`
-   (DNS-only or proxied, either works).
-2. Set the custom domain `preview.mith.ro` on the preview repository's Pages
-   settings (this commits a CNAME file).
-3. Change `PREVIEW_ORIGIN` to `https://preview.mith.ro` in all three
-   workflow files.
+`PREVIEW_ORIGIN` (set in all three workflow files) is the single knob if the
+preview host ever moves again.
