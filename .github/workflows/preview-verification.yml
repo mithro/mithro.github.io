@@ -1,0 +1,170 @@
+# Preview Site Verification
+# Waits for the PR preview deployment (published by pr-preview.yml) to
+# serve the expected commit, then link-checks the deployed preview with
+# muffet and posts the report as a PR comment.
+name: Preview Site Verification
+
+on:
+  pull_request:
+    branches: ["master"]
+    types: [opened, synchronize, reopened]
+
+  # Manual trigger for testing
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to verify'
+        required: true
+
+permissions:
+  contents: read
+  pull-requests: write
+  actions: read
+
+env:
+  PREVIEW_ORIGIN: https://mith.ro/preview.mith.ro
+
+jobs:
+  verify-preview:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get PR information
+        id: pr-info
+        uses: actions/github-script@v7
+        with:
+          script: |
+            let prNumber;
+            if (context.eventName === 'workflow_dispatch') {
+              prNumber = parseInt('${{ github.event.inputs.pr_number }}', 10);
+            } else {
+              prNumber = context.payload.pull_request.number;
+            }
+
+            const previewUrl = `${process.env.PREVIEW_ORIGIN}/pr-${prNumber}/`;
+
+            // Always fetch current PR data so a force-push during the run
+            // aborts this verification instead of verifying a stale commit.
+            const { data: pullRequest } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber
+            });
+
+            if (context.eventName === 'pull_request' &&
+                pullRequest.head.sha !== context.payload.pull_request.head.sha) {
+              core.setFailed('Workflow aborted due to stale commit hash - newer commit detected');
+              return;
+            }
+
+            console.log(`PR #${prNumber}: ${pullRequest.title}`);
+            console.log(`Preview URL: ${previewUrl}`);
+            console.log(`HEAD: ${pullRequest.head.sha}`);
+
+            core.setOutput('pr_number', prNumber);
+            core.setOutput('preview_url', previewUrl);
+            core.setOutput('head_sha', pullRequest.head.sha);
+
+      - name: Wait for preview deployment to complete
+        if: steps.pr-info.outputs.pr_number
+        run: |
+          PREVIEW_URL="${{ steps.pr-info.outputs.preview_url }}"
+          EXPECTED_COMMIT="${{ steps.pr-info.outputs.head_sha }}"
+          echo "Waiting for $PREVIEW_URL to serve commit $EXPECTED_COMMIT"
+
+          for i in {1..120}; do
+            PAGE_CONTENT=$(curl -s --max-time 20 "$PREVIEW_URL" || echo "")
+            FOUND_COMMIT=$(echo "$PAGE_CONTENT" | grep -oE '<meta name="git-commit" content="[a-f0-9]{40}"' | grep -oE '[a-f0-9]{40}' || echo "")
+
+            if [ "$FOUND_COMMIT" = "$EXPECTED_COMMIT" ]; then
+              echo "✅ Preview serves the expected commit"
+              exit 0
+            fi
+
+            echo "Attempt $i/120: found '${FOUND_COMMIT:-nothing}', waiting..."
+            sleep 5
+          done
+
+          echo "ERROR: Preview not ready with correct commit after 10 minutes"
+          exit 1
+
+      - name: Install muffet
+        if: steps.pr-info.outputs.pr_number
+        run: |
+          wget -qO- https://github.com/raviqqe/muffet/releases/latest/download/muffet_linux_amd64.tar.gz | tar -xzf - -C /tmp
+          sudo mv /tmp/muffet /usr/local/bin/
+          muffet --version
+
+      - name: Link check the deployed preview
+        if: steps.pr-info.outputs.pr_number
+        id: verification
+        run: |
+          PREVIEW_URL="${{ steps.pr-info.outputs.preview_url }}"
+          PR_NUMBER="${{ steps.pr-info.outputs.pr_number }}"
+
+          REPORT_FILE="verification-report.md"
+          echo "**PR:** #$PR_NUMBER" > $REPORT_FILE
+          echo "**URL:** $PREVIEW_URL" >> $REPORT_FILE
+          echo "" >> $REPORT_FILE
+
+          # Excluded domains block automated clients outright (LinkedIn,
+          # ACM/DOI, Google Docs/Drive/Scholar) or chain-redirect into them
+          # (bit.ly); checking them only produces false failures.
+          if muffet \
+            --timeout=30 \
+            --max-connections=10 \
+            --max-connections-per-host=5 \
+            --rate-limit=20 \
+            --max-retries=3 \
+            --buffer-size=16384 \
+            --max-response-body-size=33554432 \
+            --exclude=".*mailto:.*" \
+            --exclude=".*linkedin\.com.*" \
+            --exclude=".*docs\.google\.com.*" \
+            --exclude=".*drive\.google\.com.*" \
+            --exclude=".*doi\.org.*" \
+            --exclude=".*dl\.acm\.org.*" \
+            --exclude=".*electronics-lab\.com.*" \
+            --exclude=".*bit\.ly.*" \
+            --exclude=".*scholar\.google\.com.*" \
+            --header="User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" \
+            --header="Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" \
+            --header="Accept-Language:en-US,en;q=0.9" \
+            "$PREVIEW_URL" > muffet-report.txt 2>&1; then
+            echo "## ✅ All links and assets are valid" >> $REPORT_FILE
+            echo "verification_status=success" >> $GITHUB_OUTPUT
+          else
+            echo "## ❌ Broken links or assets found" >> $REPORT_FILE
+            echo '```' >> $REPORT_FILE
+            head -60 muffet-report.txt >> $REPORT_FILE
+            echo '```' >> $REPORT_FILE
+            echo "verification_status=failed" >> $GITHUB_OUTPUT
+          fi
+
+          echo "report_content<<REPORT_EOF" >> $GITHUB_OUTPUT
+          cat $REPORT_FILE >> $GITHUB_OUTPUT
+          echo "REPORT_EOF" >> $GITHUB_OUTPUT
+
+          cat $REPORT_FILE
+
+      - name: Comment verification results on PR
+        if: steps.pr-info.outputs.pr_number && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        env:
+          VERIFICATION_STATUS: ${{ steps.verification.outputs.verification_status }}
+          REPORT_CONTENT: ${{ steps.verification.outputs.report_content }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+        with:
+          script: |
+            const commentVerificationResults = require('./.github/scripts/comment-verification-results.js');
+            const result = await commentVerificationResults(github, context, core);
+            console.log(`Comment ID: ${result.commentId}, Archived: ${result.archivedCount} previous comments`);
+
+      - name: Fail workflow if verification failed
+        if: steps.verification.outputs.verification_status == 'failed'
+        run: |
+          echo "Preview site verification failed!"
+          exit 1

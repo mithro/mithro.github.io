@@ -1,0 +1,240 @@
+# PR Preview Deployment
+# Builds the Jekyll site for each pull request and publishes it to the
+# dedicated preview repository (mithro/preview.mith.ro), which GitHub
+# Pages serves under the mith.ro custom domain via project-pages
+# fall-through: https://mith.ro/preview.mith.ro/pr-<N>/
+#
+# Setup required (one time):
+# 1. Preview repository mithro/preview.mith.ro with Pages enabled (main branch, /)
+# 2. A deploy key with write access on the preview repository
+# 3. The private half of that key as secret PREVIEW_KEY on this repository
+#
+# To move previews to a real subdomain later: add a DNS CNAME
+# preview.mith.ro -> mithro.github.io, set the custom domain on the
+# preview repository, and change PREVIEW_ORIGIN below to
+# https://preview.mith.ro (PREVIEW_PATH becomes empty automatically).
+name: PR Preview Deployment
+
+on:
+  pull_request:
+    branches: ["master"]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+  deployments: write
+
+env:
+  PREVIEW_REPO: mithro/preview.mith.ro
+  PREVIEW_ORIGIN: https://mith.ro/preview.mith.ro
+
+# One deployment at a time per PR; don't cancel in-progress pushes to
+# the preview repository (a killed push can leave it inconsistent).
+concurrency:
+  group: pr-preview-deployment-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  deploy-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Create deployment
+        id: deployment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const createDeployment = require('./.github/scripts/create-deployment.js');
+            await createDeployment(github, context, core);
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+
+      - name: Generate PR directory name and slugified redirect
+        id: pr-directory
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const generatePrDirectoryName = require('./.github/scripts/generate-pr-directory-name.js');
+            const prNumber = context.payload.pull_request.number;
+            const prTitle = context.payload.pull_request.title;
+
+            // Main directory uses just the PR number; slugified name is a
+            // human-friendly redirect alias.
+            const directoryName = `pr-${prNumber}`;
+            const slugifiedName = generatePrDirectoryName(prNumber, prTitle);
+
+            // Base path where previews are mounted (empty for a custom domain).
+            const previewPath = new URL(process.env.PREVIEW_ORIGIN).pathname.replace(/\/$/, '');
+
+            console.log(`Main directory: ${directoryName}`);
+            console.log(`Slugified redirect: ${slugifiedName}`);
+            console.log(`Jekyll baseurl: ${previewPath}/${directoryName}`);
+
+            core.setOutput('directory_name', directoryName);
+            core.setOutput('slugified_name', slugifiedName);
+            core.setOutput('baseurl_path', `${previewPath}/${directoryName}`);
+
+      - name: Build Jekyll site
+        run: |
+          bundle exec jekyll build --baseurl "${{ steps.pr-directory.outputs.baseurl_path }}" --future
+        env:
+          JEKYLL_ENV: production
+
+      - name: Setup SSH and clone preview repository
+        run: |
+          eval $(ssh-agent -s)
+          echo "${{ secrets.PREVIEW_KEY }}" | ssh-add -
+          mkdir -p ~/.ssh
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+          git clone git@github.com:${PREVIEW_REPO}.git preview-repo
+
+          cd preview-repo
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Create PR directory and user-friendly redirect
+        run: |
+          cd preview-repo
+          DIR="${{ steps.pr-directory.outputs.directory_name }}"
+          SLUG="${{ steps.pr-directory.outputs.slugified_name }}"
+
+          # Replace the PR directory with the fresh build
+          rm -rf "$DIR"
+          mkdir -p "$DIR"
+          cp -r ../_site/* "$DIR"/
+
+          # Remove stale slug aliases from earlier titles of this PR, then
+          # create the current one (relative target keeps it mount-agnostic).
+          find . -maxdepth 1 -type d -name "${DIR}-*" -exec rm -rf {} +
+          if [ "$SLUG" != "$DIR" ]; then
+            mkdir -p "$SLUG"
+            cp ../.github/templates/redirect-template.html "$SLUG"/index.html
+            sed -i "s|{{TARGET_URL}}|../$DIR|g" "$SLUG"/index.html
+            echo "Created user-friendly redirect from $SLUG to $DIR"
+          fi
+
+      - name: Ensure .nojekyll exists
+        run: |
+          cd preview-repo
+          # The preview repository holds already-built sites; without
+          # .nojekyll, Pages would run Jekyll over them and drop files
+          # whose names start with an underscore (e.g. video thumbnails).
+          touch .nojekyll
+
+      - name: Regenerate preview index page
+        run: |
+          cd preview-repo
+          cp ../.github/scripts/generate-preview-index.sh ./
+          mkdir -p .github/templates
+          cp ../.github/templates/preview-index.html .github/templates/
+          chmod +x generate-preview-index.sh
+          ./generate-preview-index.sh
+          rm -rf generate-preview-index.sh .github
+
+      - name: Deploy to preview repository
+        run: |
+          cd preview-repo
+          git add -A
+          if git diff --staged --quiet; then
+            echo "No changes to commit for preview deployment"
+          else
+            git commit -m "Deploy preview for PR #${{ github.event.pull_request.number }} - ${{ github.event.pull_request.head.sha }}"
+            # Re-setup SSH agent (does not persist between steps)
+            eval $(ssh-agent -s)
+            echo "${{ secrets.PREVIEW_KEY }}" | ssh-add -
+            git push origin main
+          fi
+
+      - name: Wait for Pages deployment and verify accessibility
+        id: verify-deployment
+        run: |
+          PREVIEW_URL="${PREVIEW_ORIGIN}/pr-${{ github.event.pull_request.number }}/"
+          EXPECTED_COMMIT="${{ github.event.pull_request.head.sha }}"
+          echo "Waiting for $PREVIEW_URL to serve commit $EXPECTED_COMMIT"
+
+          for i in {1..60}; do
+            sleep 10
+            echo "Attempt $i/60..."
+            PAGE_CONTENT=$(curl -s --max-time 20 "$PREVIEW_URL" || echo "")
+
+            FOUND_COMMIT=$(echo "$PAGE_CONTENT" | grep -oE '<meta name="git-commit" content="[a-f0-9]{40}"' | grep -oE '[a-f0-9]{40}' || echo "")
+
+            if [ "$FOUND_COMMIT" = "$EXPECTED_COMMIT" ]; then
+              echo "✅ Preview serves the expected commit"
+              echo "deployment_status=success" >> $GITHUB_OUTPUT
+              echo "preview_url=$PREVIEW_URL" >> $GITHUB_OUTPUT
+              exit 0
+            elif [ -n "$FOUND_COMMIT" ]; then
+              echo "Preview serves commit $FOUND_COMMIT (waiting for $EXPECTED_COMMIT)"
+            else
+              echo "Preview not responding yet"
+            fi
+          done
+
+          echo "⚠️ Preview did not serve the expected commit within 10 minutes"
+          echo "deployment_status=partial" >> $GITHUB_OUTPUT
+          echo "preview_url=$PREVIEW_URL" >> $GITHUB_OUTPUT
+          echo "error_message=Git commit hash verification failed - deployment may be outdated" >> $GITHUB_OUTPUT
+
+      - name: Update deployment status
+        if: always()
+        uses: actions/github-script@v7
+        env:
+          DEPLOYMENT_ID: ${{ steps.deployment.outputs.deployment_id }}
+          JOB_STATUS: ${{ job.status }}
+          VERIFICATION_STATUS: ${{ steps.verify-deployment.outputs.deployment_status }}
+        with:
+          script: |
+            const updateDeploymentStatus = require('./.github/scripts/update-deployment-status.js');
+            await updateDeploymentStatus(github, context, core);
+
+      - name: Comment PR with preview URL
+        if: steps.verify-deployment.outputs.deployment_status == 'success'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const commentPrPreview = require('./.github/scripts/comment-pr-preview.js');
+            await commentPrPreview(github, context, core);
+
+      - name: Comment PR with deployment warning
+        if: steps.verify-deployment.outputs.deployment_status == 'partial'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const previewUrl = '${{ steps.verify-deployment.outputs.preview_url }}';
+            const errorMessage = '${{ steps.verify-deployment.outputs.error_message }}';
+
+            const warningBody = [
+              '## ⚠️ Preview Deployment Partially Ready',
+              '',
+              '| Status | Preview URL | Issue |',
+              '|--------|-------------|-------|',
+              `| 🟡 Partial | [View Preview](${previewUrl}) | ${errorMessage} |`,
+              '',
+              'The preview has been deployed but content verification is incomplete.',
+              'The site may still be propagating.',
+              '',
+              '---',
+              '<sub>⚡ mith.ro PR preview • Preview will be removed when PR is closed</sub>'
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: warningBody
+            });
+
+# Preview cleanup happens in the scheduled cleanup-previews.yml workflow,
+# so open PRs never show a skipped "cleanup" check.

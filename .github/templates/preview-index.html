@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>mith.ro PR previews</title>
+  <meta name="robots" content="noindex">
+  <style>
+    :root {
+      --bg: #0e0f11; --panel: #16171a; --line: #2c2d31;
+      --gold: #d4a72c; --gold-dim: #8a6d1f; --silk: #e8e6df; --muted: #9a948a;
+      --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    }
+    body {
+      background: var(--bg); color: var(--silk); font-family: var(--mono);
+      max-width: 720px; margin: 0 auto; padding: 3rem 1.25rem;
+    }
+    h1 { color: var(--gold); font-size: 1.1rem; letter-spacing: .14em; text-transform: uppercase; }
+    p { color: var(--muted); font-size: .85rem; }
+    a { color: var(--silk); text-decoration: underline; text-decoration-color: var(--gold-dim); text-underline-offset: 3px; }
+    a:hover, a:focus-visible { color: var(--gold); text-decoration-color: var(--gold); }
+    ul { list-style: none; margin: 1.5rem 0; padding: 0; }
+    li { border-top: 1px solid var(--line); padding: .8rem 0; }
+    .preview-url { color: var(--muted); font-size: .75rem; margin-top: .25rem; }
+    #empty-state { display: none; border: 1px dashed var(--line); border-radius: 4px; padding: 1.2rem; }
+  </style>
+</head>
+<body>
+  <h1>mith.ro PR previews</h1>
+  <p>Per-pull-request builds of <a href="https://mith.ro/">mith.ro</a>.
+  Each preview is removed automatically when its pull request closes.</p>
+  <ul>
+    <!-- PREVIEW_ITEMS_PLACEHOLDER -->
+  </ul>
+  <div id="empty-state">
+    <p>No active previews. Open a pull request against
+    <a href="https://github.com/mithro/mithro.github.io">mithro/mithro.github.io</a>
+    to create one.</p>
+  </div>
+</body>
+</html>

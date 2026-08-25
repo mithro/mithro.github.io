@@ -1,0 +1,232 @@
+# Scheduled Preview Cleanup
+# Removes preview deployments for closed PRs from the preview repository
+# and deactivates their GitHub deployments. Runs on a schedule (instead
+# of on PR close) so open PRs never show a skipped "cleanup" check.
+name: Cleanup Preview Deployments
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+
+  # Manual trigger for testing and immediate cleanup
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'Specific PR number to clean up (optional)'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+  pull-requests: write
+  deployments: write
+
+env:
+  PREVIEW_REPO: mithro/preview.mith.ro
+  PREVIEW_ORIGIN: https://mith.ro/preview.mith.ro
+
+jobs:
+  cleanup-closed-pr-previews:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup SSH and clone preview repository
+        id: find-cleanup
+        run: |
+          eval $(ssh-agent -s)
+          echo "${{ secrets.PREVIEW_KEY }}" | ssh-add -
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+          git clone git@github.com:${PREVIEW_REPO}.git preview-repo
+          cd preview-repo
+
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+
+          # Find all PR directories (pr-* pattern)
+          PR_DIRS=$(find . -maxdepth 1 -type d -name "pr-*" -exec basename {} \; | sort)
+
+          if [ -z "$PR_DIRS" ]; then
+            echo "No PR preview directories found"
+            echo "cleanup_needed=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "Found PR directories: $PR_DIRS"
+          echo "cleanup_needed=true" >> $GITHUB_OUTPUT
+
+          printf '%s\n' $PR_DIRS > "$RUNNER_TEMP/pr_directories.txt"
+
+      - name: Check PR status and identify closed PRs
+        if: steps.find-cleanup.outputs.cleanup_needed == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            const listPath = path.join(process.env.RUNNER_TEMP, 'pr_directories.txt');
+            const prDirs = fs.readFileSync(listPath, 'utf8').trim().split('\n').filter(Boolean);
+
+            console.log(`Checking ${prDirs.length} PR directories for cleanup`);
+
+            const cleanupList = [];
+            const specificPR = '${{ github.event.inputs.pr_number }}';
+
+            for (const dirName of prDirs) {
+              const prMatch = dirName.match(/^pr-(\d+)(?:-.*)?$/);
+              if (!prMatch) {
+                console.log(`Skipping invalid directory name: ${dirName}`);
+                continue;
+              }
+
+              const prNumber = parseInt(prMatch[1]);
+
+              if (specificPR && prNumber !== parseInt(specificPR)) {
+                continue;
+              }
+
+              try {
+                const { data: pr } = await github.rest.pulls.get({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: prNumber
+                });
+
+                if (pr.state === 'closed') {
+                  console.log(`PR #${prNumber} is closed, marking for cleanup`);
+                  cleanupList.push({ prNumber, dirName, closedAt: pr.closed_at });
+                } else {
+                  console.log(`PR #${prNumber} is still open, keeping preview`);
+                }
+              } catch (error) {
+                if (error.status === 404) {
+                  console.log(`PR #${prNumber} not found (deleted), marking for cleanup`);
+                  cleanupList.push({ prNumber, dirName, closedAt: 'unknown' });
+                } else {
+                  console.error(`Error checking PR #${prNumber}:`, error.message);
+                }
+              }
+            }
+
+            console.log(`Found ${cleanupList.length} PR previews to clean up`);
+            const outPath = path.join(process.env.RUNNER_TEMP, 'cleanup_list.json');
+            fs.writeFileSync(outPath, JSON.stringify(cleanupList, null, 2));
+
+      - name: Perform cleanup of closed PR previews
+        if: steps.find-cleanup.outputs.cleanup_needed == 'true'
+        run: |
+          cd preview-repo
+
+          CLEANUP_LIST=$(cat "$RUNNER_TEMP/cleanup_list.json")
+          CLEANUP_COUNT=$(echo "$CLEANUP_LIST" | jq length)
+
+          if [ "$CLEANUP_COUNT" -eq 0 ]; then
+            echo "No previews need cleanup"
+            exit 0
+          fi
+
+          echo "Cleaning up $CLEANUP_COUNT preview(s)..."
+
+          echo "$CLEANUP_LIST" | jq -r '.[] | @base64' | while IFS= read -r item; do
+            ITEM_JSON=$(echo "$item" | base64 --decode)
+            DIR_NAME=$(echo "$ITEM_JSON" | jq -r '.dirName')
+            PR_NUMBER=$(echo "$ITEM_JSON" | jq -r '.prNumber')
+
+            echo "Cleaning up directory: $DIR_NAME (PR #$PR_NUMBER)"
+
+            if [ -d "$DIR_NAME" ]; then
+              rm -rf "$DIR_NAME"
+              echo "Removed directory: $DIR_NAME"
+            fi
+
+            # Remove any slug redirect directories for this PR (pr-123-*)
+            find . -maxdepth 1 -type d -name "pr-${PR_NUMBER}-*" -exec rm -rf {} + || true
+          done
+
+          # Regenerate the preview index
+          cp ../.github/scripts/generate-preview-index.sh ./
+          mkdir -p .github/templates
+          cp ../.github/templates/preview-index.html .github/templates/
+          chmod +x generate-preview-index.sh
+          ./generate-preview-index.sh
+          rm -rf generate-preview-index.sh .github
+
+          git add -A
+          if ! git diff --staged --quiet; then
+            CLEANUP_SUMMARY=$(echo "$CLEANUP_LIST" | jq -r '.[] | "PR #\(.prNumber)"' | paste -sd ", " -)
+            git commit -m "Scheduled cleanup of closed PR previews: $CLEANUP_SUMMARY"
+
+            eval $(ssh-agent -s)
+            echo "${{ secrets.PREVIEW_KEY }}" | ssh-add -
+            git push origin main
+
+            echo "Cleanup completed and changes pushed"
+          else
+            echo "No changes to commit"
+          fi
+
+      - name: Clean up GitHub deployments for closed PRs
+        if: steps.find-cleanup.outputs.cleanup_needed == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            const listPath = path.join(process.env.RUNNER_TEMP, 'cleanup_list.json');
+            const cleanupList = JSON.parse(fs.readFileSync(listPath, 'utf8'));
+
+            console.log(`Cleaning up deployments for ${cleanupList.length} closed PRs`);
+
+            for (const item of cleanupList) {
+              const environment = `pr-preview-${item.prNumber}`;
+
+              try {
+                const { data: deployments } = await github.rest.repos.listDeployments({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  environment: environment,
+                });
+
+                console.log(`Found ${deployments.length} deployments for PR #${item.prNumber}`);
+
+                for (const deployment of deployments) {
+                  if (!deployment.id || !Number.isInteger(deployment.id)) {
+                    continue;
+                  }
+
+                  await github.rest.repos.createDeploymentStatus({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    deployment_id: deployment.id,
+                    state: 'inactive',
+                    description: 'Scheduled cleanup - PR closed'
+                  });
+
+                  console.log(`Marked deployment ${deployment.id} as inactive for PR #${item.prNumber}`);
+                }
+              } catch (error) {
+                console.error(`Error cleaning up deployments for PR #${item.prNumber}:`, error.message);
+              }
+            }
+
+      - name: Summary
+        if: always()
+        run: |
+          if [ -f "$RUNNER_TEMP/cleanup_list.json" ]; then
+            CLEANUP_COUNT=$(cat "$RUNNER_TEMP/cleanup_list.json" | jq length)
+            echo "✅ Scheduled cleanup completed"
+            echo "📊 Processed $CLEANUP_COUNT closed PR preview(s)"
+            if [ "$CLEANUP_COUNT" -gt 0 ]; then
+              cat "$RUNNER_TEMP/cleanup_list.json" | jq -r '.[] | "  - PR #\(.prNumber) (\(.dirName))"'
+            fi
+          else
+            echo "ℹ️  No PR preview directories found"
+          fi
