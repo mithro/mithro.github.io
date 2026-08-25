@@ -68,20 +68,27 @@ jobs:
             const directoryName = `pr-${prNumber}`;
             const slugifiedName = generatePrDirectoryName(prNumber, prTitle);
 
-            // Base path where previews are mounted (empty for a custom domain).
-            const previewPath = new URL(process.env.PREVIEW_ORIGIN).pathname.replace(/\/$/, '');
+            // Split PREVIEW_ORIGIN into the host origin (becomes site.url so
+            // absolute_url links stay on the preview host) and a mount path
+            // (empty for a custom domain), which joins the baseurl.
+            const previewUrl = new URL(process.env.PREVIEW_ORIGIN);
+            const previewPath = previewUrl.pathname.replace(/\/$/, '');
 
             console.log(`Main directory: ${directoryName}`);
             console.log(`Slugified redirect: ${slugifiedName}`);
-            console.log(`Jekyll baseurl: ${previewPath}/${directoryName}`);
+            console.log(`Jekyll url: ${previewUrl.origin}, baseurl: ${previewPath}/${directoryName}`);
 
             core.setOutput('directory_name', directoryName);
             core.setOutput('slugified_name', slugifiedName);
+            core.setOutput('site_url', previewUrl.origin);
             core.setOutput('baseurl_path', `${previewPath}/${directoryName}`);
 
       - name: Build Jekyll site
         run: |
-          bundle exec jekyll build --baseurl "${{ steps.pr-directory.outputs.baseurl_path }}" --future
+          # Override site.url so absolute_url links (canonical, og:image,
+          # feed) point at the preview host instead of production.
+          printf 'url: "%s"\n' "${{ steps.pr-directory.outputs.site_url }}" > "$RUNNER_TEMP/preview-url.yml"
+          bundle exec jekyll build --config "_config.yml,$RUNNER_TEMP/preview-url.yml" --baseurl "${{ steps.pr-directory.outputs.baseurl_path }}" --future
         env:
           JEKYLL_ENV: production
 
