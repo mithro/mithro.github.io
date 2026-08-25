@@ -12,6 +12,7 @@ plugins:
 include:
   - _7jSh04LzhA-320.webp
   - _7jSh04LzhA-640.webp
+  - .well-known
 
 # Redirect stubs are generated files; everything else is hand-written.
 exclude:
