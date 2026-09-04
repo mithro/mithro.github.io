@@ -33,7 +33,7 @@ cleared for it.
 |---|---|
 | Which decks get film strips | A new **Strips** column in the talks sheet, imported manually into `talks.yaml` |
 | Categories | Claude proposes a taxonomy and assigns all talks; Tim reviews |
-| Highlighted talks | Claude proposes 5–10 with reasoning; Tim approves |
+| Highlighted talks | Claude proposes 8–10 with reasoning; Tim approves (page shows at most 10) |
 | URL structure | `/talks/` becomes a **hub**; timeline, topics and highlights get their own URLs |
 | Where strips appear | **Everywhere**: timeline, topics, highlights and detail pages |
 | New short links | Only for talks with **no** short link at all, pointing at the deck, else the video |
@@ -96,14 +96,15 @@ Images live at `assets/strips/<slug>/<NN>-240.webp` and `-480.webp`
 present in the manifest, so a deck that failed to export degrades to
 today's single thumbnail tile.
 
-### `_data/video_stats.yaml` — optional snapshot (generated)
+### `_data/video_stats.yaml` — deferred
 
-`{<youtube id>: {views, published, fetched}}` if a YouTube Data API key
-is available (`YOUTUBE_API_KEY` env, or a key created on the
-`gdoc2netcfg-appscript` project). Used for the "total views" stat and
-as one input to the highlights ranking. If unavailable the site simply
-omits that stat; nothing else depends on it. (`yt-dlp` was tried and is
-blocked by YouTube's bot check from this network.)
+A `{<youtube id>: {views, published, fetched}}` snapshot from the
+YouTube Data API would give a "total views" stat and a ranking input
+for highlights. It is **out of scope for this plan**: `yt-dlp` is
+blocked by YouTube's bot check from this network and the Data API needs
+a key to be created first. The hub omits the views stat until a
+`scripts/fetch_video_stats.py` exists; highlights are ranked without
+it.
 
 ## Sheet workflow — `scripts/talks_sheet.py`
 
@@ -117,11 +118,13 @@ Matches rows on every tab of the original talks sheet
 | `dump` | sheet → stdout | JSON of all tabs with row↔talk matches (debugging) |
 | `slugs` | YAML → sheet | Writes the Slug column (done). Black = existing alias, bold red = proposal |
 | `strips` | YAML → sheet | Adds a **Strips** column next to Slug, pre-filled `yes` (red) for decks that are publicly fetchable today (present in `_data/thumbs.yaml`), blank for restricted decks. Never overwrites a cell Tim has already filled |
-| `import` | sheet → YAML | Reads Slug and Strips back: updates `slug:`/`strips:` textually (comments preserved, as `enrich_talk_embeds.py` does), then turns imported Slug/Strips cells black to show they are accepted |
+| `import` | sheet → YAML | Reads Slug and Strips back: updates `slug:` textually (comments preserved, as `enrich_talk_embeds.py` does); a Strips cell of `yes` (case-insensitive) writes `strips: true`, anything else removes the `strips:` line. Then turns imported Slug/Strips cells black to show they are accepted |
 | `shortlinks` | YAML → shortlinks sheet | For each talk with no short link at all, appends a row `mith.ro/<slug>` → deck URL (else video URL), Visibility `private`, Source `talk`, for Tim's review |
 
-`import` refuses to change a slug that would collide with another
-talk or an existing short link, and reports what it changed.
+`import` (and `validate_slugs`) refuses a slug that collides with
+another talk, an existing short link, or one of the reserved names
+under `/talks/` — `timeline`, `topics`, `highlights`, `feed` — and
+reports what it changed.
 
 `format_sheets.py sync` gains one behaviour: rows in the shortlinks
 sheet whose alias is in no YAML entry are appended to
@@ -133,8 +136,11 @@ regenerates the file. `gen_redirect_pages.py` needs no change.
 
 - uv/PEP 723 script; auth via `gcloud auth print-access-token`
   (Drive scope covers the Slides API); sends
-  `X-Goog-User-Project: gdoc2netcfg-appscript` (the Slides API is
-  enabled there; `GOOGLE_QUOTA_PROJECT` overrides).
+  `X-Goog-User-Project: mithro-drive-backup` — the same quota project
+  and `GOOGLE_QUOTA_PROJECT` override `fetch_talk_thumbs.py` already
+  uses for its first-slide `getThumbnail` calls. The Slides-API helper
+  (token, headers, backoff, the 1.5 s per-render pacing) is shared with
+  that script rather than duplicated.
 - For every talk with `strips: true` and a Google Slides deck id
   (from `slides_edit`, else `slides`, else `slides_embed`; `/d/e/`
   published ids are not usable and are reported):
@@ -222,16 +228,21 @@ each run (idempotent, like `redirects/`).
   scrollbar, 135 px tall frames (`aspect-ratio` from the manifest),
   gap 0.35 rem; keyboard-reachable (each frame is a link); hover
   raises the frame slightly, disabled under `prefers-reduced-motion`.
-- Listing rows get `content-visibility: auto` with a
+- The strip's block wrapper (inside the table cell — `content-visibility`
+  does not apply to table rows) gets `content-visibility: auto` with a
   `contain-intrinsic-size` hint so 121 strips cost nothing until they
   scroll near the viewport; images are lazy, so real fetches track
   what the visitor actually looks at.
 - On listing pages the strip **replaces** the single slides tile
   (the video tile stays alongside); on the detail page the strip sits
   above the full slides and video embeds.
-- Each frame links to the deck at that slide (`#slide=id.<objectId>`
-  on the `slides_edit`/`slides` URL). Decks without a usable link fall
-  back to a non-link frame.
+- Each frame links to the deck at that slide: the docs.google.com
+  `/presentation/d/<id>/edit#slide=id.<objectId>` URL derived from the
+  deck id (never a bit.ly link, whose redirect may drop the fragment).
+  Decks without a usable id fall back to a non-link frame.
+- The click-to-load embed tiles and their swap-in script move from
+  `talks/index.html` into `_includes/talk_embeds.html` so the four
+  listing pages and the detail layout share one implementation.
 
 ## Highlights selection
 
@@ -241,6 +252,18 @@ ERI), and how often the talk was re-invited (series size). Claude
 proposes 8–10 with a one-line justification each in the PR
 description; Tim trims/re-orders by editing `highlight:` ranks. The
 page shows at most 10.
+
+## Sequencing
+
+The short-link path (`talks_sheet.py shortlinks`, the `format_sheets.py
+sync` extension, the `fetch_bitly.py` preservation rule) touches a
+different sheet and the private `shortlinks.yaml`, and nothing on the
+site depends on it: it is the last task and independently mergeable.
+
+The PR-preview and link-check workflows live on branch
+`ci-previews-linkcheck` (PR #1, unmerged). Verification steps 3–4 below
+need them on this branch: `talks-overhaul` is rebased onto (or PR #1
+is merged before) that work lands.
 
 ## Verification
 
