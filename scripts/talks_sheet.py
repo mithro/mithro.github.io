@@ -11,7 +11,13 @@ _data/talks.yaml. Rows are matched to YAML entries by the Google Slides
 document id (falling back to the YouTube video id for deck-less talks).
 
     uv run scripts/talks_sheet.py dump    # print both sheets as JSON (row-matched)
-    uv run scripts/talks_sheet.py slugs   # write/refresh the Slug column
+    uv run scripts/talks_sheet.py slugs   # YAML -> sheet: write/refresh the Slug column
+    uv run scripts/talks_sheet.py strips  # YAML -> sheet: add a Strips column, pre-fill proposals
+    uv run scripts/talks_sheet.py import  # sheet -> YAML: pull Slug/Strips values (colours untouched)
+    uv run scripts/talks_sheet.py import --accept   # ...and mark the cells black (Tim has reviewed)
+
+Cell colour is the review state: black = accepted/current, bold red =
+a proposal awaiting Tim. Only `import --accept` turns cells black.
 
 Auth: gcloud user credentials with Drive scope
 (`gcloud auth login --enable-gdrive-access`), as for format_sheets.py.
@@ -146,6 +152,8 @@ def do_dump(s: requests.Session) -> None:
 
 
 SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+# Names that are pages under /talks/ and so can never be a talk slug.
+RESERVED = {"timeline", "topics", "highlights", "feed", "index"}
 RED = {"red": 0.8, "green": 0.0, "blue": 0.0}
 BLACK = {"red": 0.0, "green": 0.0, "blue": 0.0}
 SHORTLINKS_YAML = pathlib.Path("_data/shortlinks.yaml")
@@ -177,8 +185,8 @@ def validate_slugs(talks: list[dict]) -> None:
     taken = shortlink_names()
     for i, t in enumerate(talks):
         slug = t.get("slug")
-        if not slug or not SLUG_RE.match(slug):
-            sys.exit(f"talk {i} ({t['title'][:50]}): bad or missing slug {slug!r}")
+        if not slug or not SLUG_RE.match(slug) or slug in RESERVED:
+            sys.exit(f"talk {i} ({t['title'][:50]}): bad, reserved or missing slug {slug!r}")
         if slug in seen:
             sys.exit(f"duplicate slug {slug}: talks {seen[slug]} and {i}")
         seen[slug] = i
@@ -280,11 +288,205 @@ def do_slugs(s: requests.Session) -> None:
               file=sys.stderr)
 
 
+THUMBS_YAML = pathlib.Path("_data/thumbs.yaml")
+PRES_RE = re.compile(r"presentation/d/(?!e/)([\w-]+)")
+
+
+def deck_id(talk: dict) -> str | None:
+    for field in ("slides_edit", "slides", "slides_embed"):
+        if m := PRES_RE.search(talk.get(field) or ""):
+            return m.group(1)
+    return None
+
+
+def ensure_column(tab: dict, name: str, after: str,
+                  width: int = 90) -> tuple[int, list[dict]]:
+    """Return (column index, batchUpdate requests) for header `name`,
+    inserting it right after column `after` when absent. The tab's
+    in-memory header/rows are shifted to match."""
+    header = tab["header"]
+    if name in header:
+        return header.index(name), []
+    col = header.index(after) + 1
+    sid = tab["sheet_id"]
+    if col >= tab["n_cols"]:
+        # Past the grid's edge: append (inheritFromBefore would copy the
+        # red/bold proposal formatting from the Slug cells).
+        grow = {"appendDimension": {"sheetId": sid, "dimension": "COLUMNS",
+                                    "length": col + 1 - tab["n_cols"]}}
+        tab["n_cols"] = col + 1
+    else:
+        grow = {"insertDimension": {"range": {"sheetId": sid, "dimension": "COLUMNS",
+                                              "startIndex": col, "endIndex": col + 1},
+                                    "inheritFromBefore": False}}
+        tab["n_cols"] += 1
+    reqs = [
+        grow,
+        # Header cell takes its look from the neighbouring header.
+        {"copyPaste": {"source": {"sheetId": sid, "startRowIndex": 0,
+                                  "endRowIndex": 1, "startColumnIndex": col - 1,
+                                  "endColumnIndex": col},
+                       "destination": {"sheetId": sid, "startRowIndex": 0,
+                                       "endRowIndex": 1, "startColumnIndex": col,
+                                       "endColumnIndex": col + 1},
+                       "pasteType": "PASTE_FORMAT"}},
+        {"updateDimensionProperties": {
+            "range": {"sheetId": sid, "dimension": "COLUMNS",
+                      "startIndex": col, "endIndex": col + 1},
+            "properties": {"pixelSize": width}, "fields": "pixelSize"}},
+    ]
+    header.insert(col, name)
+    for r in tab["rows"]:
+        if len(r["cells"]) >= col:
+            r["cells"].insert(col, "")
+    return col, reqs
+
+
+def cell_format(tab: dict, row: int, col: int, proposed: bool) -> dict:
+    return {"repeatCell": {
+        "range": {"sheetId": tab["sheet_id"], "startRowIndex": row - 1,
+                  "endRowIndex": row, "startColumnIndex": col,
+                  "endColumnIndex": col + 1},
+        "cell": {"userEnteredFormat": {"textFormat": {
+            "foregroundColor": RED if proposed else BLACK,
+            "bold": proposed}}},
+        "fields": "userEnteredFormat.textFormat(foregroundColor,bold)"}}
+
+
+def write_column(s: requests.Session, tab: dict, col: int,
+                 values: list[list[str | None]], reqs: list[dict]) -> None:
+    """Apply format/structure requests, then the column values (None
+    cells are skipped by the API, i.e. left untouched)."""
+    if reqs:
+        check(s.post(f"{SHEETS}/{tab['spreadsheet']}:batchUpdate",
+                     json={"requests": reqs}))
+    rng = f"{tab['title']!r}!{col_letter(col)}1:{col_letter(col)}{len(values)}"
+    check(s.put(f"{SHEETS}/{tab['spreadsheet']}/values/{rng}",
+                params={"valueInputOption": "RAW"},
+                json={"range": rng, "majorDimension": "ROWS",
+                      "values": values}))
+
+
+def do_strips(s: requests.Session) -> None:
+    """Add a Strips column after Slug; propose 'yes' (red) for every
+    talk whose deck has a public thumbnail. Filled cells are never
+    overwritten — the column is Tim's to edit."""
+    talks = yaml.safe_load(TALKS_YAML.read_text())
+    validate_slugs(talks)
+    thumbs = set(yaml.safe_load(THUMBS_YAML.read_text())["slides"])
+    tabs = load_tabs(s, TALKS_SHEET) + load_tabs(s, ADDITIONS_SHEET)
+    match_rows(talks, tabs)
+    for tab in tabs:
+        if "Slug" not in tab["header"]:
+            continue
+        fresh = "Strips" not in tab["header"]
+        col, reqs = ensure_column(tab, "Strips", "Slug")
+        values: list[list[str | None]] = [["Strips"] if fresh else [None]]
+        proposed = 0
+        for r in tab["rows"]:
+            cells = r["cells"]
+            current = cells[col].strip() if len(cells) > col else ""
+            t = talks[r["talk"][0]] if r["talk"] else None
+            if t and not current and deck_id(t) in thumbs:
+                values.append(["yes"])
+                reqs.append(cell_format(tab, r["row"], col, proposed=True))
+                proposed += 1
+            else:
+                values.append([None])
+        write_column(s, tab, col, values, reqs)
+        print(f"{tab['title']}: {proposed} strips proposals in column "
+              f"{col_letter(col)}", file=sys.stderr)
+
+
+def do_import(s: requests.Session, accept: bool = False) -> None:
+    """Pull the Slug and Strips columns back into talks.yaml. With
+    accept=True (Tim has finished reviewing) the imported cells are also
+    turned black; otherwise colours are left exactly as they are."""
+    import copy
+
+    import talks_yaml
+
+    talks = yaml.safe_load(TALKS_YAML.read_text())
+    tabs = load_tabs(s, TALKS_SHEET) + load_tabs(s, ADDITIONS_SHEET)
+    match_rows(talks, tabs)
+    wanted: dict[int, dict] = {}
+    origin: dict[int, str] = {}
+    accepted: list[tuple[dict, int, int]] = []
+    for tab in tabs:
+        if "Slug" not in tab["header"]:
+            continue
+        c_slug = tab["header"].index("Slug")
+        c_strips = (tab["header"].index("Strips")
+                    if "Strips" in tab["header"] else None)
+        for r in tab["rows"]:
+            if not r["talk"]:
+                continue
+            i, cells = r["talk"][0], r["cells"]
+            slug = (cells[c_slug] if len(cells) > c_slug else "").strip()
+            if not slug:
+                continue
+            strips = (c_strips is not None and len(cells) > c_strips
+                      and cells[c_strips].strip().lower() == "yes")
+            val = {"slug": slug, "strips": strips}
+            where = f"{tab['title']} row {r['row']}"
+            if i in wanted and wanted[i] != val:
+                sys.exit(f"conflict for {talks[i]['title'][:50]}: "
+                         f"{origin[i]} vs {where}")
+            wanted[i], origin[i] = val, where
+            accepted.append((tab, r["row"], c_slug))
+            if c_strips is not None:
+                accepted.append((tab, r["row"], c_strips))
+
+    updates: dict[int, dict] = {}
+    changes: list[str] = []
+    for i, val in wanted.items():
+        t, fields = talks[i], {}
+        if val["slug"] != t.get("slug"):
+            fields["slug"] = val["slug"]
+            changes.append(f"{t['slug']} -> {val['slug']}")
+        if val["strips"] != bool(t.get("strips")):
+            fields["strips"] = True if val["strips"] else None
+            changes.append(f"{t['slug']}: strips {'on' if val['strips'] else 'off'}")
+        if fields:
+            updates[i] = fields
+    # Validate the post-import state before touching the file.
+    future = copy.deepcopy(talks)
+    for i, fields in updates.items():
+        for k, v in fields.items():
+            if v is None:
+                future[i].pop(k, None)
+            else:
+                future[i][k] = v
+    validate_slugs(future)
+    if updates:
+        talks_yaml.set_fields(updates)
+
+    if accept:
+        by_sheet: dict[str, list[dict]] = {}
+        for tab, row, col in accepted:
+            by_sheet.setdefault(tab["spreadsheet"], []).append(
+                cell_format(tab, row, col, proposed=False))
+        for spreadsheet, reqs in by_sheet.items():
+            check(s.post(f"{SHEETS}/{spreadsheet}:batchUpdate",
+                         json={"requests": reqs}))
+    print("\n".join(changes) or "no changes", file=sys.stderr)
+    print(f"import: {len(changes)} changes; {len(accepted)} cells "
+          f"{'marked accepted' if accept else 'read (colours untouched)'}",
+          file=sys.stderr)
+
+
 def main() -> None:
-    actions = {"dump": do_dump, "slugs": do_slugs}
-    if len(sys.argv) != 2 or sys.argv[1] not in actions:
-        sys.exit(f"usage: {sys.argv[0]} {{{'|'.join(actions)}}}")
-    actions[sys.argv[1]](session())
+    actions = {"dump": do_dump, "slugs": do_slugs, "strips": do_strips,
+               "import": do_import}
+    args = sys.argv[1:]
+    accept = "--accept" in args
+    args = [a for a in args if a != "--accept"]
+    if len(args) != 1 or args[0] not in actions or (accept and args[0] != "import"):
+        sys.exit(f"usage: {sys.argv[0]} {{{'|'.join(actions)}}} [import --accept]")
+    if args[0] == "import":
+        do_import(session(), accept=accept)
+    else:
+        actions[args[0]](session())
 
 
 if __name__ == "__main__":
