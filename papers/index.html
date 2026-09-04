@@ -74,26 +74,11 @@ description: "Scientific papers by Tim 'mithro' Ansell."
 </section>
 
 <section class="sect">
-  <h2><span aria-hidden="true">🌐</span> Chrome design documents</h2>
-  <p class="prose">Public design docs from Tim's years on the Chrome team
-  (2014–2018, Sydney — animation, input &amp; scheduling).</p>
-  <div class="table-scroll" tabindex="0" role="region" aria-label="Chrome design documents">
-  <table class="talks-table">
-    <caption class="visually-hidden">Chrome design documents</caption>
-    <thead>
-      <tr><th scope="col">Document</th><th scope="col">Venue · Year</th></tr>
-    </thead>
-    <tbody>
-    {% for doc in site.data.chrome_docs %}
-    <tr>
-      <td class="ti">
-        <a href="{{ doc.url | escape }}">{{ doc.title | escape }}</a>
-        <span class="au">{{ doc.authors | escape }}</span>
-      </td>
-      <td class="ev"><span>{{ doc.venue | escape }} · <span class="nowrap">{{ doc.year }}</span></span></td>
-    </tr>
-    {% endfor %}
-    </tbody>
-  </table>
-  </div>
+  <h2><span aria-hidden="true">📐</span> Design documents</h2>
+  {%- assign doc_total = 0 -%}
+  {%- for group in site.data.design_docs -%}{%- assign doc_total = doc_total | plus: group.docs.size -%}{%- endfor %}
+  <p class="prose">Tim's public design documents — from the Chrome team
+  years through LiteX, open source FPGA tooling, the SKY130 / GF180MCU
+  PDKs and wafer.space — have their own page:
+  <a href="{{ '/design-docs/' | relative_url }}">all {{ doc_total }} design documents →</a></p>
 </section>
