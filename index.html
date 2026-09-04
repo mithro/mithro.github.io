@@ -26,6 +26,9 @@ description: "Tim 'mithro' Ansell — building open source silicon ecosystems: S
   <div><dt><span aria-hidden="true">🎙️</span> Interviews</dt><dd>{{ site.data.interviews | size }}</dd></div>
   <div><dt><span aria-hidden="true">📄</span> Papers</dt><dd>{{ site.data.papers.papers | size }}</dd></div>
   <div><dt><span aria-hidden="true">🎓</span> Citations</dt><dd>{{ site.data.papers.metrics.citations }}</dd></div>
+  {%- assign doc_total = 0 -%}
+  {%- for group in site.data.design_docs -%}{%- assign doc_total = doc_total | plus: group.docs.size -%}{%- endfor %}
+  <div><dt><span aria-hidden="true">📐</span> Design docs</dt><dd>{{ doc_total }}</dd></div>
   <div><dt><span aria-hidden="true">🐙</span> GitHub repos</dt><dd>{{ site.data.github.profile.public_repos }}</dd></div>
   <div><dt><span aria-hidden="true">👥</span> Followers</dt><dd>{{ site.data.github.profile.followers }}</dd></div>
 </dl>

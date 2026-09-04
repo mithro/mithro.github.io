@@ -1,0 +1,72 @@
+---
+layout: default
+title: Design documents
+description: "Public design documents, proposals and requirements docs by Tim 'mithro' Ansell — Chrome, LiteX & FPGA tooling, open source silicon and wafer.space."
+---
+<section class="sect">
+  <h2><span aria-hidden="true">📐</span> Design documents</h2>
+  {%- assign doc_total = 0 -%}
+  {%- for group in site.data.design_docs -%}
+    {%- assign doc_total = doc_total | plus: group.docs.size -%}
+  {%- endfor %}
+  <p class="prose">{{ doc_total }} public design documents, proposals and
+  requirements docs, written as Google Docs and shared with anyone who has
+  the link. Each opens via its <code>mith.ro</code> short link; the same
+  links appear in the documents themselves and in talks that reference
+  them.</p>
+  <nav class="doc-toc" aria-label="Topics">
+    {%- for group in site.data.design_docs %}
+    <a href="#{{ group.id }}">{{ group.topic | escape }} <span class="n">{{ group.docs.size }}</span></a>
+    {%- endfor %}
+  </nav>
+</section>
+
+{% assign tile_n = 0 %}
+{% for group in site.data.design_docs %}
+<section class="sect doc-group" id="{{ group.id }}">
+  <h3 class="year-head">{{ group.topic | escape }}</h3>
+  <p class="prose meta">{{ group.blurb | escape }}</p>
+  <div class="doc-grid">
+  {% for doc in group.docs %}
+    {%- assign tile_n = tile_n | plus: 1 -%}
+    {%- comment -%}
+      Link through the mith.ro redirect stub when one is generated for the
+      alias (public in the short-link sheet); otherwise fall back to the
+      document itself so the card is never a dead end.
+    {%- endcomment -%}
+    {%- assign stub_path = "/" | append: doc.alias | append: "/" -%}
+    {%- assign stub = site.pages | where: "permalink", stub_path | first -%}
+    {%- if stub -%}
+      {%- assign href = stub_path | relative_url -%}
+      {%- assign short_disp = "mith.ro/" | append: doc.alias -%}
+    {%- else -%}
+      {%- assign href = doc.url -%}
+      {%- assign short_disp = "docs.google.com" -%}
+    {%- endif -%}
+    {%- assign th = site.data.doc_thumbs[doc.alias] %}
+    <article class="doc-card">
+      <a class="doc-thumb" href="{{ href | escape }}" tabindex="-1" aria-hidden="true">
+        {%- if th -%}
+        <img src="{{ '/assets/thumbs/docs/' | relative_url }}{{ doc.alias }}-240.webp"
+             srcset="{{ '/assets/thumbs/docs/' | relative_url }}{{ doc.alias }}-240.webp 240w, {{ '/assets/thumbs/docs/' | relative_url }}{{ doc.alias }}-480.webp {{ th.w }}w"
+             sizes="7.5rem" width="{{ th.w }}" height="{{ th.h }}" alt=""
+             {% if tile_n <= 3 %}fetchpriority="high"{% else %}loading="lazy"{% endif %} decoding="async">
+        {%- else -%}
+        <span class="doc-blank"><span aria-hidden="true">{% include icons/googledocs.svg %}</span></span>
+        {%- endif -%}
+      </a>
+      <div class="doc-body">
+        <h4><a href="{{ href | escape }}">{{ doc.title | escape }}</a></h4>
+        {% if doc.subtitle %}<p class="doc-sub">{{ doc.subtitle | escape }}</p>{% endif %}
+        <p class="doc-desc">{{ doc.description | escape }}</p>
+        <p class="meta">
+          <span class="au">{{ doc.authors | escape }}</span> ·
+          <span class="nowrap">{{ doc.year }}{% if doc.updated and doc.updated != doc.year %}–{{ doc.updated }}{% endif %}</span> ·
+          <a class="doc-link" href="{{ href | escape }}"><span class="ci-icon" aria-hidden="true">{% include icons/googledocs.svg %}</span> {{ short_disp }}</a>
+        </p>
+      </div>
+    </article>
+  {% endfor %}
+  </div>
+</section>
+{% endfor %}
