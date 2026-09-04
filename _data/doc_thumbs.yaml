@@ -45,6 +45,9 @@ litex-ha-dd:
 litex-tests-doc:
   h: 679
   w: 480
+mpy-fpga:
+  h: 679
+  w: 480
 open-source-pdks-naming:
   h: 679
   w: 480
