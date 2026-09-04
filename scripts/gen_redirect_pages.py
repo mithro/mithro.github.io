@@ -18,6 +18,7 @@ import shutil
 import yaml
 
 RESERVED = {"talks", "interviews", "papers", "projects", "resume", "about",
+            "design-docs",
             "assets", "docs", "scripts", "404"}
 
 links = yaml.safe_load(open("_data/shortlinks.yaml"))
