@@ -31,7 +31,7 @@
   - alias: chrome-tagging
     title: Content Tagging in Chromium
     subtitle: Design sketch for detecting content mixing issues
-    authors: T Ansell, N Gordon
+    authors: T Ansell, N Gordon (tansell@, noel@)
     year: 2015
     description: >-
       Proposes tagging every piece of content Chrome generates with the
@@ -56,9 +56,10 @@
     subtitle: Design document
     authors: Z Forman · reviewed by T Ansell
     year: 2015
+    updated: 2016
     description: >-
-      Design for a MapReduce-style pipeline (build mapper, feature
-      extractor, workspace creator) that builds Chromium at many revisions
+      Design for a pipeline of mappers (build mapper, feature extractor,
+      workspace creator) that builds Chromium at many revisions
       and relates source-level changes to changes in the produced binaries,
       so questions like "how does diff size relate to binary diff size" can
       be answered from data.
@@ -106,20 +107,31 @@
       consumer components; and the physical interface levels available on
       Spartan 6 and Series 7 SERDES and transceivers.
     url: https://docs.google.com/document/d/1L8lz7u2uj6MrzSQv4b1Vk6Rmic26okyRklOju5IWLYA/edit
+  - alias: mpy-fpga
+    title: MicroPython on FPGAs
+    authors: T Ansell
+    year: 2016
+    updated: 2018
+    description: >-
+      Planning note for running MicroPython on LiteX/MiSoC soft cores —
+      current status on lm32, mor1kx and picorv32, a pros-and-cons choice
+      of target framework, CPU architecture and development platform
+      (QEMU, Verilator, hardware), goals, staged steps and the peripheral
+      support matrix.
+    url: https://docs.google.com/document/d/1zUZqIag9rz-jClExGithc4iUSPM-h-9bvxp6FwJ9okQ/edit
   - alias: litex-tests-doc
     title: Types of "testing" in LiteX (and Migen/MiSoC)
     authors: T Ansell
     year: 2016
     description: >-
-      Options analysis of every testing approach available to LiteX
-      designs — linting, Python-only simulation, iverilog co-simulation,
-      generate-and-parse checks, Verilator full-system simulation and
-      on-hardware tests — with usage, advantages, disadvantages and future
-      work for each.
+      Options analysis of seven testing approaches for LiteX designs —
+      linting, Python-only simulation, iverilog co-simulation,
+      generate-and-parse checks, toolchain compile tests, Verilator
+      full-system simulation and running on hardware — with usage,
+      advantages, disadvantages and future work for each.
     url: https://docs.google.com/document/d/1SLRMCTETNKA0Cfy8dExF8QAn8j0FVbUEgorsicJmoeU/edit
   - alias: linux-litex-notes
-    title: LiteX Linux Support
-    subtitle: Goals, requirements and status
+    title: LiteX Linux Support Random Notes
     authors: T Ansell
     year: 2017
     description: >-
@@ -188,8 +200,7 @@
     description: >-
       Step-by-step verification flow for Project X-Ray and any F4PGA
       target — testbench, vendor tools, Yosys, VPR, fasm2v and bit2fasm —
-      identifying at each stage which tool a failure implicates and where
-      new tests should be added.
+      identifying at each stage which tool a failure implicates.
     url: https://docs.google.com/document/d/11wJUvr2aVBkUiuYYsFN07jkoYr_ccWlLLLFH8YQw8uQ/edit
   - alias: symbiflow-targets
     title: SymbiFlow Target Designs
@@ -219,11 +230,11 @@
     year: 2021
     updated: 2025
     description: >-
-      Connectivity diagram and parts list for a hardware-in-the-loop CI
-      rack — PoE-powered Raspberry Pi runners netbooting and driving
-      Digilent Arty boards — for continuously testing symbiflow-examples,
-      the arch-defs, LiteX boards and LiteDRAM on real silicon. Built by
-      Carl Karsten.
+      Connectivity diagram, parts table and set-up notes for a
+      hardware-in-the-loop CI rack: a PoE+ switch powering Raspberry Pi
+      runners that netboot from a server and drive Digilent Arty boards
+      through PMOD and USB Ethernet, with the RPi netboot and WiFi-disable
+      configuration steps. Links to Carl's photos of the build.
     url: https://docs.google.com/document/d/1H3x34bdztWy-uN8EYe-FxJL2YojIjd-0feL9d8BMtN4/edit
 
 - id: silicon
@@ -250,9 +261,9 @@
     authors: T Ansell
     year: 2022
     description: >-
-      Works out what can practically fit in an Open MPW user area on
-      SKY130 — real 130nm parts such as the PSoC 4200 as reference points,
-      plus measured densities for SRAM, ReRAM and other memory types.
+      Short note on what fits in the 10mm² Open MPW user area on SKY130 —
+      the Cypress PSoC 4200 as a real 130nm reference point, plus measured
+      SRAM and ReRAM densities from Open MPW projects.
     url: https://docs.google.com/document/d/1k3LuRPa6-7iM1gC6ocFGLlAFboFiXNTpgXEjTLBbpy4/edit
   - alias: drc-testing
     title: Design Rule Check (DRC) Testing
@@ -332,8 +343,8 @@
     description: >-
       Inventory of the Renode models needed to simulate the whole Open MPW
       bring-up rig — the STM32 Nucleo tester MCU and its peripherals, the
-      Efabless hat and power supply, and the Caravel SoC with its user
-      project — so firmware could be developed before silicon arrived.
+      Efabless hat and I2C power supply, and the Caravel SoC with its user
+      project — marking which models already exist.
     url: https://docs.google.com/document/d/1qhin7U1esp58NoVwrdkKkEDZb2k280YF0PKGENGgLSI/edit
   - alias: trillian-ic
     title: Trillian applied to Integrated Circuits
@@ -341,11 +352,10 @@
     authors: T Ansell
     year: 2023
     description: >-
-      Proposal to bring the verifiable-log approach behind Certificate
-      Transparency to chip making — enabled-by-default verification and
-      tamper evidence across hardware design, EDA processing and
-      manufacturing, as an alternative to the industry's
-      security-through-obscurity habits.
+      Proposal to apply Trillian to chip making — adding enabled-by-default
+      verification and tamper protection across the three parts of IC
+      creation (the hardware design, the PDK data and the EDA tools) as an
+      alternative to the industry's security-through-obscurity habits.
     url: https://docs.google.com/document/d/1SQHC3eQ4n-VchxuOmgY5JXy0T6rR7LpX9uZckc6UCLQ/edit?resourcekey=0-nQtazqnEVI0OSF7LVq0Hnw
   - alias: openmpw-viewer-req
     title: Open MPW viewer website
