@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% if page.title %}{{ page.title }} · {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
   <meta name="description" content="{{ page.description | default: site.description }}">
+  <meta name="git-commit" content="{{ site.github.build_revision }}">
   <link rel="canonical" href="{{ page.url | absolute_url }}">
   <style>{% include main.css %}</style>
   <link rel="alternate" type="application/rss+xml" title="Tim 'mithro' Ansell — Talks" href="{{ '/talks/feed.xml' | absolute_url }}">
