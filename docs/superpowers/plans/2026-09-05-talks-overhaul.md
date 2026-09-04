@@ -165,11 +165,12 @@ Note the old page computed `tile_n` per tile (slides tile and video tile counted
 
 - [ ] **Step 4: Create `_includes/talk_row.html`**
 
-The title row + embeds row, taking `include.talk` and `include.eager`. Start the file with `{%- assign talk = include.talk -%}` so it is self-contained (Liquid assigns leak globally, so it would otherwise only work by accident of the caller's loop variable name). Reproduce the `<tr>…</tr>` and `<tr class="embrow">` markup from `talks/index.html` lines 55–104, but: the title cell keeps linking to the slides for now (Task 9 repoints it), and the embeds row becomes
+The title row + embeds row, taking `include.talk` and `include.eager`. Start the file with `{%- assign talk = include.talk -%}` so it is self-contained (Liquid assigns leak globally, so it would otherwise only work by accident of the caller's loop variable name). Reproduce the `<tr>…</tr>` and `<tr class="embrow">` markup from `talks/index.html` lines 55–104, but: the title cell keeps linking to the slides for now (Task 9 repoints it); do **not** copy the `vid_id`/`vid_start` block (old lines 22–33) — it now lives in `talk_embeds.html`, which renders *after* the title row, so referencing `vid_id` here would read the previous talk's value. Compute `has_video` first and use it for the "▶ video" fallback link in the title cell (`{%- if has_video == false and talk.video != "" and talk.video %} <a class="vid" …>` — this is the non-YouTube case, e.g. `iccad20-goog-miss`). The embeds row becomes
 
 ```liquid
 {%- assign has_video = false -%}
 {%- if talk.video != "" and talk.video -%}{%- if talk.video contains "youtu.be/" or talk.video contains "watch?v=" -%}{%- assign has_video = true -%}{%- endif -%}{%- endif -%}
+… title row here …
 {%- if talk.slides_embed or has_video %}
 <tr class="embrow">
   <td colspan="2">
@@ -1053,7 +1054,7 @@ for t in talks:
 print(f"Wrote {len(talks)} talk stubs")
 ```
 
-- [ ] **Step 3: `og:image` honours `page.image`** in `_layouts/default.html:15`
+- [ ] **Step 3: `og:image` honours `page.image`** — the `<meta property="og:image" …>` line in `_layouts/default.html` (line 16 after Task 1's merge adds the git-commit meta; find it by content)
 
 ```liquid
 <meta property="og:image" content="{{ page.image | default: '/assets/photos/og-image.jpg' | absolute_url }}">
@@ -1220,8 +1221,9 @@ description: "A short list of Tim 'mithro' Ansell's most significant talks — s
     <h3><a href="{{ '/talks/' | append: talk.slug | append: '/' | relative_url }}">{{ talk.talk_title | default: talk.title | escape }}</a></h3>
     <p class="talk-meta">{% if talk.event_url %}<a href="{{ talk.event_url | escape }}">{{ talk.event | escape }}</a>{% else %}{{ talk.event | escape }}{% endif %}{% if talk.date and talk.date != "" %} · <span class="nowrap">{{ talk.date | escape }}</span>{% endif %}</p>
     <p class="prose">{{ talk.blurb | escape }}</p>
-    {% include strip.html slug=talk.slug title=talk.talk_title %}
-    <div class="embeds">{% include talk_embeds.html talk=talk eager=forloop.first no_slides_tile=true %}</div>
+    {%- assign has_strip = false -%}{%- if site.data.strips[talk.slug] -%}{%- assign has_strip = true -%}{%- endif %}
+    {% if has_strip %}{% include strip.html slug=talk.slug title=talk.talk_title %}{% endif %}
+    <div class="embeds">{% include talk_embeds.html talk=talk eager=forloop.first no_slides_tile=has_strip %}</div>
   </article>
   {% endfor %}
 </section>
@@ -1229,7 +1231,7 @@ description: "A short list of Tim 'mithro' Ansell's most significant talks — s
 ```
 CSS: `.hl { border-top: 1px solid var(--line); padding: 1.2rem 0; } .hl h3 { margin: 0 0 .2rem; font-family: var(--mono); font-size: 1rem; } .hl h3 a { color: var(--silk); text-decoration: none; border-bottom: 1px solid var(--gold-dim); } .hl h3 a:hover { color: var(--gold); }`
 
-Note `no_slides_tile=true` here: highlighted decks all have strips, so the strip carries the slides and only the video tile is rendered. If a highlighted talk ever lacks a strip, pass `no_slides_tile=false`.
+`no_slides_tile=has_strip` mirrors `talk_row.html`: the strip carries the slides when it exists, and a deck whose export failed still gets its plain slides tile.
 
 - [ ] **Step 5: Build and verify**
 
@@ -1274,11 +1276,12 @@ description: "Tim 'mithro' Ansell has given over 120 talks since 2007 — highli
 {%- assign busiest = by_year | sort: "size" | last -%}
 {%- assign first_year = by_year | first -%}
 {%- assign last_year = by_year | last -%}
-{%- comment -%} Jekyll 3.10's where_exp takes exactly ONE comparison (no and/or);
-the data has no empty-string video/event values, so truthiness is enough. {%- endcomment -%}
+{%- comment -%} Jekyll 3.10's where_exp takes exactly ONE comparison (no and/or).
+video/slides_embed are absent (nil) when unknown, so truthiness works; 18 talks
+have event: '' and "" is truthy in Liquid, so events need the != '' test. {%- endcomment -%}
 {%- assign recorded = talks | where_exp: "t", "t.video" -%}
 {%- assign decks = talks | where_exp: "t", "t.slides_embed" -%}
-{%- assign events = talks | where_exp: "t", "t.event" | map: "event" | uniq -%}
+{%- assign events = talks | where_exp: "t", "t.event != ''" | map: "event" | uniq -%}
 {%- assign total_slides = 0 -%}
 {%- for s in site.data.strips %}{% assign total_slides = total_slides | plus: s[1].count %}{% endfor -%}
 {%- assign venues = talks | where_exp: "t", "t.venue" | group_by: "venue" | sort: "size" | reverse -%}
@@ -1391,7 +1394,7 @@ the data has no empty-string video/event values, so truthiness is enough. {%- en
 bundle exec jekyll build
 grep -o '<dd>[0-9]*</dd>' _site/talks/index.html
 ```
-Cross-check with a scratch Python script over the YAML (talk count, recorded count where `video` non-empty, decks with `slides_embed`, sum of strip counts, distinct non-empty events, min/max year). All six must match. Playwright at 1280/390 (`?v=3`): bars render with year labels, no horizontal page scroll, cards stack on mobile.
+Cross-check with a scratch Python script over the YAML (talk count, recorded count where `video` non-empty, decks with `slides_embed`, sum of strip counts, distinct non-empty events — 85 today, min/max year). All six must match. (2021 and 2022 tie at 17 talks; Liquid's stable sort makes `busiest` 2022 — expected, not a bug.) Playwright at 1280/390 (`?v=3`): bars render with year labels, no horizontal page scroll, cards stack on mobile.
 
 - [ ] **Step 5: Commit**
 
