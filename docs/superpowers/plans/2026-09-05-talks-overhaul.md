@@ -165,7 +165,7 @@ Note the old page computed `tile_n` per tile (slides tile and video tile counted
 
 - [ ] **Step 4: Create `_includes/talk_row.html`**
 
-The title row + embeds row, taking `include.talk` and `include.eager`. Reproduce the `<tr>…</tr>` and `<tr class="embrow">` markup from `talks/index.html` lines 55–104, but: the title cell keeps linking to the slides for now (Task 9 repoints it), and the embeds row becomes
+The title row + embeds row, taking `include.talk` and `include.eager`. Start the file with `{%- assign talk = include.talk -%}` so it is self-contained (Liquid assigns leak globally, so it would otherwise only work by accident of the caller's loop variable name). Reproduce the `<tr>…</tr>` and `<tr class="embrow">` markup from `talks/index.html` lines 55–104, but: the title cell keeps linking to the slides for now (Task 9 repoints it), and the embeds row becomes
 
 ```liquid
 {%- assign has_video = false -%}
@@ -201,9 +201,9 @@ and replace the trailing `<script>…</script>` with `{% include embed_script.ht
 
 ```bash
 bundle exec jekyll build
-diff <(sed 's/[[:space:]]\+/ /g' tmp/talks-before.html) <(sed 's/[[:space:]]\+/ /g' _site/talks/index.html) | head -40
+diff -w -B tmp/talks-before.html _site/talks/index.html | head -40
 ```
-Expected: only the `fetchpriority="high"` ↔ `loading="lazy"` swap on the second talk's slides tile; no other lines differ. Fix anything else before continuing.
+Expected: only the `fetchpriority="high"` ↔ `loading="lazy"` swap on the second talk's slides tile (the first talk in date order, `tsri26`, has a slides tile only, so the old "first two tiles" rule reached into the second talk); no other lines differ. `-w -B` ignores the whitespace and blank-line changes that the `{%- -%}` trimming in the new includes introduces. Fix anything else before continuing.
 
 - [ ] **Step 7: Commit**
 
@@ -263,8 +263,12 @@ def render(value) -> str:
     if isinstance(value, list):
         return "[" + ", ".join(render(v) for v in value) + "]"
     s = str(value)
-    if re.search(r"[:#\[\]{}&*!|>'\"%@`,]|^\s|\s$", s) or s in ("", "yes", "no", "true", "false", "null"):
-        return yaml.safe_dump(s, default_style='"', width=4096).strip()
+    # Quote only when YAML would misread a plain scalar ("!" is an
+    # indicator only at the start, so a trailing "!" stays bare).
+    if (re.search(r"[:#\[\]{}&*|>'\"%@`,]|^[!?\-\s]|\s$", s)
+            or s in ("", "yes", "no", "true", "false", "null")):
+        return yaml.safe_dump(s, default_style='"', width=4096,
+                              allow_unicode=True).strip()
     return s
 
 
@@ -612,6 +616,8 @@ uv run scripts/talks_sheet.py import     # expect: no changes
 git diff --stat                          # only _data/talks.yaml (strips: true lines)
 ```
 Read back a handful of cells (a small `tmp/check_sheet.py` modelled on the earlier one) to confirm the column sits right after Slug and the colours are black after import. Delete the scratch script.
+
+A talk that appears on both the Slides and YouTube tabs (e.g. `cae21-goog-miss`) gets a Strips cell on each; `import` deliberately exits on a disagreement between them rather than guessing — if that happens during the live run it is a data conflict to resolve in the sheet, not a bug.
 
 Note the semantics agreed with Tim: after this step the strips flags in YAML reflect the sheet; Tim edits the sheet later and `import` is re-run on request.
 
@@ -1002,7 +1008,7 @@ git commit -m "Show a scrollable film strip for every talk with exported slides"
 collections:
   talks:
     output: true
-    permalink: /talks/:slug/
+    permalink: /talks/:slug/     # :slug reads the stub's front matter (== filename here)
 
 defaults:
   - scope: { path: "", type: talks }
@@ -1138,7 +1144,7 @@ git commit -m "Give every talk a detail page at /talks/<slug>/"
 
 - [ ] **Step 1: Move the timeline**
 
-`git mv talks/index.html talks/timeline/index.html`; set front matter `title: Talks timeline`, `description: "Every talk by Tim 'mithro' Ansell in date order, 2007–present."`; insert `{% include talks_nav.html %}` right after the `<h2>`. (The hub is written in Task 11; until then `/talks/` 404s locally — fine.)
+`mkdir -p talks/timeline && git mv talks/index.html talks/timeline/index.html` (git mv does not create the directory); set front matter `title: Talks timeline`, `description: "Every talk by Tim 'mithro' Ansell in date order, 2007–present."`; insert `{% include talks_nav.html %}` right after the `<h2>`. (The hub is written in Task 11; until then `/talks/` 404s locally — fine.)
 
 - [ ] **Step 2: Write `talks/topics/index.html`**
 
@@ -1259,17 +1265,20 @@ rm tmp/set_highlights.py
 ---
 layout: default
 title: Talks
-description: "Tim 'mithro' Ansell has given {{ site.data.talks | size }} talks since 2007 — highlights, timeline, topics and the numbers."
+description: "Tim 'mithro' Ansell has given over 120 talks since 2007 — highlights, timeline, topics and the numbers."
 ---
+{%- comment -%} Front matter is not Liquid-rendered, hence the rounded number above. {%- endcomment -%}
 {%- assign talks = site.data.talks -%}
 {%- assign dated = talks | where_exp: "t", "t.year != 0" -%}
 {%- assign by_year = dated | group_by: "year" | sort: "name" -%}
 {%- assign busiest = by_year | sort: "size" | last -%}
 {%- assign first_year = by_year | first -%}
 {%- assign last_year = by_year | last -%}
-{%- assign recorded = talks | where_exp: "t", "t.video and t.video != ''" -%}
+{%- comment -%} Jekyll 3.10's where_exp takes exactly ONE comparison (no and/or);
+the data has no empty-string video/event values, so truthiness is enough. {%- endcomment -%}
+{%- assign recorded = talks | where_exp: "t", "t.video" -%}
 {%- assign decks = talks | where_exp: "t", "t.slides_embed" -%}
-{%- assign events = talks | where_exp: "t", "t.event and t.event != ''" | map: "event" | uniq -%}
+{%- assign events = talks | where_exp: "t", "t.event" | map: "event" | uniq -%}
 {%- assign total_slides = 0 -%}
 {%- for s in site.data.strips %}{% assign total_slides = total_slides | plus: s[1].count %}{% endfor -%}
 {%- assign venues = talks | where_exp: "t", "t.venue" | group_by: "venue" | sort: "size" | reverse -%}
