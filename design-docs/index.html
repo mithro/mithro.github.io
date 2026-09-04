@@ -61,8 +61,8 @@ description: "Public design documents, proposals and requirements docs by Tim 'm
         <p class="doc-desc">{{ doc.description | escape }}</p>
         <p class="meta">
           <span class="au">{{ doc.authors | escape }}</span> ·
-          <span class="nowrap">{{ doc.year }}{% if doc.updated and doc.updated != doc.year %}–{{ doc.updated }}{% endif %}</span> ·
-          <a class="doc-link" href="{{ href | escape }}"><span class="ci-icon" aria-hidden="true">{% include icons/googledocs.svg %}</span> {{ short_disp }}</a>
+          <span class="nowrap">{{ doc.year }}{% if doc.updated and doc.updated != doc.year %}–{{ doc.updated }}{% endif %}</span>
+          <span class="nowrap">· <a class="doc-link" href="{{ href | escape }}"><span class="ci-icon" aria-hidden="true">{% include icons/googledocs.svg %}</span> {{ short_disp }}</a></span>
         </p>
       </div>
     </article>
