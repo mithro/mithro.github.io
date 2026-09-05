@@ -45,7 +45,15 @@ hand-edited, some are refreshed from external sources with a script:
   2023-2026 entries compiled from public sources (marked
   `source: compiled` / shown with a ✱ on the site). There is no
   automated fetch script for this sheet — re-snapshot by hand when the
-  sheet changes, or paste in new rows as CSV.
+  sheet changes, or paste in new rows as CSV. Per-talk `slug`,
+  `talk_title`, `categories`, `series`, `venue`, `strips`, `highlight`
+  and `blurb` fields drive the talks section (see "Talks section
+  tooling" below); `_data/talk_categories.yaml` is the topic taxonomy.
+- **`_data/strips.yaml`** + **`assets/strips/`** — machine-generated
+  film-strip thumbnails (one WebP per slide) by
+  `scripts/fetch_slide_strips.py` for every talk with `strips: true`.
+- **`_talks/`** — machine-generated detail-page stubs, one per talk, by
+  `scripts/gen_talk_pages.py`. Re-run after editing `_data/talks.yaml`.
 - **`_data/papers.yaml`** — hand-edited snapshot of the Google Scholar
   profile metrics + paper list. Re-snapshot by hand periodically.
 - **`_data/resume.yaml`** — hand-edited, structured from the resume
@@ -121,6 +129,30 @@ Google Sheet. Until that paste-back happens, the sheet and
 `_data/talks.yaml` are out of sync for those rows (the site is ahead).
 Paste the CSV rows in, then this file can be deleted.
 
+## Talks section tooling
+
+`/talks/` is a hub (statistics, talks-per-year chart), with
+`/talks/timeline/`, `/talks/topics/`, `/talks/highlights/` and one
+detail page per talk at `/talks/<slug>/`. Everything renders from
+`_data/talks.yaml`; the scripts keep the generated parts in step:
+
+| Script | Purpose |
+|---|---|
+| `scripts/validate_talks.py` | Data invariants (slugs, categories, highlights, strips manifest). Run before committing `_data/` changes. |
+| `scripts/gen_talk_pages.py` | Rebuilds `_talks/` (front-matter stubs; content comes from the layout). |
+| `scripts/fetch_slide_strips.py` | Exports per-slide thumbnails via the Slides API into `assets/strips/<slug>/` + `_data/strips.yaml`. Slow (the API paces renders); `--only <slug>` / `--force` for one deck. |
+| `scripts/fetch_talk_thumbs.py` | First-slide and video thumbnails (unchanged); shares `scripts/slides_api.py` with the strip exporter. |
+| `scripts/talks_sheet.py` | Sheet ↔ YAML round-trip for the talks sheets: `slugs` and `strips` push proposals (bold red) into the Slug/Strips columns; `import` pulls Tim's edits back (`--accept` turns the cells black once reviewed); `shortlinks` proposes `mith.ro/<slug>` rows in the short-links sheet for talks with no short link. |
+| `scripts/talks_yaml.py` | Comment-preserving field editor used by the above. |
+
+After editing talks (or importing from the sheet): `validate_talks.py`
+→ `gen_talk_pages.py` → `fetch_talk_thumbs.py` / `fetch_slide_strips.py`
+if decks changed → build.
+
+Both Slides-API scripts use gcloud user credentials
+(`gcloud auth login --enable-gdrive-access`) with the
+`mithro-drive-backup` quota project (`GOOGLE_QUOTA_PROJECT` overrides).
+
 ## Short-link redirects
 
 The source of truth for which short links are published is the private
@@ -135,7 +167,10 @@ Workflow after editing Visibility in the sheet:
 1. Ask Claude to sync `_data/shortlinks.yaml` from the sheet (the YAML
    mirrors it; `include: true` == `public`). Target URLs still come
    from the bit.ly API (`scripts/fetch_bitly.py`) — the sheet only
-   governs visibility.
+   governs visibility — except for sheet-native `mith.ro/<alias>` rows
+   (added by `scripts/talks_sheet.py shortlinks`), whose target is the
+   sheet's "Final URL" column; sync imports those as `source: sheet`
+   entries and `fetch_bitly.py` preserves them.
 2. Run `scripts/gen_redirect_pages.py` to regenerate `redirects/`
    (one page per public entry, rendered by `jekyll-redirect-from`).
 3. Rebuild and verify (see "Verification" below), then commit
