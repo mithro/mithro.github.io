@@ -14,7 +14,7 @@ description: "A short list of Tim 'mithro' Ansell's most significant talks — s
     <p class="talk-meta">{% if talk.event_url %}<a href="{{ talk.event_url | escape }}">{{ talk.event | escape }}</a>{% else %}{{ talk.event | escape }}{% endif %}{% if talk.date and talk.date != "" %} · <span class="nowrap">{{ talk.date | escape }}</span>{% endif %}</p>
     <p class="prose">{{ talk.blurb | escape }}</p>
     {%- assign has_strip = false -%}{%- if site.data.strips[talk.slug] -%}{%- assign has_strip = true -%}{%- endif %}
-    {% if has_strip %}{% include strip.html slug=talk.slug title=title %}{% endif %}
+    {% if has_strip %}{% include strip.html slug=talk.slug title=title limit=24 %}{% endif %}
     <div class="embeds">{% include talk_embeds.html talk=talk eager=forloop.first no_slides_tile=has_strip %}</div>
   </article>
   {% endfor %}

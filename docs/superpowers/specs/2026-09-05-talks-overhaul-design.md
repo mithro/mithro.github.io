@@ -236,6 +236,12 @@ each run (idempotent, like `redirects/`).
 - On listing pages the strip **replaces** the single slides tile
   (the video tile stays alongside); on the detail page the strip sits
   above the full slides and video embeds.
+- **Implementation finding (2026-09-05):** the decks total 8,340 slides
+  (average 74, up to 176), not the ~25 per deck assumed above. Detail
+  pages show every frame; listing rows show the first 12 (highlights:
+  24) followed by a "+N more" frame that links to the detail page, so
+  the timeline carries ~1,500 frames rather than ~8,000. The asset
+  footprint is ~200 MB rather than 25–40 MB.
 - Each frame links to the deck at that slide: the docs.google.com
   `/presentation/d/<id>/edit#slide=id.<objectId>` URL derived from the
   deck id (never a bit.ly link, whose redirect may drop the fragment).
