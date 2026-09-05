@@ -15,6 +15,7 @@ document id (falling back to the YouTube video id for deck-less talks).
     uv run scripts/talks_sheet.py strips  # YAML -> sheet: add a Strips column, pre-fill proposals
     uv run scripts/talks_sheet.py import  # sheet -> YAML: pull Slug/Strips values (colours untouched)
     uv run scripts/talks_sheet.py import --accept   # ...and mark the cells black (Tim has reviewed)
+    uv run scripts/talks_sheet.py shortlinks        # propose mith.ro/<slug> rows in the short-links sheet
 
 Cell colour is the review state: black = accepted/current, bold red =
 a proposal awaiting Tim. Only `import --accept` turns cells black.
@@ -475,9 +476,53 @@ def do_import(s: requests.Session, accept: bool = False) -> None:
           file=sys.stderr)
 
 
+def do_shortlinks(s: requests.Session) -> None:
+    """Append a private mith.ro/<slug> row to the short-links sheet for
+    every talk that has no short link at all, pointing at the deck (else
+    the recording). Tim flips Visibility; format_sheets.py sync then
+    imports the rows as sheet-native entries."""
+    from datetime import date
+
+    from format_sheets import SHORTLINKS_SHEET
+
+    talks = yaml.safe_load(TALKS_YAML.read_text())
+    validate_slugs(talks)
+    grid = check(s.get(f"{SHEETS}/{SHORTLINKS_SHEET}/values/A2:A100000")
+                 ).get("values", [])
+    in_sheet = {re.sub(r"^(bit\.ly|j\.mp|mith\.ro)/", "", r[0]).lower()
+                for r in grid if r}
+    taken = in_sheet | shortlink_names()
+    today = date.today().isoformat()
+    rows, skipped = [], []
+    for t in talks:
+        if existing_alias(t):
+            continue
+        deck = next((t.get(f) for f in ("slides_edit", "slides")
+                     if "docs.google.com" in (t.get(f) or "")), None)
+        target = deck or t.get("video")
+        if not target:
+            skipped.append(t["slug"])
+            continue
+        if t["slug"] in taken:
+            continue
+        rows.append([f"mith.ro/{t['slug']}", "private",
+                     t.get("talk_title") or t["title"], today, target, "",
+                     "", "talk short link — proposed, review visibility"])
+    if rows:
+        check(s.post(f"{SHEETS}/{SHORTLINKS_SHEET}/values/'short links'!A1:append",
+                     params={"valueInputOption": "RAW",
+                             "insertDataOption": "INSERT_ROWS"},
+                     json={"values": rows}))
+    print(f"shortlinks: appended {len(rows)} private rows"
+          + (f"; no deck or video for: {', '.join(skipped)}" if skipped else ""),
+          file=sys.stderr)
+    for r in rows:
+        print(f"  {r[0]} -> {r[4]}", file=sys.stderr)
+
+
 def main() -> None:
     actions = {"dump": do_dump, "slugs": do_slugs, "strips": do_strips,
-               "import": do_import}
+               "import": do_import, "shortlinks": do_shortlinks}
     args = sys.argv[1:]
     accept = "--accept" in args
     args = [a for a in args if a != "--accept"]
