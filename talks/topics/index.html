@@ -1,0 +1,32 @@
+---
+layout: default
+title: Talks by topic
+description: "Tim 'mithro' Ansell's talks grouped by topic: open silicon, FPGA toolchains, conference video, Tomu/Fomu, Python and more."
+---
+<section class="sect">
+  <h2><span aria-hidden="true">🗂️</span> Talks by topic</h2>
+  {% include talks_nav.html %}
+  {% assign talks_sorted = site.data.talks | sort: "sort_date" | reverse %}
+  {% assign tile_n = 0 %}
+  {% for cat in site.data.talk_categories %}
+  {% assign in_cat = talks_sorted | where_exp: "t", "t.categories contains cat.key" %}
+  {% if in_cat.size > 0 %}
+  <h3 class="year-head" id="{{ cat.key }}">{{ cat.name }} <span class="count">{{ in_cat.size }}</span></h3>
+  <p class="prose cat-blurb">{{ cat.blurb }}</p>
+  <div class="table-scroll" tabindex="0" role="region" aria-label="{{ cat.name }} talks">
+  <table class="talks-table">
+    <caption class="visually-hidden">{{ cat.name }} talks</caption>
+    <thead><tr><th scope="col">Talk</th><th scope="col">Event · Date</th></tr></thead>
+    <tbody>
+    {% for talk in in_cat %}
+    {%- assign eager = false -%}
+    {%- if tile_n < 1 -%}{%- if talk.slides_embed or talk.video -%}{%- assign eager = true -%}{%- assign tile_n = tile_n | plus: 1 -%}{%- endif -%}{%- endif %}
+    {% include talk_row.html talk=talk eager=eager %}
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% endif %}
+  {% endfor %}
+</section>
+{% include embed_script.html %}
