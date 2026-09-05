@@ -93,7 +93,7 @@ video/slides_embed are absent (nil) when unknown, so truthiness works;
   <article class="hl">
     <h3><a href="{{ '/talks/' | append: talk.slug | append: '/' | relative_url }}">{{ title | escape }}</a></h3>
     <p class="talk-meta">{{ talk.event | escape }}{% if talk.date and talk.date != "" %} · {{ talk.date | escape }}{% endif %}</p>
-    {% include strip.html slug=talk.slug title=title %}
+    {% include strip.html slug=talk.slug title=title limit=12 %}
   </article>
   {% endfor %}
   <p class="more"><a href="{{ '/talks/highlights/' | relative_url }}">All highlights →</a></p>
