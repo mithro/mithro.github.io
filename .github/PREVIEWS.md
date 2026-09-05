@@ -36,7 +36,8 @@ classic Pages builder, in Actions, and locally — no custom plugin needed.
 
 Domains excluded in `preview-verification.yml` either block automated
 clients outright (LinkedIn, ACM/doi.org, Google Docs/Drive/Scholar,
-electronics-lab.com) or redirect into blocked domains (bit.ly). Everything
+electronics-lab.com, IEEE Xplore and Twitter/X — the last two only
+from datacenter IPs) or redirect into blocked domains (bit.ly). Everything
 else — including YouTube, archive.org and all internal pages, PDFs and
 thumbnails — is checked. `--max-retries=3` absorbs transient DNS/network
 failures.
