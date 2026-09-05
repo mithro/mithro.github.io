@@ -161,6 +161,26 @@ a { color: var(--gold); }
 .embed-lite:hover .lite-play, .embed-lite:focus-visible .lite-play {
   transform: translate(-50%, -50%) scale(1.1);
 }
+/* ---- Film strips ----------------------------------------------------
+   One frame per slide, scrolled sideways. The wrapper (a block inside
+   the table cell — table rows ignore content-visibility) is skipped
+   entirely until it nears the viewport. */
+.strip-wrap { flex: 1 1 320px; min-width: 0; contain: inline-size; content-visibility: auto; contain-intrinsic-size: auto 150px; }
+.strip { display: flex; gap: .35rem; overflow-x: auto; scroll-snap-type: x proximity; padding: .2rem 0 .5rem; scrollbar-width: thin; scrollbar-color: var(--gold-dim) transparent; }
+.strip:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.strip .frame { flex: 0 0 auto; scroll-snap-align: start; border: 1px solid var(--line); border-radius: 3px; overflow: hidden; background: var(--panel); line-height: 0; }
+.strip .frame:hover, .strip .frame:focus-visible { border-color: var(--gold); }
+.strip img { display: block; height: 135px; width: auto; }
+.strip-lg .strip img { height: 200px; }
+.strip-lg { contain-intrinsic-size: auto 220px; }
+@media (prefers-reduced-motion: no-preference) {
+  .strip .frame { transition: transform .12s ease, border-color .12s ease; }
+  .strip .frame:hover { transform: translateY(-2px); }
+}
+@media (max-width: 640px) {
+  .strip img { height: 110px; }
+  .strip-lg .strip img { height: 150px; }
+}
 .talks-table td.ev a { color: inherit; text-decoration: underline; text-decoration-color: var(--gold-dim); text-underline-offset: 3px; padding: .3rem 0; }
 .talks-table td.ev a:hover, .talks-table td.ev a:focus-visible { color: var(--gold); text-decoration-color: var(--gold); }
 .table-scroll { overflow-x: auto; }

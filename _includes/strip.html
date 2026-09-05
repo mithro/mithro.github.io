@@ -1,0 +1,19 @@
+{%- comment -%}
+Scrollable film strip of a deck's slides.
+  include.slug   talk slug (manifest key in _data/strips.yaml)
+  include.title  accessible label text
+  include.size   "lg" on detail pages (taller frames)
+{%- endcomment -%}
+{%- assign st = site.data.strips[include.slug] -%}
+{%- if st -%}
+{%- assign base = '/assets/strips/' | append: include.slug | append: '/' | relative_url -%}
+<div class="strip-wrap{% if include.size == 'lg' %} strip-lg{% endif %}">
+  <div class="strip" role="group" aria-label="Slides: {{ include.title | escape }}" tabindex="0">
+  {%- for oid in st.slides -%}
+    {%- assign n = forloop.index -%}
+    {%- assign nn = n | prepend: '000' | slice: -3, 3 -%}
+    <a class="frame" href="{{ st.link | escape }}#slide=id.{{ oid }}" title="Slide {{ n }} of {{ st.count }}"><img src="{{ base }}{{ nn }}-240.webp" srcset="{{ base }}{{ nn }}-240.webp 240w, {{ base }}{{ nn }}-480.webp 480w" sizes="{% if include.size == 'lg' %}356px{% else %}240px{% endif %}" width="{{ st.w }}" height="{{ st.h }}" alt="Slide {{ n }} of {{ st.count }}" loading="lazy" decoding="async"></a>
+  {%- endfor -%}
+  </div>
+</div>
+{%- endif -%}

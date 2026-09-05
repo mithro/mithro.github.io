@@ -42,11 +42,14 @@ anything to show, a full-width row with the film strip and embed tiles.
     {%- endif -%}
   </span></td>
 </tr>
-{%- if talk.slides_embed or has_video %}
+{%- assign has_strip = false -%}
+{%- if site.data.strips[talk.slug] -%}{%- assign has_strip = true -%}{%- endif -%}
+{%- if talk.slides_embed or has_video or has_strip %}
 <tr class="embrow">
   <td colspan="2">
     <div class="embeds">
-      {% include talk_embeds.html talk=talk eager=include.eager %}
+      {% if has_strip %}{% include strip.html slug=talk.slug title=talk.talk_title %}{% endif %}
+      {% include talk_embeds.html talk=talk eager=include.eager no_slides_tile=has_strip %}
     </div>
   </td>
 </tr>
