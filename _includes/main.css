@@ -269,6 +269,9 @@ ul.deg-list { padding-left: 0; list-style: none; }
   .talks-table tr:has(+ tr.embrow) td { padding-bottom: 0; }
   .talks-table td.ev { text-align: left; }
   .talks-table td.ev > span { max-width: none; margin-left: 0; font-size: .78rem; margin-top: .15rem; }
+  /* Stacked title/event links: let their tap padding take up layout
+     space so the two targets stop overlapping (WCAG 2.5.8). */
+  .talks-table td.ti > a, .talks-table td.ev a { display: inline-block; }
   .talks-table td.ev .ev-none { display: none; }
   .proj { display: block; }
   .proj-blurb { margin-top: .4rem; }
