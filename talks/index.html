@@ -1,0 +1,100 @@
+---
+layout: default
+title: Talks
+description: "Tim 'mithro' Ansell has given over 120 talks since 2007 — highlights, timeline, topics and the numbers."
+---
+{%- comment -%}
+Front matter is not Liquid-rendered, hence the rounded number above.
+Jekyll 3.10's where_exp takes exactly ONE comparison (no and/or).
+video/slides_embed are absent (nil) when unknown, so truthiness works;
+18 talks have event: '' and "" is truthy in Liquid, so events need the
+!= '' test.
+{%- endcomment -%}
+{%- assign talks = site.data.talks -%}
+{%- assign dated = talks | where_exp: "t", "t.year != 0" -%}
+{%- assign by_year = dated | group_by: "year" | sort: "name" -%}
+{%- assign busiest = by_year | sort: "size" | last -%}
+{%- assign first_year = by_year | first -%}
+{%- assign last_year = by_year | last -%}
+{%- assign recorded = talks | where_exp: "t", "t.video" -%}
+{%- assign decks = talks | where_exp: "t", "t.slides_embed" -%}
+{%- assign events = talks | where_exp: "t", "t.event != ''" | map: "event" | uniq -%}
+{%- assign total_slides = 0 -%}
+{%- for s in site.data.strips %}{% assign total_slides = total_slides | plus: s[1].count %}{% endfor -%}
+{%- assign venues = talks | where_exp: "t", "t.venue" | group_by: "venue" | sort: "size" | reverse -%}
+{%- assign series = talks | where_exp: "t", "t.series" | group_by: "series" | sort: "size" | reverse -%}
+{%- assign picks = talks | where_exp: "t", "t.highlight" | sort: "highlight" | slice: 0, 3 -%}
+<section class="sect">
+  <h2><span aria-hidden="true">🎤</span> Talks &amp; presentations</h2>
+  {% include talks_nav.html %}
+  <div class="cards">
+    <a class="card" href="{{ '/talks/highlights/' | relative_url }}"><strong>Highlights</strong><span>Start with the ten that matter most.</span></a>
+    <a class="card" href="{{ '/talks/timeline/' | relative_url }}"><strong>Timeline</strong><span>All {{ talks | size }} talks, newest first.</span></a>
+    <a class="card" href="{{ '/talks/topics/' | relative_url }}"><strong>Topics</strong><span>Grouped by subject across {{ site.data.talk_categories | size }} themes.</span></a>
+  </div>
+</section>
+
+<dl class="spec">
+  <div><dt>Talks</dt><dd>{{ talks | size }}</dd></div>
+  <div><dt>Years speaking</dt><dd>{{ last_year.name | minus: first_year.name | plus: 1 }}</dd></div>
+  <div><dt>Recordings</dt><dd>{{ recorded | size }}</dd></div>
+  <div><dt>Slide decks</dt><dd>{{ decks | size }}</dd></div>
+  <div><dt>Slides shown</dt><dd>{{ total_slides }}</dd></div>
+  <div><dt>Events</dt><dd>{{ events | size }}</dd></div>
+</dl>
+
+<section class="sect">
+  <h3 class="year-head">Talks per year <span class="count">{{ first_year.name }}–{{ last_year.name }} · busiest {{ busiest.name }} with {{ busiest.size }}</span></h3>
+  <div class="bars" aria-hidden="true">
+  {%- for year in (first_year.name..last_year.name) -%}
+    {%- assign g = by_year | where: "name", year | first -%}
+    {%- assign n = 0 -%}{%- if g %}{% assign n = g.size %}{% endif -%}
+    {%- assign pct = n | times: 100 | divided_by: busiest.size -%}
+    <div class="bar-col" style="--h: {{ pct }}"><span class="n">{% if n > 0 %}{{ n }}{% endif %}</span><span class="b"></span><span class="y">{{ year }}</span></div>
+  {%- endfor -%}
+  </div>
+  <table class="visually-hidden"><caption>Talks per year</caption><thead><tr><th scope="col">Year</th><th scope="col">Talks</th></tr></thead><tbody>
+  {%- for g in by_year %}<tr><td>{{ g.name }}</td><td>{{ g.size }}</td></tr>{% endfor -%}
+  </tbody></table>
+</section>
+
+<section class="sect stats-grid">
+  <div>
+    <h3 class="year-head">By topic</h3>
+    <ul class="stat-list">
+    {%- for cat in site.data.talk_categories -%}
+      {%- assign n = talks | where_exp: "t", "t.categories contains cat.key" | size -%}
+      <li><a href="{{ '/talks/topics/' | relative_url }}#{{ cat.key }}">{{ cat.name }}</a><span class="num">{{ n }}</span></li>
+    {%- endfor -%}
+    </ul>
+  </div>
+  <div>
+    <h3 class="year-head">Favourite venues</h3>
+    <ul class="stat-list">
+    {%- for v in venues limit: 6 -%}<li>{{ v.name }}<span class="num">{{ v.size }}</span></li>{%- endfor -%}
+    </ul>
+  </div>
+  <div>
+    <h3 class="year-head">Most-repeated talks</h3>
+    <ul class="stat-list">
+    {%- for sr in series limit: 5 -%}
+      {%- assign yrs = sr.items | where_exp: "t", "t.year != 0" | map: "year" | sort -%}
+      {%- assign y0 = yrs | first -%}{%- assign y1 = yrs | last -%}
+      <li>{{ sr.name }}<span class="num">{{ sr.size }}× · {{ y0 }}{% if y1 != y0 %}–{{ y1 }}{% endif %}</span></li>
+    {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+<section class="sect">
+  <h3 class="year-head">Start here</h3>
+  {% for talk in picks %}
+  {%- assign title = talk.talk_title | default: talk.title -%}
+  <article class="hl">
+    <h3><a href="{{ '/talks/' | append: talk.slug | append: '/' | relative_url }}">{{ title | escape }}</a></h3>
+    <p class="talk-meta">{{ talk.event | escape }}{% if talk.date and talk.date != "" %} · {{ talk.date | escape }}{% endif %}</p>
+    {% include strip.html slug=talk.slug title=title %}
+  </article>
+  {% endfor %}
+  <p class="more"><a href="{{ '/talks/highlights/' | relative_url }}">All highlights →</a></p>
+</section>
