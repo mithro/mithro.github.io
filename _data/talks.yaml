@@ -12,6 +12,15 @@
 #   scripts/enrich_talk_embeds.py — edit slides/slides_edit, not this.
 # slides_short: hand-maintained canonical short URL for the deck
 #   (wafer.space/<alias>) — preferred over bit.ly/mith.ro on /talks/.
+# slug: URL id (/talks/<slug>/); equals the short-link alias where one
+#   exists. Reviewed in the talks sheets' Slug column (talks_sheet.py).
+# talk_title: the talk's own title without event decorations.
+# categories: keys from _data/talk_categories.yaml (one or more).
+# series / venue: display names grouping repeat performances and
+#   recurring venues for the hub statistics (optional).
+# strips: true = export and show the slide film strip; imported from
+#   the sheets' Strips column (talks_sheet.py import).
+# highlight: 1..10 rank on /talks/highlights/, with a one-line blurb.
 
 - title: ISPD 2023 - Build custom silicon with Google!
   slug: ispd23-goog
