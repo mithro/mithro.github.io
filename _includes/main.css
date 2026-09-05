@@ -323,6 +323,28 @@ ul.deg-list { padding-left: 0; list-style: none; }
 .hl h3 a:hover, .hl h3 a:focus-visible { color: var(--gold); }
 .hl .prose { margin: 0 0 .6rem; }
 
+/* ---- Talks hub ------------------------------------------------------ */
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin: .2rem 0 1.6rem; }
+.card { display: block; border: 1px solid var(--line); border-radius: 6px; padding: 1rem 1.1rem; background: var(--panel); color: var(--silk); text-decoration: none; }
+.card strong { display: block; color: var(--gold); margin-bottom: .25rem; }
+.card span { font-family: var(--sans); font-size: .9rem; color: var(--muted); }
+.card:hover, .card:focus-visible { border-color: var(--gold); }
+.bars { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 4px; align-items: end; margin: .6rem 0 1.6rem; }
+.bar-col { display: flex; flex-direction: column; align-items: center; min-width: 0; }
+.bar-col .n { font-size: .65rem; color: var(--muted); line-height: 1; height: .8rem; }
+.bar-col .b { width: 100%; height: calc(130px * var(--h) / 100); min-height: 2px; background: var(--gold); border-radius: 2px 2px 0 0; }
+.bar-col .y { font-size: .58rem; color: var(--muted); margin-top: .35rem; writing-mode: vertical-rl; transform: rotate(180deg); }
+.stats-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 2rem; }
+.stat-list { list-style: none; margin: 0; padding: 0; font-size: .85rem; }
+.stat-list li { display: flex; justify-content: space-between; gap: 1rem; border-top: 1px solid var(--line); padding: .35rem 0; }
+.stat-list .num { color: var(--gold); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.stat-list a { color: var(--silk); text-decoration: none; border-bottom: 1px solid var(--gold-dim); }
+.stat-list a:hover, .stat-list a:focus-visible { color: var(--gold); }
+@media (max-width: 760px) {
+  .cards, .stats-grid { grid-template-columns: 1fr; }
+  .bar-col .b { height: calc(90px * var(--h) / 100); }
+}
+
 .print-head { display: none; }
 
 @page { margin: 1.6cm; }
