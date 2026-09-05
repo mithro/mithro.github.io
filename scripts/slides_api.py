@@ -21,9 +21,10 @@ RETRY = (429, 500, 502, 503, 504)
 _TOKEN: str | None = None
 
 
-def token() -> str:
+def token(refresh: bool = False) -> str:
+    """gcloud access tokens live about an hour; long exports must refresh."""
     global _TOKEN
-    if _TOKEN is None:
+    if _TOKEN is None or refresh:
         _TOKEN = subprocess.run(["gcloud", "auth", "print-access-token"],
                                 capture_output=True, text=True,
                                 check=True).stdout.strip()
@@ -40,8 +41,8 @@ def get(url: str, params: dict | None = None, tries: int = 5,
         auth: bool = True) -> requests.Response:
     """GET with exponential backoff on quota/server errors and on
     connection resets/timeouts (Google drops long-lived connections)."""
-    hdr = headers() if auth else {}
     for attempt in range(tries):
+        hdr = headers() if auth else {}
         try:
             r = requests.get(url, params=params, headers=hdr, timeout=30)
         except requests.RequestException as exc:
@@ -50,6 +51,9 @@ def get(url: str, params: dict | None = None, tries: int = 5,
             print(f"retrying after {exc.__class__.__name__}: {url[:80]}",
                   file=sys.stderr)
             time.sleep(1.5 * 2 ** attempt)
+            continue
+        if r.status_code == 401 and auth and attempt < tries - 1:
+            token(refresh=True)  # expired access token
             continue
         if r.status_code in RETRY and attempt < tries - 1:
             time.sleep(1.5 * 2 ** attempt)
