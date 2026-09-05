@@ -37,10 +37,12 @@ def headers() -> dict[str, str]:
                                                   "mithro-drive-backup")}
 
 
-def get(url: str, params: dict | None = None, tries: int = 5,
+def get(url: str, params: dict | None = None, tries: int = 8,
         auth: bool = True) -> requests.Response:
     """GET with exponential backoff on quota/server errors and on
-    connection resets/timeouts (Google drops long-lived connections)."""
+    connection resets/timeouts (Google drops long-lived connections).
+    The thumbnail render quota is per minute, so 429 backoff climbs to a
+    full minute (5, 10, 20, 40, 60, 60, 60 s) before giving up."""
     for attempt in range(tries):
         hdr = headers() if auth else {}
         try:
@@ -56,7 +58,8 @@ def get(url: str, params: dict | None = None, tries: int = 5,
             token(refresh=True)  # expired access token
             continue
         if r.status_code in RETRY and attempt < tries - 1:
-            time.sleep(1.5 * 2 ** attempt)
+            time.sleep(min(60, 5 * 2 ** attempt) if r.status_code == 429
+                       else 1.5 * 2 ** attempt)
             continue
         return r
     return r
