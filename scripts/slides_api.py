@@ -36,11 +36,21 @@ def headers() -> dict[str, str]:
                                                   "mithro-drive-backup")}
 
 
-def get(url: str, params: dict | None = None,
-        tries: int = 5) -> requests.Response:
-    """GET with exponential backoff on quota/server errors."""
+def get(url: str, params: dict | None = None, tries: int = 5,
+        auth: bool = True) -> requests.Response:
+    """GET with exponential backoff on quota/server errors and on
+    connection resets/timeouts (Google drops long-lived connections)."""
+    hdr = headers() if auth else {}
     for attempt in range(tries):
-        r = requests.get(url, params=params, headers=headers(), timeout=30)
+        try:
+            r = requests.get(url, params=params, headers=hdr, timeout=30)
+        except requests.RequestException as exc:
+            if attempt == tries - 1:
+                raise
+            print(f"retrying after {exc.__class__.__name__}: {url[:80]}",
+                  file=sys.stderr)
+            time.sleep(1.5 * 2 ** attempt)
+            continue
         if r.status_code in RETRY and attempt < tries - 1:
             time.sleep(1.5 * 2 ** attempt)
             continue
@@ -67,7 +77,7 @@ def thumbnail_png(pid: str, page: str, size: str = "MEDIUM") -> bytes | None:
         print(f"slides {pid}/{page}: thumbnail HTTP {r.status_code}",
               file=sys.stderr)
         return None
-    img = requests.get(r.json()["contentUrl"], timeout=30)
+    img = get(r.json()["contentUrl"], auth=False)  # signed URL, no token
     if not img.ok:
         print(f"slides {pid}/{page}: contentUrl HTTP {img.status_code}",
               file=sys.stderr)
