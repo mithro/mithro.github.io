@@ -303,6 +303,19 @@ ul.deg-list { padding-left: 0; list-style: none; }
    Arial on white, plain section headings, name + contact masthead.
    The masthead exists only in resume/index.html; the rest of these
    rules also give the other pages a sane light printout. */
+/* ---- Talks section pages -------------------------------------------- */
+.subnav { display: flex; flex-wrap: wrap; gap: .3rem 1.3rem; font-size: .8rem; margin: -.4rem 0 1.2rem; }
+.subnav a { color: var(--muted); text-decoration: none; padding: .2rem 0; }
+.subnav a.on { color: var(--silk); border-bottom: 2px solid var(--gold); }
+.subnav a:hover, .subnav a:focus-visible { color: var(--gold); }
+.talk-page h2 { margin-bottom: .3rem; }
+.talk-meta { color: var(--muted); font-size: .82rem; margin: .2rem 0 .8rem; }
+.talk-meta a { color: var(--silk); }
+.chips { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0 0 1rem; }
+.chip { font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--gold); border: 1px solid var(--gold-dim); border-radius: 999px; padding: .15rem .6rem; text-decoration: none; }
+.chip:hover, .chip:focus-visible { border-color: var(--gold); }
+.prevnext { display: flex; justify-content: space-between; gap: 1rem; margin-top: 1.5rem; }
+
 .print-head { display: none; }
 
 @page { margin: 1.6cm; }

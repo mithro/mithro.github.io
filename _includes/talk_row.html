@@ -9,22 +9,9 @@ anything to show, a full-width row with the film strip and embed tiles.
 {%- if talk.video != "" and talk.video -%}
   {%- if talk.video contains "youtu.be/" or talk.video contains "watch?v=" -%}{%- assign has_video = true -%}{%- endif -%}
 {%- endif -%}
-{%- assign short_disp = "" -%}
-{%- assign slides_href = talk.slides -%}
-{%- if talk.slides_short -%}
-  {%- assign slides_href = talk.slides_short -%}
-{%- elsif talk.slides contains "bit.ly/" or talk.slides contains "j.mp/" -%}
-  {%- assign short_disp = talk.slides | replace: "https://", "" | replace: "http://", "" -%}
-  {%- assign mith_alias = short_disp | split: "/" | last -%}
-  {%- assign stub_path = "/" | append: mith_alias | append: "/" -%}
-  {%- assign stub = site.pages | where: "permalink", stub_path | first -%}
-  {%- if stub -%}
-    {%- assign slides_href = stub_path | relative_url -%}
-  {%- endif -%}
-{%- endif %}
 <tr>
   <td class="ti">
-    {% if talk.slides != "" and talk.slides %}<a href="{{ slides_href | escape }}">{{ talk.title | escape }}</a>{% else %}{{ talk.title | escape }}{% endif %}
+    <a href="{{ '/talks/' | append: talk.slug | append: '/' | relative_url }}">{{ talk.talk_title | default: talk.title | escape }}</a>
     {%- if has_video == false and talk.video != "" and talk.video %} <a class="vid" href="{{ talk.video | escape }}"><span aria-hidden="true">▶</span> video</a>{% endif %}
   </td>
   <td class="ev"><span>

@@ -1,0 +1,35 @@
+---
+layout: default
+---
+{%- assign talk = site.data.talks | where: "slug", page.slug | first -%}
+{%- assign sorted = site.data.talks | sort: "sort_date" -%}
+{%- for t in sorted %}{% if t.slug == page.slug %}{% assign idx = forloop.index0 %}{% endif %}{% endfor -%}
+{%- assign prev_i = idx | minus: 1 -%}{%- assign next_i = idx | plus: 1 -%}
+{%- if idx > 0 %}{% assign prev = sorted[prev_i] %}{% endif -%}
+{%- assign next = sorted[next_i] -%}
+{%- assign title = talk.talk_title | default: talk.title -%}
+<section class="sect talk-page">
+  {% include talks_nav.html %}
+  <h2>{{ title | escape }}</h2>
+  <p class="talk-meta">
+    {%- if talk.event and talk.event != "" -%}{%- if talk.event_url %}<a href="{{ talk.event_url | escape }}">{{ talk.event | escape }}</a>{% else %}{{ talk.event | escape }}{% endif -%}{%- endif -%}
+    {%- if talk.date and talk.date != "" %} · <span class="nowrap">{{ talk.date | escape }}</span>{% endif -%}
+    {%- if talk.series %} · part of <em>{{ talk.series | escape }}</em>{% endif %}
+  </p>
+  <p class="chips">{% for c in talk.categories %}{% assign cat = site.data.talk_categories | where: "key", c | first %}<a class="chip" href="{{ '/talks/topics/' | relative_url }}#{{ c }}">{{ cat.name | escape }}</a>{% endfor %}</p>
+  {% if talk.blurb %}<p class="prose">{{ talk.blurb | escape }}</p>{% endif %}
+  {% include strip.html slug=talk.slug title=title size="lg" %}
+  <div class="embeds">
+    {% include talk_embeds.html talk=talk eager=true %}
+  </div>
+  {%- assign stub_path = "/" | append: talk.slug | append: "/" -%}
+  {%- assign stub = site.pages | where: "permalink", stub_path | first -%}
+  {%- if stub %}
+  <p class="talk-meta">Short link: <a href="{{ stub_path | relative_url }}">mith.ro/{{ talk.slug }}</a></p>
+  {%- endif %}
+  <p class="talk-meta prevnext">
+    {% if prev %}<a href="{{ '/talks/' | append: prev.slug | append: '/' | relative_url }}">← {{ prev.talk_title | default: prev.title | escape }}</a>{% else %}<span></span>{% endif %}
+    {% if next %}<a href="{{ '/talks/' | append: next.slug | append: '/' | relative_url }}">{{ next.talk_title | default: next.title | escape }} →</a>{% endif %}
+  </p>
+</section>
+{% include embed_script.html %}
