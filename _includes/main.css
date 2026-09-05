@@ -315,6 +315,13 @@ ul.deg-list { padding-left: 0; list-style: none; }
 .chip { font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--gold); border: 1px solid var(--gold-dim); border-radius: 999px; padding: .15rem .6rem; text-decoration: none; }
 .chip:hover, .chip:focus-visible { border-color: var(--gold); }
 .prevnext { display: flex; justify-content: space-between; gap: 1rem; margin-top: 1.5rem; }
+.year-head .count { color: var(--muted); font-weight: 400; font-size: .8rem; margin-left: .4rem; }
+.cat-blurb { margin: 0 0 .6rem; }
+.hl { border-top: 1px solid var(--line); padding: 1.2rem 0; }
+.hl h3 { margin: 0 0 .2rem; font-family: var(--mono); font-size: 1rem; }
+.hl h3 a { color: var(--silk); text-decoration: none; border-bottom: 1px solid var(--gold-dim); }
+.hl h3 a:hover, .hl h3 a:focus-visible { color: var(--gold); }
+.hl .prose { margin: 0 0 .6rem; }
 
 .print-head { display: none; }
 
