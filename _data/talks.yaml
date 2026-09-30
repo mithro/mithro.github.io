@@ -28,7 +28,6 @@
   categories: [open-silicon]
   series: Build custom silicon with Google
   strips: true
-  highlight: 9
   blurb: "The mature programme: how anyone could build custom silicon with Google's open silicon efforts."
   event: International Symposium on Physical Design 2023 (ISPD)
   event_url: https://web.archive.org/web/20230330055413/https://ispd.cc/ispd2023/index.php
@@ -60,6 +59,8 @@
   categories: [open-silicon]
   series: Build custom silicon with Google
   strips: true
+  highlight: 2
+  blurb: "How anyone can build custom silicon for free with Google: open source PDKs, open tools and the no-cost Open MPW shuttles."
   event: VSDOpen Conference (2022)
   event_url: https://www.vlsisystemdesign.com/vsdopen2022/
   year: 2022
@@ -75,6 +76,8 @@
   talk_title: "Google, GlobalFoundries & open source! What is happening and why should I care?"
   categories: [open-silicon]
   strips: true
+  highlight: 7
+  blurb: "GF180MCU, the first open source PDK from Google and GlobalFoundries, and the no-cost shuttles to manufacture designs on it."
   event: GlobalFoundries University Calls
   year: 2022
   date: 31 Aug 2022
@@ -266,7 +269,6 @@
   categories: [open-silicon]
   series: Open down to the transistor
   strips: true
-  highlight: 3
   blurb: "OpenTapeOut keynote: what it takes to open silicon all the way down to the transistor."
   event: OpenTapeOut 2021
   event_url: https://web.archive.org/web/20211104195336/https://www.opentapeout.dev/
@@ -299,7 +301,9 @@
   series: "Google and open source hardware toolchains & ecosystem"
   venue: OpenPOWER
   strips: true
-  event: ''
+  highlight: 3
+  blurb: "Why Google invests in open source hardware toolchains, and the ecosystem of open PDKs, EDA tools and IP it is helping to grow."
+  event: "OpenPOWER AI & Cloud Virtual University"
   year: 2022
   date: 4 Mar 2022
   slides: https://bit.ly/op22-gtools
@@ -440,7 +444,7 @@
   series: Fomu
   venue: Chaos Communication Congress/Camp
   strips: true
-  highlight: 6
+  highlight: 4
   blurb: "With Sean 'xobs' Cross at Chaos Communication Camp: Fomu, the FPGA board that fits inside a USB port."
   event: CCCamp19 — with Sean 'xobs' Cross
   event_url: https://events.ccc.de/camp/2019/
@@ -594,7 +598,6 @@
   series: google/skywater-pdk
   venue: RISC-V Summit
   strips: true
-  highlight: 8
   blurb: "RISC-V Summit: the manufacturable open 130 nm PDK and the no-cost shuttle programme built on it."
   event: RISC-V Summit 2020
   event_url: https://web.archive.org/web/20201130105336/https://riscv.org/event/risc-v-summit/
@@ -629,7 +632,6 @@
   categories: [open-silicon]
   series: google/skywater-pdk
   strips: true
-  highlight: 2
   blurb: "The FOSSi Dial-Up where the first fully open source, manufacturable 130 nm PDK was introduced to the community."
   event: FOSSi Foundation Dialup Talk Series
   event_url: https://web.archive.org/web/20200707124528/https://fossi-foundation.org/dial-up/
@@ -835,6 +837,8 @@
   series: Tim has too many projects
   venue: Latch-Up
   strips: true
+  highlight: 5
+  blurb: "The Latch-Up edition of Tim's long-running series: a rapid tour of open hardware projects that need people to work on them."
   event: Latch-Up 2019
   event_url: https://web.archive.org/web/20190507122353/https://fossi-foundation.org/latchup/
   year: 2019
@@ -853,7 +857,6 @@
   series: SymbiFlow – finally the GCC of FPGAs
   venue: Chaos Communication Congress/Camp
   strips: true
-  highlight: 1
   blurb: "The Congress talk that laid out why FPGAs needed a GCC-style open toolchain, and how far SymbiFlow had got."
   event: 35C3
   event_url: https://fahrplan.events.ccc.de/congress/2018/Fahrplan/index.html
@@ -925,7 +928,6 @@
   series: "I'm Tomu"
   venue: Hackaday
   strips: true
-  highlight: 7
   blurb: "Tomu at Hackaday Supercon: a microcontroller, or an FPGA, hiding inside your USB port."
   event: HackADay SuperCon 2018
   event_url: https://web.archive.org/web/20181104151652/https://hackaday.io/superconference/
@@ -944,7 +946,6 @@
   categories: [timvideos, community]
   venue: Chaos Communication Congress/Camp
   strips: true
-  highlight: 4
   blurb: "With Andrew 'bunnie' Huang: how the Chaos Communication Congress community shaped an open hardware success."
   event: 35C3 — with Andrew 'bunnie' Huang
   event_url: https://fahrplan.events.ccc.de/congress/2018/Fahrplan/index.html
@@ -1187,7 +1188,7 @@
   categories: [timvideos, fpga-tools]
   venue: Chaos Communication Congress/Camp
   strips: true
-  highlight: 5
+  highlight: 6
   blurb: "Everything TimVideos learned building open, FPGA-based HDMI capture hardware for recording conferences."
   event: 33C3
   event_url: https://fahrplan.events.ccc.de/congress/2016/Fahrplan/index.html
@@ -1630,7 +1631,7 @@
   series: wafer.space roadshow
   venue: Hackware
   strips: true
-  highlight: 10
+  highlight: 1
   blurb: "wafer.space: silicon now $4 USD — what came out of Run #1 and where open silicon goes next."
   event: Hackware hardware meetup, Singapore
   event_url: https://luma.com/myyz0ab6
