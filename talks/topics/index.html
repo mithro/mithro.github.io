@@ -11,9 +11,11 @@ where_exp takes exactly ONE comparison, hence the separate assigns.
 <section class="sect">
   <h2><span aria-hidden="true">🗂️</span> Talks by topic</h2>
   {% include talks_nav.html %}
+  {%- assign multi = site.data.talks | where_exp: "t", "t.categories.size > 1" -%}
   <p class="prose cat-blurb">{{ site.data.talks | size }} talks across
     {{ site.data.talk_categories | size }} topics — pick one for the full list
-    of talks, decks and recordings.</p>
+    of talks, decks and recordings. A talk can sit under several topics
+    ({{ multi.size }} do), so the counts add up to more than {{ site.data.talks | size }}.</p>
   <div class="table-scroll" tabindex="0" role="region" aria-label="Talk topics">
   <table class="topics-table">
     <caption class="visually-hidden">Talk topics, in taxonomy order</caption>

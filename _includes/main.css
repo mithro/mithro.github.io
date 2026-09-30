@@ -336,6 +336,9 @@ ul.deg-list { padding-left: 0; list-style: none; }
 .topics-table td.n { text-align: right; color: var(--gold); white-space: nowrap; font-variant-numeric: tabular-nums; width: 5rem; }
 .topics-table td.bl { color: var(--muted); text-wrap: pretty; }
 .topics-table .clab { display: none; }
+.talks-table .also { display: block; color: var(--muted); font-size: .75rem; margin-top: .1rem; }
+.talks-table td.ti .also a { color: var(--muted); padding: .2rem 0; }
+.talks-table td.ti .also a:hover, .talks-table td.ti .also a:focus-visible { color: var(--gold); }
 @media (max-width: 640px) {
   .topics-table { min-width: 0; }
   .topics-table thead { display: none; }
