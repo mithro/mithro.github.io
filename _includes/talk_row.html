@@ -47,8 +47,8 @@ anything to show, a full-width row with the film strip and embed tiles.
 <tr class="embrow">
   <td colspan="2">
     <div class="embeds">
-      {% if has_strip %}{% include strip.html slug=talk.slug title=talk.talk_title limit=12 eager=include.eager %}{% endif %}
       {% include talk_embeds.html talk=talk eager=include.eager no_slides_tile=has_strip %}
+      {% if has_strip %}{% include strip.html slug=talk.slug title=talk.talk_title limit=12 eager=include.eager %}{% endif %}
     </div>
   </td>
 </tr>
