@@ -111,8 +111,9 @@ jobs:
           echo "" >> $REPORT_FILE
 
           # Excluded domains block automated clients outright (LinkedIn,
-          # ACM/DOI, Google Docs/Drive/Scholar) or chain-redirect into them
-          # (bit.ly); checking them only produces false failures.
+          # ACM/DOI, Google Docs/Drive/Scholar, Twitter/X from datacenter
+          # IPs) or chain-redirect into them (bit.ly); checking them only
+          # produces false failures.
           if muffet \
             --timeout=30 \
             --max-connections=10 \
@@ -131,6 +132,8 @@ jobs:
             --exclude=".*electronics-lab\.com.*" \
             --exclude=".*bit\.ly.*" \
             --exclude=".*scholar\.google\.com.*" \
+            --exclude=".*twitter\.com.*" \
+            --exclude="https?://(www\.)?x\.com.*" \
             --header="User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" \
             --header="Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" \
             --header="Accept-Language:en-US,en;q=0.9" \

@@ -1,0 +1,92 @@
+# /// script
+# requires-python = ">=3.11"
+# dependencies = ["requests"]
+# ///
+"""Minimal Google Slides API client shared by the thumbnail scripts.
+
+Auth: gcloud user credentials with Drive scope
+(`gcloud auth login --enable-gdrive-access`). The Slides API needs a
+quota project with slides.googleapis.com enabled: mithro-drive-backup
+by default, GOOGLE_QUOTA_PROJECT overrides.
+"""
+import os
+import subprocess
+import sys
+import time
+
+import requests
+
+SLIDES = "https://slides.googleapis.com/v1/presentations"
+RETRY = (429, 500, 502, 503, 504)
+_TOKEN: str | None = None
+
+
+def token(refresh: bool = False) -> str:
+    """gcloud access tokens live about an hour; long exports must refresh."""
+    global _TOKEN
+    if _TOKEN is None or refresh:
+        _TOKEN = subprocess.run(["gcloud", "auth", "print-access-token"],
+                                capture_output=True, text=True,
+                                check=True).stdout.strip()
+    return _TOKEN
+
+
+def headers() -> dict[str, str]:
+    return {"Authorization": f"Bearer {token()}",
+            "X-Goog-User-Project": os.environ.get("GOOGLE_QUOTA_PROJECT",
+                                                  "mithro-drive-backup")}
+
+
+def get(url: str, params: dict | None = None, tries: int = 8,
+        auth: bool = True) -> requests.Response:
+    """GET with exponential backoff on quota/server errors and on
+    connection resets/timeouts (Google drops long-lived connections).
+    The thumbnail render quota is per minute, so 429 backoff climbs to a
+    full minute (5, 10, 20, 40, 60, 60, 60 s) before giving up."""
+    for attempt in range(tries):
+        hdr = headers() if auth else {}
+        try:
+            r = requests.get(url, params=params, headers=hdr, timeout=30)
+        except requests.RequestException as exc:
+            if attempt == tries - 1:
+                raise
+            print(f"retrying after {exc.__class__.__name__}: {url[:80]}",
+                  file=sys.stderr)
+            time.sleep(1.5 * 2 ** attempt)
+            continue
+        if r.status_code == 401 and auth and attempt < tries - 1:
+            token(refresh=True)  # expired access token
+            continue
+        if r.status_code in RETRY and attempt < tries - 1:
+            time.sleep(min(60, 5 * 2 ** attempt) if r.status_code == 429
+                       else 1.5 * 2 ** attempt)
+            continue
+        return r
+    return r
+
+
+def slide_ids(pid: str) -> list[str] | None:
+    """Page objectIds in deck order, or None (with a message) on failure."""
+    r = get(f"{SLIDES}/{pid}", params={"fields": "slides.objectId"})
+    if not r.ok:
+        print(f"slides {pid}: metadata HTTP {r.status_code}", file=sys.stderr)
+        return None
+    return [s["objectId"] for s in r.json().get("slides", [])]
+
+
+def thumbnail_png(pid: str, page: str, size: str = "MEDIUM") -> bytes | None:
+    """Render one page (MEDIUM = 800 px wide). Paced: the render quota is
+    tight per minute, so callers should keep thread pools small."""
+    time.sleep(1.5)
+    r = get(f"{SLIDES}/{pid}/pages/{page}/thumbnail",
+            params={"thumbnailProperties.thumbnailSize": size})
+    if not r.ok:
+        print(f"slides {pid}/{page}: thumbnail HTTP {r.status_code}",
+              file=sys.stderr)
+        return None
+    img = get(r.json()["contentUrl"], auth=False)  # signed URL, no token
+    if not img.ok:
+        print(f"slides {pid}/{page}: contentUrl HTTP {img.status_code}",
+              file=sys.stderr)
+        return None
+    return img.content

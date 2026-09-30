@@ -1,0 +1,55 @@
+{%- comment -%}
+One talk in a .talks-table: the title/event row plus, when there is
+anything to show, a full-width row with the film strip and embed tiles.
+  include.talk   the talk entry
+  include.eager  true for the first talk on the page (eager thumbnails)
+  include.topic  on a topic page, that topic's key: the talk's OTHER
+                 topics are listed under its title as links
+{%- endcomment -%}
+{%- assign talk = include.talk -%}
+{%- assign has_video = false -%}
+{%- if talk.video != "" and talk.video -%}
+  {%- if talk.video contains "youtu.be/" or talk.video contains "watch?v=" -%}{%- assign has_video = true -%}{%- endif -%}
+{%- endif -%}
+<tr>
+  <td class="ti">
+    <a href="{{ '/talks/' | append: talk.slug | append: '/' | relative_url }}">{{ talk.talk_title | default: talk.title | escape }}</a>
+    {%- if has_video == false and talk.video != "" and talk.video %} <a class="vid" href="{{ talk.video | escape }}"><span aria-hidden="true">▶</span> video</a>{% endif %}
+    {%- if include.topic and talk.categories.size > 1 %}
+    <span class="also">Also in
+      {%- assign sep = "" -%}
+      {%- for c in talk.categories -%}{%- if c != include.topic -%}
+        {%- assign oc = site.data.talk_categories | where: "key", c | first -%}
+        {{ sep }} <a href="{{ '/talks/topics/' | append: c | append: '/' | relative_url }}">{{ oc.name | escape }}</a>
+        {%- assign sep = "," -%}
+      {%- endif -%}{%- endfor -%}
+    </span>
+    {%- endif %}
+  </td>
+  <td class="ev"><span>
+    {%- if talk.event != "" and talk.event -%}
+      {%- if talk.event_url -%}<a href="{{ talk.event_url | escape }}">{{ talk.event | escape }}</a>{%- else -%}{{ talk.event | escape }}{%- endif -%}
+      {%- if talk.date != "" and talk.date %} · {% endif -%}
+    {%- endif -%}
+    {%- if talk.date != "" and talk.date -%}
+      <span class="nowrap">{{ talk.date | escape }}</span>
+    {%- endif -%}
+    {%- if talk.event == "" or talk.event == nil -%}
+      {%- if talk.date == "" or talk.date == nil -%}
+        <span class="ev-none" aria-hidden="true">—</span>
+      {%- endif -%}
+    {%- endif -%}
+  </span></td>
+</tr>
+{%- assign has_strip = false -%}
+{%- if site.data.strips[talk.slug] -%}{%- assign has_strip = true -%}{%- endif -%}
+{%- if talk.slides_embed or has_video or has_strip %}
+<tr class="embrow">
+  <td colspan="2">
+    <div class="embeds">
+      {% include talk_embeds.html talk=talk eager=include.eager no_slides_tile=has_strip %}
+      {% if has_strip %}{% include strip.html slug=talk.slug title=talk.talk_title limit=12 eager=include.eager %}{% endif %}
+    </div>
+  </td>
+</tr>
+{%- endif %}

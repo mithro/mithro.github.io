@@ -1,0 +1,34 @@
+---
+layout: default
+title: Talks timeline
+description: "Every talk by Tim 'mithro' Ansell in date order, 2007–present."
+---
+<section class="sect">
+  <h2><span aria-hidden="true">🎤</span> Talks timeline</h2>
+  {% include talks_nav.html %}
+
+  {% assign talks_sorted = site.data.talks | sort: "sort_date" | reverse %}
+  {% assign years = talks_sorted | map: "year" | uniq %}
+  {% assign tile_n = 0 %}
+  {% for y in years %}
+  <h3 class="year-head">{% if y == 0 %}Undated{% else %}{{ y }}{% endif %}</h3>
+  <div class="table-scroll" tabindex="0" role="region" aria-label="{% if y == 0 %}Undated talks{% else %}Talks from {{ y }}{% endif %}">
+  <table class="talks-table">
+    <caption class="visually-hidden">{% if y == 0 %}Undated talks{% else %}Talks from {{ y }}{% endif %}</caption>
+    <thead>
+      <tr><th scope="col">Talk</th><th scope="col">Event · Date</th></tr>
+    </thead>
+    <tbody>
+    {% for talk in talks_sorted %}{% if talk.year == y %}
+    {%- assign eager = false -%}
+    {%- if tile_n < 1 -%}{%- if talk.slides_embed or talk.video -%}{%- assign eager = true -%}{%- assign tile_n = tile_n | plus: 1 -%}{%- endif -%}{%- endif %}
+    {% include talk_row.html talk=talk eager=eager %}
+    {% endif %}{% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% endfor %}
+</section>
+
+{% include embed_script.html %}
+{% include strip_script.html %}

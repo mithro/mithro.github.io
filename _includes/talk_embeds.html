@@ -1,0 +1,66 @@
+{%- comment -%}
+Video + slides click-to-load tiles for one talk (video first, so it
+sits on the left).
+  include.talk            the talk entry
+  include.eager           true for above-the-fold tiles (fetchpriority=high)
+  include.no_slides_tile  true when a film strip replaces the slides tile
+{%- endcomment -%}
+{%- assign talk = include.talk -%}
+{%- assign vid_id = "" -%}
+{%- assign vid_start = "" -%}
+{%- if talk.video != "" and talk.video -%}
+  {%- if talk.video contains "youtu.be/" -%}
+    {%- assign vid_id = talk.video | split: "youtu.be/" | last | split: "?" | first -%}
+  {%- elsif talk.video contains "watch?v=" -%}
+    {%- assign vid_id = talk.video | split: "v=" | last | split: "&" | first -%}
+  {%- endif -%}
+  {%- if vid_id != "" and talk.video contains "t=" -%}
+    {%- assign vid_start = talk.video | split: "t=" | last | split: "&" | first | split: "s" | first -%}
+  {%- endif -%}
+{%- endif -%}
+{%- assign short_disp = "" -%}
+{%- assign slides_href = talk.slides -%}
+{%- if talk.slides_short -%}
+  {%- assign short_disp = talk.slides_short | replace: "https://", "" | replace: "http://", "" -%}
+  {%- assign slides_href = talk.slides_short -%}
+{%- elsif talk.slides contains "bit.ly/" or talk.slides contains "j.mp/" -%}
+  {%- assign short_disp = talk.slides | replace: "https://", "" | replace: "http://", "" -%}
+  {%- assign mith_alias = short_disp | split: "/" | last -%}
+  {%- assign stub_path = "/" | append: mith_alias | append: "/" -%}
+  {%- assign stub = site.pages | where: "permalink", stub_path | first -%}
+  {%- if stub -%}
+    {%- assign slides_href = stub_path | relative_url -%}
+    {%- assign short_disp = "mith.ro/" | append: mith_alias -%}
+  {%- endif -%}
+{%- endif -%}
+{%- comment -%} A raw Google Slides URL is swapped for the deck's visitor link (_data/deck_links.yaml): published to the web where possible, and no link at all when no visitor could open the deck. Short links are left as they are. {%- endcomment -%}
+{%- if slides_href contains "docs.google.com/presentation" -%}
+  {%- assign dl = site.data.deck_links[talk.slug] -%}
+  {%- if dl -%}{%- assign slides_href = dl.url | default: "" -%}{%- endif -%}
+{%- endif -%}
+{%- assign pres_id = "" -%}
+{%- if talk.slides_embed and talk.slides_embed contains "/presentation/d/" -%}
+  {%- unless talk.slides_embed contains "/d/e/" -%}
+    {%- assign pres_id = talk.slides_embed | split: "/d/" | last | split: "/embed" | first -%}
+  {%- endunless -%}
+{%- endif -%}
+{%- if vid_id != "" %}
+{%- assign vt = site.data.thumbs.video[vid_id] %}
+<div class="embed-col">
+  <a class="emb-cap" href="{{ talk.video | escape }}"><span class="ci-icon" aria-hidden="true">{% include icons/youtube.svg %}</span> youtu.be/{{ vid_id }}</a>
+  <button type="button" class="embed-lite lite-video" data-src="https://www.youtube-nocookie.com/embed/{{ vid_id }}?autoplay=1{% if vid_start != '' %}&amp;start={{ vid_start }}{% endif %}" aria-label="Play video: {{ talk.title | escape }}">
+    {% if vt %}<img src="{{ '/assets/thumbs/video/' | relative_url }}{{ vid_id }}-320.webp" srcset="{{ '/assets/thumbs/video/' | relative_url }}{{ vid_id }}-320.webp 320w, {{ '/assets/thumbs/video/' | relative_url }}{{ vid_id }}-640.webp {{ vt.w }}w" sizes="(max-width: 640px) 92vw, 420px" width="{{ vt.w }}" height="{{ vt.h }}" alt="" {% if include.eager %}fetchpriority="high"{% else %}loading="lazy"{% endif %} decoding="async">{% endif %}
+    <span class="lite-play" aria-hidden="true">{% include icons/youtube-play.svg %}</span>
+  </button>
+</div>
+{%- endif %}
+{%- if talk.slides_embed and include.no_slides_tile != true %}
+{%- assign st = site.data.thumbs.slides[pres_id] %}
+<div class="embed-col">
+  {% if slides_href != "" %}<a class="emb-cap" href="{{ slides_href | escape }}">{% else %}<span class="emb-cap">{% endif %}<span class="ci-icon" aria-hidden="true">{% include icons/googleslides.svg %}</span> {% if short_disp != "" %}{{ short_disp | escape }}{% else %}Slides{% endif %}{% if slides_href != "" %}</a>{% else %}</span>{% endif %}
+  <button type="button" class="embed-lite lite-slides" data-src="{{ talk.slides_embed | escape }}" aria-label="Load slides: {{ talk.title | escape }}">
+    {% if st %}<img src="{{ '/assets/thumbs/slides/' | relative_url }}{{ st.name }}-320.webp" srcset="{{ '/assets/thumbs/slides/' | relative_url }}{{ st.name }}-320.webp 320w, {{ '/assets/thumbs/slides/' | relative_url }}{{ st.name }}-640.webp {{ st.w }}w" sizes="(max-width: 640px) 92vw, 420px" width="{{ st.w }}" height="{{ st.h }}" alt="" {% if include.eager %}fetchpriority="high"{% else %}loading="lazy"{% endif %} decoding="async">{% endif %}
+    <span class="lite-play" aria-hidden="true">{% include icons/slides-play.svg %}</span>
+  </button>
+</div>
+{%- endif %}

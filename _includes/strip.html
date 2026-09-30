@@ -1,0 +1,31 @@
+{%- comment -%}
+Scrollable film strip of a deck's slides.
+  include.slug   talk slug (manifest key in _data/strips.yaml)
+  include.title  accessible label text
+  include.size   "lg" on detail pages (taller frames)
+  include.limit  show at most this many frames, then a "+N more" frame
+                 linking to the detail page (listing pages; decks run to
+                 170+ slides, so listings must not carry every frame)
+  include.eager  true when the strip is above the fold: the first frames
+                 load eagerly (a lazily loaded LCP image costs seconds)
+{%- endcomment -%}
+{%- assign st = site.data.strips[include.slug] -%}
+{%- comment -%} Frames open the deck at that slide via _data/deck_links.yaml (deck_links.py): published to the web where possible; no link when no visitor could open the deck. {%- endcomment -%}
+{%- assign dl = site.data.deck_links[include.slug] -%}
+{%- if st -%}
+{%- assign base = '/assets/strips/' | append: include.slug | append: '/' | relative_url -%}
+{%- assign limit = include.limit | default: st.count -%}
+{%- assign rest = st.count | minus: limit -%}
+<div class="strip-wrap{% if include.size == 'lg' %} strip-lg{% endif %}">
+  <div class="strip" role="group" aria-label="Slides: {{ include.title | escape }}" tabindex="0">
+  {%- for oid in st.slides limit: limit -%}
+    {%- assign n = forloop.index -%}
+    {%- assign nn = n | prepend: '000' | slice: -3, 3 -%}
+    {%- if dl.url %}<a class="frame" href="{{ dl.url | escape }}{% if dl.via == 'edit' %}#{% else %}&amp;{% endif %}slide=id.{{ oid }}" title="Slide {{ n }} of {{ st.count }}">{% else %}<span class="frame">{% endif %}<img src="{{ base }}{{ nn }}-240.webp" srcset="{{ base }}{{ nn }}-240.webp 240w, {{ base }}{{ nn }}-480.webp 480w" sizes="{% if include.size == 'lg' %}356px{% else %}240px{% endif %}" width="{{ st.w }}" height="{{ st.h }}" alt="Slide {{ n }} of {{ st.count }}" {% if include.eager and n <= 4 %}{% if n == 1 %}fetchpriority="high" {% endif %}loading="eager"{% else %}loading="lazy"{% endif %} decoding="async">{% if dl.url %}</a>{% else %}</span>{% endif %}
+  {%- endfor -%}
+  {%- if rest > 0 -%}
+    <a class="frame more" href="{{ '/talks/' | append: include.slug | append: '/' | relative_url }}" style="aspect-ratio: {{ st.w }} / {{ st.h }}"><span>+{{ rest }} more</span></a>
+  {%- endif -%}
+  </div>
+</div>
+{%- endif -%}

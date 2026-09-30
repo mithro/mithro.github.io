@@ -14,3 +14,4 @@ _data/shortlinks.yaml
 
 # Playwright MCP session artifacts (screenshots, logs)
 .playwright-mcp/
+assets/strips/.*.partial/
