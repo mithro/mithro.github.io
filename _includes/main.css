@@ -321,6 +321,38 @@ ul.deg-list { padding-left: 0; list-style: none; }
 .prevnext { display: flex; justify-content: space-between; gap: 1rem; margin-top: 1.5rem; }
 .year-head .count { color: var(--muted); font-weight: 400; font-size: .8rem; margin-left: .4rem; }
 .cat-blurb { margin: 0 0 .6rem; }
+
+/* The topics index is a table of topics; each row links to that topic's
+   own page. Below 640px rows stack like .talks-table rows do, and the
+   .clab labels take over from the (then hidden) column headers. */
+.topics-table { border-collapse: collapse; width: 100%; min-width: 38rem; font-size: .85rem; }
+.topics-table caption { text-align: left; }
+.topics-table th { font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-align: left; font-weight: 600; padding: 0 .8rem .3rem 0; border-bottom: 1px solid var(--gold-dim); }
+.topics-table th.n { text-align: right; }
+.topics-table td { border-top: 1px solid var(--line); padding: .55rem .8rem .55rem 0; vertical-align: top; }
+.topics-table td.ti { white-space: nowrap; }
+.topics-table td.ti a { color: var(--silk); text-decoration: underline; text-decoration-color: var(--gold-dim); text-underline-offset: 3px; padding: .3rem 0; display: inline-block; }
+.topics-table td.ti a:hover, .topics-table td.ti a:focus-visible { color: var(--gold); text-decoration-color: var(--gold); }
+.topics-table td.n { text-align: right; color: var(--gold); white-space: nowrap; font-variant-numeric: tabular-nums; width: 5rem; }
+.topics-table td.bl { color: var(--muted); text-wrap: pretty; }
+.topics-table .clab { display: none; }
+@media (max-width: 640px) {
+  .topics-table { min-width: 0; }
+  .topics-table thead { display: none; }
+  .topics-table, .topics-table tbody { display: block; }
+  /* Flex rows rather than blocks: a flex container drops the whitespace
+     between cells, so the count/years line starts flush with the topic
+     name instead of inheriting a leading space. */
+  .topics-table tr { display: flex; flex-wrap: wrap; align-items: baseline; border-top: 1px solid var(--line); padding: .55rem 0; }
+  .topics-table td { border-top: 0; padding: 0; text-align: left; width: auto; }
+  .topics-table td.ti, .topics-table td.bl { flex: 0 0 100%; }
+  .topics-table td.ti { white-space: normal; }
+  /* width/text-align must be re-stated at td.n specificity: the desktop
+     .topics-table td.n rule outranks the .topics-table td reset above. */
+  .topics-table td.n { width: auto; text-align: left; color: var(--muted); font-size: .78rem; margin-right: 1rem; }
+  .topics-table td.bl { margin-top: .2rem; font-size: .82rem; }
+  .topics-table .clab { display: inline; }
+}
 .hl { border-top: 1px solid var(--line); padding: 1.2rem 0; }
 .hl h3 { margin: 0 0 .2rem; font-family: var(--mono); font-size: 1rem; }
 .hl h3 a { color: var(--silk); text-decoration: none; border-bottom: 1px solid var(--gold-dim); }

@@ -2,6 +2,6 @@
   <a href="{{ '/talks/' | relative_url }}"{% if page.url == '/talks/' %} class="on" aria-current="page"{% endif %}>Overview</a>
   <a href="{{ '/talks/highlights/' | relative_url }}"{% if page.url == '/talks/highlights/' %} class="on" aria-current="page"{% endif %}>Highlights</a>
   <a href="{{ '/talks/timeline/' | relative_url }}"{% if page.url == '/talks/timeline/' %} class="on" aria-current="page"{% endif %}>Timeline</a>
-  <a href="{{ '/talks/topics/' | relative_url }}"{% if page.url == '/talks/topics/' %} class="on" aria-current="page"{% endif %}>Topics</a>
+  <a href="{{ '/talks/topics/' | relative_url }}"{% if page.url contains '/talks/topics/' %} class="on"{% if page.url == '/talks/topics/' %} aria-current="page"{% endif %}{% endif %}>Topics</a>
   <a href="{{ '/talks/feed.xml' | relative_url }}">RSS</a>
 </nav>

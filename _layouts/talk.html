@@ -16,7 +16,7 @@ layout: default
     {%- if talk.date and talk.date != "" %} · <span class="nowrap">{{ talk.date | escape }}</span>{% endif -%}
     {%- if talk.series %} · part of <em>{{ talk.series | escape }}</em>{% endif %}
   </p>
-  <p class="chips">{% for c in talk.categories %}{% assign cat = site.data.talk_categories | where: "key", c | first %}<a class="chip" href="{{ '/talks/topics/' | relative_url }}#{{ c }}">{{ cat.name | escape }}</a>{% endfor %}</p>
+  <p class="chips">{% for c in talk.categories %}{% assign cat = site.data.talk_categories | where: "key", c | first %}<a class="chip" href="{{ '/talks/topics/' | append: c | append: '/' | relative_url }}">{{ cat.name | escape }}</a>{% endfor %}</p>
   {% if talk.blurb %}<p class="prose">{{ talk.blurb | escape }}</p>{% endif %}
   {% include strip.html slug=talk.slug title=title size="lg" eager=true %}
   <div class="embeds">
