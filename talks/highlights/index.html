@@ -6,8 +6,8 @@ description: "A short list of Tim 'mithro' Ansell's most significant talks — s
 <section class="sect">
   <h2><span aria-hidden="true">⭐</span> Highlighted talks</h2>
   {% include talks_nav.html %}
-  {%- comment -%} highlight: ranks choose WHICH ten; they show newest first. {%- endcomment -%}
-  {% assign picks = site.data.talks | where_exp: "t", "t.highlight" | sort: "highlight" | slice: 0, 10 | sort: "sort_date" | reverse %}
+  {%- comment -%} In Tim's order: the highlight: rank. {%- endcomment -%}
+  {% assign picks = site.data.talks | where_exp: "t", "t.highlight" | sort: "highlight" | slice: 0, 10 %}
   {% for talk in picks %}
   {%- assign title = talk.talk_title | default: talk.title -%}
   <article class="hl">
@@ -15,8 +15,11 @@ description: "A short list of Tim 'mithro' Ansell's most significant talks — s
     <p class="talk-meta">{% if talk.event and talk.event != "" %}{% if talk.event_url %}<a href="{{ talk.event_url | escape }}">{{ talk.event | escape }}</a>{% else %}{{ talk.event | escape }}{% endif %}{% if talk.date and talk.date != "" %} · {% endif %}{% endif %}{% if talk.date and talk.date != "" %}<span class="nowrap">{{ talk.date | escape }}</span>{% endif %}</p>
     <p class="prose">{{ talk.blurb | escape }}</p>
     {%- assign has_strip = false -%}{%- if site.data.strips[talk.slug] -%}{%- assign has_strip = true -%}{%- endif %}
-    {% if has_strip %}{% include strip.html slug=talk.slug title=title limit=24 eager=forloop.first %}{% endif %}
-    <div class="embeds">{% include talk_embeds.html talk=talk eager=forloop.first no_slides_tile=has_strip %}</div>
+    {%- comment -%} Same arrangement as a timeline row: the recording on the left, the film strip beside it. {%- endcomment %}
+    <div class="embeds">
+      {% include talk_embeds.html talk=talk eager=forloop.first no_slides_tile=has_strip %}
+      {% if has_strip %}{% include strip.html slug=talk.slug title=title limit=24 eager=forloop.first %}{% endif %}
+    </div>
   </article>
   {% endfor %}
 </section>
