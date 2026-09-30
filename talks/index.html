@@ -30,7 +30,7 @@ video/slides_embed are absent (nil) when unknown, so truthiness works;
   <div class="cards">
     <a class="card" href="{{ '/talks/highlights/' | relative_url }}"><strong>Highlights</strong><span>Start with the ten that matter most.</span></a>
     <a class="card" href="{{ '/talks/timeline/' | relative_url }}"><strong>Timeline</strong><span>All {{ talks | size }} talks, newest first.</span></a>
-    <a class="card" href="{{ '/talks/topics/' | relative_url }}"><strong>Topics</strong><span>Grouped by subject across {{ site.data.talk_categories | size }} themes.</span></a>
+    <a class="card" href="{{ '/talks/topics/' | relative_url }}"><strong>Topics</strong><span>One page per subject, across {{ site.data.talk_categories | size }} themes.</span></a>
   </div>
 </section>
 
@@ -64,7 +64,7 @@ video/slides_embed are absent (nil) when unknown, so truthiness works;
     <ul class="stat-list">
     {%- for cat in site.data.talk_categories -%}
       {%- assign n = talks | where_exp: "t", "t.categories contains cat.key" | size -%}
-      <li><a href="{{ '/talks/topics/' | relative_url }}#{{ cat.key }}">{{ cat.name }}</a><span class="num">{{ n }}</span></li>
+      <li><a href="{{ '/talks/topics/' | append: cat.key | append: '/' | relative_url }}">{{ cat.name }}</a><span class="num">{{ n }}</span></li>
     {%- endfor -%}
     </ul>
   </div>
