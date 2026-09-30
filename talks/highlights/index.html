@@ -12,7 +12,7 @@ description: "A short list of Tim 'mithro' Ansell's most significant talks — s
   {%- assign title = talk.talk_title | default: talk.title -%}
   <article class="hl">
     <h3><a href="{{ '/talks/' | append: talk.slug | append: '/' | relative_url }}">{{ title | escape }}</a></h3>
-    <p class="talk-meta">{% if talk.event_url %}<a href="{{ talk.event_url | escape }}">{{ talk.event | escape }}</a>{% else %}{{ talk.event | escape }}{% endif %}{% if talk.date and talk.date != "" %} · <span class="nowrap">{{ talk.date | escape }}</span>{% endif %}</p>
+    <p class="talk-meta">{% if talk.event and talk.event != "" %}{% if talk.event_url %}<a href="{{ talk.event_url | escape }}">{{ talk.event | escape }}</a>{% else %}{{ talk.event | escape }}{% endif %}{% if talk.date and talk.date != "" %} · {% endif %}{% endif %}{% if talk.date and talk.date != "" %}<span class="nowrap">{{ talk.date | escape }}</span>{% endif %}</p>
     <p class="prose">{{ talk.blurb | escape }}</p>
     {%- assign has_strip = false -%}{%- if site.data.strips[talk.slug] -%}{%- assign has_strip = true -%}{%- endif %}
     {% if has_strip %}{% include strip.html slug=talk.slug title=title limit=24 eager=forloop.first %}{% endif %}
