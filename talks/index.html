@@ -23,7 +23,7 @@ video/slides_embed are absent (nil) when unknown, so truthiness works;
 {%- for s in site.data.strips %}{% assign total_slides = total_slides | plus: s[1].count %}{% endfor -%}
 {%- assign venues = talks | where_exp: "t", "t.venue" | group_by: "venue" | sort: "size" | reverse -%}
 {%- assign series = talks | where_exp: "t", "t.series" | group_by: "series" | sort: "size" | reverse -%}
-{%- assign picks = talks | where_exp: "t", "t.highlight" | sort: "highlight" | slice: 0, 9 -%}
+{%- assign picks = talks | where_exp: "t", "t.highlight" | sort: "highlight" | slice: 0, 9 | sort: "sort_date" | reverse -%}
 <section class="sect">
   <h2><span aria-hidden="true">🎤</span> Talks &amp; presentations</h2>
   {% include talks_nav.html %}
