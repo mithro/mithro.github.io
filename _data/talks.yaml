@@ -12,6 +12,9 @@
 #   scripts/enrich_talk_embeds.py — edit slides/slides_edit, not this.
 # slides_short: hand-maintained canonical short URL for the deck
 #   (wafer.space/<alias>) — preferred over bit.ly/mith.ro on /talks/.
+# slides_pub: the deck's "Publish to the web" link (/d/e/2PACX-…/pub),
+#   for decks published but not link-shared; scripts/deck_links.py
+#   links visitors there first (optional; hand-maintained).
 # slug: URL id (/talks/<slug>/); equals the short-link alias where one
 #   exists. Reviewed in the talks sheets' Slug column (talks_sheet.py).
 # talk_title: the talk's own title without event decorations.

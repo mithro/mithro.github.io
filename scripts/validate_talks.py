@@ -75,6 +75,18 @@ def main() -> None:
     for v in sorted({t["venue"] for t in talks if t.get("venue")}):
         if not str(venue_urls.get(v, "")).startswith("https://"):
             problems.append(f"venue {v!r}: no https link in _data/talk_venues.yaml")
+    # Deck links (deck_links.py): every deck needs a checked visitor link.
+    dl_path = pathlib.Path("_data/deck_links.yaml")
+    deck_links = (yaml.safe_load(dl_path.read_text()) or {}) if dl_path.exists() else {}
+    for t in talks:
+        has_deck = any("docs.google.com/presentation" in (t.get(f) or "")
+                       for f in ("slides", "slides_edit", "slides_embed", "slides_pub"))
+        d = deck_links.get(t.get("slug"))
+        if has_deck and not d:
+            problems.append(f"{t.get('slug')}: no deck_links entry (run deck_links.py)")
+        elif d and (d.get("via") not in ("pub", "embed", "edit", "none")
+                    or (d["via"] == "none") != (d.get("url") is None)):
+            problems.append(f"{t.get('slug')}: bad deck_links entry {d!r}")
     for key in sorted(keys - used):
         problems.append(f"topic {key}: no talks, its page would be empty")
     for slug, entry in strips.items():
@@ -84,11 +96,6 @@ def main() -> None:
             problems.append(f"strips manifest: {slug} is not a talk")
         elif not talks[slugs[slug]].get("strips"):
             problems.append(f"strips manifest: {slug} has strips: true unset")
-        link = entry.get("link")
-        if link is not None and "/embed?start=false" not in link:
-            # /edit etc. send visitors of published-only decks to a sign-in page.
-            problems.append(f"strips manifest: {slug} link is not an /embed slideshow "
-                            "(run fetch_slide_strips.py --relink)")
         if len(list(d.glob("*-240.webp"))) != n or len(list(d.glob("*-480.webp"))) != n:
             problems.append(f"strips manifest: {slug} expects {n} slides, files differ")
     for p in problems:

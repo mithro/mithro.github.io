@@ -10,6 +10,8 @@ Scrollable film strip of a deck's slides.
                  load eagerly (a lazily loaded LCP image costs seconds)
 {%- endcomment -%}
 {%- assign st = site.data.strips[include.slug] -%}
+{%- comment -%} Frames open the deck at that slide via _data/deck_links.yaml (deck_links.py): published to the web where possible; no link when no visitor could open the deck. {%- endcomment -%}
+{%- assign dl = site.data.deck_links[include.slug] -%}
 {%- if st -%}
 {%- assign base = '/assets/strips/' | append: include.slug | append: '/' | relative_url -%}
 {%- assign limit = include.limit | default: st.count -%}
@@ -19,8 +21,7 @@ Scrollable film strip of a deck's slides.
   {%- for oid in st.slides limit: limit -%}
     {%- assign n = forloop.index -%}
     {%- assign nn = n | prepend: '000' | slice: -3, 3 -%}
-    {%- comment -%} st.link is the deck's anonymous /embed slideshow; null when no visitor could open the deck, so those frames are not links. {%- endcomment -%}
-    {%- if st.link %}<a class="frame" href="{{ st.link | escape }}&amp;slide=id.{{ oid }}" title="Slide {{ n }} of {{ st.count }}">{% else %}<span class="frame">{% endif %}<img src="{{ base }}{{ nn }}-240.webp" srcset="{{ base }}{{ nn }}-240.webp 240w, {{ base }}{{ nn }}-480.webp 480w" sizes="{% if include.size == 'lg' %}356px{% else %}240px{% endif %}" width="{{ st.w }}" height="{{ st.h }}" alt="Slide {{ n }} of {{ st.count }}" {% if include.eager and n <= 4 %}{% if n == 1 %}fetchpriority="high" {% endif %}loading="eager"{% else %}loading="lazy"{% endif %} decoding="async">{% if st.link %}</a>{% else %}</span>{% endif %}
+    {%- if dl.url %}<a class="frame" href="{{ dl.url | escape }}{% if dl.via == 'edit' %}#{% else %}&amp;{% endif %}slide=id.{{ oid }}" title="Slide {{ n }} of {{ st.count }}">{% else %}<span class="frame">{% endif %}<img src="{{ base }}{{ nn }}-240.webp" srcset="{{ base }}{{ nn }}-240.webp 240w, {{ base }}{{ nn }}-480.webp 480w" sizes="{% if include.size == 'lg' %}356px{% else %}240px{% endif %}" width="{{ st.w }}" height="{{ st.h }}" alt="Slide {{ n }} of {{ st.count }}" {% if include.eager and n <= 4 %}{% if n == 1 %}fetchpriority="high" {% endif %}loading="eager"{% else %}loading="lazy"{% endif %} decoding="async">{% if dl.url %}</a>{% else %}</span>{% endif %}
   {%- endfor -%}
   {%- if rest > 0 -%}
     <a class="frame more" href="{{ '/talks/' | append: include.slug | append: '/' | relative_url }}" style="aspect-ratio: {{ st.w }} / {{ st.h }}"><span>+{{ rest }} more</span></a>

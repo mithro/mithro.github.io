@@ -145,13 +145,14 @@ step:
 | `scripts/gen_talk_pages.py` | Rebuilds `_talks/` (front-matter stubs; content comes from the layout). |
 | `scripts/gen_topic_pages.py` | Rebuilds `_topics/` — one stub per `_data/talk_categories.yaml` entry. Jekyll cannot page a data file, so each topic needs a real file. |
 | `scripts/fetch_slide_strips.py` | Exports per-slide thumbnails via the Slides API into `assets/strips/<slug>/` + `_data/strips.yaml`. Slow (the API paces renders); `--only <slug>` / `--force` for one deck. |
+| `scripts/deck_links.py` | Picks the link visitors get for each deck — published to the web (`/pub`), else the `/embed` slideshow, else the view-only editor, else none — checking each anonymously; writes `_data/deck_links.yaml` and reports every deck that fell back, plus short links that end at a sign-in page. Re-run after adding decks or changing sharing. |
 | `scripts/fetch_talk_thumbs.py` | First-slide and video thumbnails (unchanged); shares `scripts/slides_api.py` with the strip exporter. |
 | `scripts/talks_sheet.py` | Sheet ↔ YAML round-trip for the talks sheets: `slugs` and `strips` push proposals (bold red) into the Slug/Strips columns; `import` pulls Tim's edits back (`--accept` turns the cells black once reviewed); `shortlinks` proposes `mith.ro/<slug>` rows in the short-links sheet for talks with no short link. |
 | `scripts/talks_yaml.py` | Comment-preserving field editor used by the above. |
 
 After editing talks (or importing from the sheet): `validate_talks.py`
 → `gen_talk_pages.py` → `fetch_talk_thumbs.py` / `fetch_slide_strips.py`
-if decks changed → build. After editing
+if decks changed → `deck_links.py` → build. After editing
 `_data/talk_categories.yaml`: `gen_topic_pages.py` → `validate_talks.py`
 (which fails if a category has no page, a page has no category, or a
 category has no talks).
