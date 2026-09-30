@@ -84,6 +84,11 @@ def main() -> None:
             problems.append(f"strips manifest: {slug} is not a talk")
         elif not talks[slugs[slug]].get("strips"):
             problems.append(f"strips manifest: {slug} has strips: true unset")
+        link = entry.get("link")
+        if link is not None and "/embed?start=false" not in link:
+            # /edit etc. send visitors of published-only decks to a sign-in page.
+            problems.append(f"strips manifest: {slug} link is not an /embed slideshow "
+                            "(run fetch_slide_strips.py --relink)")
         if len(list(d.glob("*-240.webp"))) != n or len(list(d.glob("*-480.webp"))) != n:
             problems.append(f"strips manifest: {slug} expects {n} slides, files differ")
     for p in problems:
