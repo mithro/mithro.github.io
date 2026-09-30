@@ -3,6 +3,8 @@ One talk in a .talks-table: the title/event row plus, when there is
 anything to show, a full-width row with the film strip and embed tiles.
   include.talk   the talk entry
   include.eager  true for the first talk on the page (eager thumbnails)
+  include.topic  on a topic page, that topic's key: the talk's OTHER
+                 topics are listed under its title as links
 {%- endcomment -%}
 {%- assign talk = include.talk -%}
 {%- assign has_video = false -%}
@@ -13,6 +15,16 @@ anything to show, a full-width row with the film strip and embed tiles.
   <td class="ti">
     <a href="{{ '/talks/' | append: talk.slug | append: '/' | relative_url }}">{{ talk.talk_title | default: talk.title | escape }}</a>
     {%- if has_video == false and talk.video != "" and talk.video %} <a class="vid" href="{{ talk.video | escape }}"><span aria-hidden="true">▶</span> video</a>{% endif %}
+    {%- if include.topic and talk.categories.size > 1 %}
+    <span class="also">Also in
+      {%- assign sep = "" -%}
+      {%- for c in talk.categories -%}{%- if c != include.topic -%}
+        {%- assign oc = site.data.talk_categories | where: "key", c | first -%}
+        {{ sep }} <a href="{{ '/talks/topics/' | append: c | append: '/' | relative_url }}">{{ oc.name | escape }}</a>
+        {%- assign sep = "," -%}
+      {%- endif -%}{%- endfor -%}
+    </span>
+    {%- endif %}
   </td>
   <td class="ev"><span>
     {%- if talk.event != "" and talk.event -%}

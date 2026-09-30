@@ -35,7 +35,7 @@ where_exp takes exactly ONE comparison, hence the separate assigns.
     {% for talk in in_cat %}
     {%- assign eager = false -%}
     {%- if tile_n < 1 -%}{%- if talk.slides_embed or talk.video -%}{%- assign eager = true -%}{%- assign tile_n = tile_n | plus: 1 -%}{%- endif -%}{%- endif %}
-    {% include talk_row.html talk=talk eager=eager %}
+    {% include talk_row.html talk=talk eager=eager topic=key %}
     {% endfor %}
     </tbody>
   </table>
