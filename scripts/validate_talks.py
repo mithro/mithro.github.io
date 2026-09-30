@@ -25,6 +25,20 @@ def main() -> None:
     strips = (yaml.safe_load(strips_path.read_text()) or {}) if strips_path.exists() else {}
     keys = {c["key"] for c in cats}
     problems: list[str] = []
+    # Every topic needs a page, and every page a topic: /talks/topics/<key>/
+    # comes from a real file in _topics/ (scripts/gen_topic_pages.py), so a
+    # category added without regenerating would 404 from the topics table.
+    stubs = {p.stem for p in pathlib.Path("_topics").glob("*.md")}
+    for key in sorted(keys - stubs):
+        problems.append(f"topic {key}: no _topics/{key}.md (run gen_topic_pages.py)")
+    for key in sorted(stubs - keys):
+        problems.append(f"_topics/{key}.md: no such category (run gen_topic_pages.py)")
+    for c in cats:
+        if not SLUG_RE.match(c["key"]):
+            problems.append(f"category {c['key']!r}: bad key")
+        if not c.get("name") or not c.get("blurb"):
+            problems.append(f"category {c['key']}: needs name and blurb")
+    used: set[str] = set()
     slugs: dict[str, int] = {}
     ranks: dict[int, str] = {}
     for i, t in enumerate(talks):
@@ -39,6 +53,7 @@ def main() -> None:
             if not t.get("categories"):
                 problems.append(f"{who}: no categories")
             for c in t.get("categories") or []:
+                used.add(c)
                 if c not in keys:
                     problems.append(f"{who}: unknown category {c!r}")
             if not t.get("talk_title"):
@@ -55,6 +70,8 @@ def main() -> None:
             ranks[h] = slug
             if not t.get("blurb"):
                 problems.append(f"{who}: highlighted talks need a blurb")
+    for key in sorted(keys - used):
+        problems.append(f"topic {key}: no talks, its page would be empty")
     for slug, entry in strips.items():
         d = pathlib.Path("assets/strips") / slug
         n = entry["count"]
@@ -66,7 +83,8 @@ def main() -> None:
             problems.append(f"strips manifest: {slug} expects {n} slides, files differ")
     for p in problems:
         print(p, file=sys.stderr)
-    print(f"{len(talks)} talks, {len(keys)} categories, {len(strips)} strips, "
+    print(f"{len(talks)} talks, {len(keys)} categories ({len(stubs)} pages), "
+          f"{len(strips)} strips, "
           f"{len(ranks)} highlights: {'OK' if not problems else f'{len(problems)} problems'}",
           file=sys.stderr)
     sys.exit(1 if problems else 0)
