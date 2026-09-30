@@ -674,7 +674,7 @@
 - title: 'Eating Rabbits: A guide to using Python to conquer FPGA video systems'
   slug: teardown18-rabbits
   talk_title: "Eating rabbits: a guide to using Python to conquer FPGA video systems"
-  categories: [python, conference-video, fpga-tools]
+  categories: [python, timvideos, fpga-tools]
   venue: Teardown
   strips: true
   event: Teardown
@@ -928,7 +928,7 @@
 - title: Snakes and Rabbits - How CCC shaped an open hardware success
   slug: 35c3-snakes-rabbits
   talk_title: "Snakes and rabbits: how CCC shaped an open hardware success"
-  categories: [conference-video, community]
+  categories: [timvideos, community]
   venue: Chaos Communication Congress/Camp
   strips: true
   highlight: 4
@@ -1041,7 +1041,7 @@
 - title: Using Python for creating hardware to record FOSS conferences! (PyCon AU 2017)
   slug: pyconau17-pyhardware
   talk_title: Using Python to create hardware to record FOSS conferences!
-  categories: [python, conference-video]
+  categories: [python, timvideos]
   series: Using Python to build conference-recording hardware
   venue: PyCon AU
   strips: true
@@ -1059,7 +1059,7 @@
 - title: Using Python for creating FPGA based hardware to record FOSS conferences! (HGGD28 - 2018)
   slug: hddg28-pyhardware
   talk_title: Using Python to create FPGA-based hardware to record FOSS conferences!
-  categories: [python, conference-video, fpga-tools]
+  categories: [python, timvideos, fpga-tools]
   series: Using Python to build conference-recording hardware
   strips: true
   event: HDDG 28
@@ -1137,7 +1137,7 @@
 - title: Using Python for creating hardware to record FOSS conferences! (LCA2017)
   slug: lca17-pyhardware
   talk_title: Using Python to create hardware to record FOSS conferences!
-  categories: [python, conference-video]
+  categories: [python, timvideos]
   series: Using Python to build conference-recording hardware
   venue: linux.conf.au
   strips: true
@@ -1171,7 +1171,7 @@
 - title: Dissecting HDMI - Developing open, FPGA-based capture hardware for conference & user group recording [33C3]
   slug: 33c3-hdmi
   talk_title: "Dissecting HDMI: developing open, FPGA-based capture hardware for conference & user group recording"
-  categories: [conference-video, fpga-tools]
+  categories: [timvideos, fpga-tools]
   venue: Chaos Communication Congress/Camp
   strips: true
   highlight: 5
@@ -1221,7 +1221,7 @@
 - title: Random Talk about HDMI, Python and FPGAs (TT2016)
   slug: tt16-hdmi
   talk_title: "HDMI, Python and FPGAs"
-  categories: [conference-video, python, fpga-tools]
+  categories: [timvideos, python, fpga-tools]
   strips: true
   event: TT2016
   event_url: https://web.archive.org/web/20170305091151/http://wiki.madebymikal.com/index.php?title=Technical_Topics:December_2016
@@ -1265,7 +1265,7 @@
 - title: Designing Hardware with Python (SyPy 2015)
   slug: sypy15-pyhardware
   talk_title: Designing hardware with Python
-  categories: [python, conference-video]
+  categories: [python, timvideos]
   series: Designing hardware with Python
   strips: true
   event: SyPy (Sydney Python User Group)
@@ -1282,7 +1282,7 @@
 - title: Designing Hardware with Python (PyCon AU 2016)
   slug: pyconau16-pyhardware
   talk_title: Designing hardware with Python
-  categories: [python, conference-video]
+  categories: [python, timvideos]
   series: Designing hardware with Python
   venue: PyCon AU
   strips: true
@@ -1300,7 +1300,7 @@
 - title: Debugging HDMI & other tales from developing conference capture hardware....
   slug: hdmi-pyconau2016
   talk_title: "Debugging HDMI & other tales from developing conference capture hardware"
-  categories: [conference-video]
+  categories: [timvideos]
   venue: PyCon AU
   strips: true
   event: PyCon AU 2016
@@ -1350,7 +1350,7 @@
 - title: TimVideos HDMI2USB and WebRTC
   slug: webrtc15-hdmi2usb
   talk_title: "TimVideos, HDMI2USB and WebRTC"
-  categories: [conference-video]
+  categories: [timvideos]
   strips: true
   event: WebRTC Sydney Meetup
   event_url: https://web.archive.org/web/20151016225107/http://www.meetup.com/WebRTC-Sydney/
@@ -1426,7 +1426,7 @@
 - title: Linux.conf.au and TimVideos - Live Streaming
   slug: lca14-streaming
   talk_title: "linux.conf.au and TimVideos: live streaming"
-  categories: [conference-video]
+  categories: [timvideos]
   venue: linux.conf.au
   strips: true
   event: LCA 2014
@@ -1443,7 +1443,7 @@
 - title: Making Video Streaming Interactive
   slug: lca12-streaming
   talk_title: Making video streaming interactive
-  categories: [conference-video]
+  categories: [timvideos]
   venue: linux.conf.au
   strips: true
   event: LCA 2012
@@ -1460,7 +1460,7 @@
 - title: PyCon US Live Streaming
   slug: pyconus12-streaming
   talk_title: PyCon US live streaming
-  categories: [conference-video, python]
+  categories: [timvideos, python]
   strips: true
   event: PyCon US 2012 (Santa Clara)
   year: 2012
@@ -1503,7 +1503,7 @@
 - title: Fun with gstreamer pipelines - Python
   slug: lca13-gstreamer
   talk_title: Fun with GStreamer pipelines!
-  categories: [python, conference-video]
+  categories: [python, timvideos]
   series: Fun with GStreamer pipelines
   venue: linux.conf.au
   strips: true
@@ -1537,7 +1537,7 @@
 - title: Fun with gstreamer pipelines
   slug: gstreamer-pipelines
   talk_title: Fun with GStreamer pipelines!
-  categories: [python, conference-video]
+  categories: [python, timvideos]
   series: Fun with GStreamer pipelines
   strips: true
   event: ''
