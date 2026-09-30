@@ -168,6 +168,8 @@ a { color: var(--gold); }
 .strip-wrap { flex: 1 1 320px; min-width: 0; contain: inline-size; content-visibility: auto; contain-intrinsic-size: auto 150px; }
 .strip { display: flex; gap: .35rem; overflow-x: auto; scroll-snap-type: x proximity; padding: .2rem 0 .5rem; scrollbar-width: thin; scrollbar-color: var(--gold-dim) transparent; }
 .strip:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+/* Hover panning (strip_script.html) turns snapping off while it runs. */
+.strip.panning { scroll-snap-type: none; }
 .strip .frame { flex: 0 0 auto; scroll-snap-align: start; border: 1px solid var(--line); border-radius: 3px; overflow: hidden; background: var(--panel); line-height: 0; }
 .strip .frame:hover, .strip .frame:focus-visible { border-color: var(--gold); }
 .strip img { display: block; height: 135px; width: auto; }
