@@ -71,7 +71,7 @@ video/slides_embed are absent (nil) when unknown, so truthiness works;
   <div>
     <h3 class="year-head">Favourite venues</h3>
     <ul class="stat-list">
-    {%- for v in venues limit: 6 -%}<li>{{ v.name }}<span class="num">{{ v.size }}</span></li>{%- endfor -%}
+    {%- for v in venues limit: 6 -%}<li><a href="{{ site.data.talk_venues[v.name] | escape }}">{{ v.name }}</a><span class="num">{{ v.size }}</span></li>{%- endfor -%}
     </ul>
   </div>
   <div>
