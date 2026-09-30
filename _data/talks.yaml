@@ -632,6 +632,7 @@
   categories: [open-silicon]
   series: google/skywater-pdk
   strips: true
+  highlight: 8
   blurb: "The FOSSi Dial-Up where the first fully open source, manufacturable 130 nm PDK was introduced to the community."
   event: FOSSi Foundation Dialup Talk Series
   event_url: https://web.archive.org/web/20200707124528/https://fossi-foundation.org/dial-up/
@@ -946,6 +947,7 @@
   categories: [timvideos, community]
   venue: Chaos Communication Congress/Camp
   strips: true
+  highlight: 9
   blurb: "With Andrew 'bunnie' Huang: how the Chaos Communication Congress community shaped an open hardware success."
   event: 35C3 — with Andrew 'bunnie' Huang
   event_url: https://fahrplan.events.ccc.de/congress/2018/Fahrplan/index.html
