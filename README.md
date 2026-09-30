@@ -132,14 +132,18 @@ Paste the CSV rows in, then this file can be deleted.
 ## Talks section tooling
 
 `/talks/` is a hub (statistics, talks-per-year chart), with
-`/talks/timeline/`, `/talks/topics/`, `/talks/highlights/` and one
-detail page per talk at `/talks/<slug>/`. Everything renders from
-`_data/talks.yaml`; the scripts keep the generated parts in step:
+`/talks/timeline/`, `/talks/highlights/`, a table of topics at
+`/talks/topics/` linking to one page per topic at
+`/talks/topics/<key>/`, and one detail page per talk at
+`/talks/<slug>/`. Everything renders from `_data/talks.yaml` and
+`_data/talk_categories.yaml`; the scripts keep the generated parts in
+step:
 
 | Script | Purpose |
 |---|---|
 | `scripts/validate_talks.py` | Data invariants (slugs, categories, highlights, strips manifest). Run before committing `_data/` changes. |
 | `scripts/gen_talk_pages.py` | Rebuilds `_talks/` (front-matter stubs; content comes from the layout). |
+| `scripts/gen_topic_pages.py` | Rebuilds `_topics/` — one stub per `_data/talk_categories.yaml` entry. Jekyll cannot page a data file, so each topic needs a real file. |
 | `scripts/fetch_slide_strips.py` | Exports per-slide thumbnails via the Slides API into `assets/strips/<slug>/` + `_data/strips.yaml`. Slow (the API paces renders); `--only <slug>` / `--force` for one deck. |
 | `scripts/fetch_talk_thumbs.py` | First-slide and video thumbnails (unchanged); shares `scripts/slides_api.py` with the strip exporter. |
 | `scripts/talks_sheet.py` | Sheet ↔ YAML round-trip for the talks sheets: `slugs` and `strips` push proposals (bold red) into the Slug/Strips columns; `import` pulls Tim's edits back (`--accept` turns the cells black once reviewed); `shortlinks` proposes `mith.ro/<slug>` rows in the short-links sheet for talks with no short link. |
@@ -147,7 +151,10 @@ detail page per talk at `/talks/<slug>/`. Everything renders from
 
 After editing talks (or importing from the sheet): `validate_talks.py`
 → `gen_talk_pages.py` → `fetch_talk_thumbs.py` / `fetch_slide_strips.py`
-if decks changed → build.
+if decks changed → build. After editing
+`_data/talk_categories.yaml`: `gen_topic_pages.py` → `validate_talks.py`
+(which fails if a category has no page, a page has no category, or a
+category has no talks).
 
 Both Slides-API scripts use gcloud user credentials
 (`gcloud auth login --enable-gdrive-access`) with the
