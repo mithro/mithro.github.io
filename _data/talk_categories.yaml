@@ -7,7 +7,7 @@
   name: Open FPGA toolchains
   blurb: SymbiFlow/F4PGA, Yosys, VPR, LiteX and the road to a "GCC of FPGAs".
 - key: timvideos
-  name: TimVideos, HDMI2USB & video recording
+  name: TimVideos, HDMI2USB & conference recording
   blurb: The TimVideos project and HDMI2USB, open hardware and software for recording and live-streaming free-software conferences, from GStreamer pipelines to FPGA-based HDMI capture.
 - key: tiny-boards
   name: Tomu & Fomu
