@@ -363,6 +363,18 @@ ul.deg-list { padding-left: 0; list-style: none; }
 .hl .prose { margin: 0 0 .6rem; }
 
 /* ---- Talks hub ------------------------------------------------------ */
+/* "Start here": the highlights as a 3-column grid of cards (2 on tablets,
+   1 on phones), each the deck's first slide, title and event · date. */
+.start-grid { list-style: none; margin: .4rem 0 1rem; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.2rem 1rem; }
+.start-grid li { display: flex; flex-direction: column; gap: .3rem; min-width: 0; }
+.sg-card { display: flex; flex-direction: column; gap: .45rem; color: var(--silk); text-decoration: none; }
+.sg-card img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); }
+.sg-card strong { font-family: var(--mono); font-size: .88rem; font-weight: 600; line-height: 1.35; text-wrap: balance; text-decoration: underline; text-decoration-color: var(--gold-dim); text-underline-offset: 3px; }
+.sg-card:hover strong, .sg-card:focus-visible strong { color: var(--gold); text-decoration-color: var(--gold); }
+.sg-card:hover img, .sg-card:focus-visible img { border-color: var(--gold); }
+.start-grid .talk-meta { margin: 0; font-size: .75rem; }
+@media (max-width: 960px) { .start-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .start-grid { grid-template-columns: 1fr; } }
 .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin: .2rem 0 1.6rem; }
 .card { display: block; border: 1px solid var(--line); border-radius: 6px; padding: 1rem 1.1rem; background: var(--panel); color: var(--silk); text-decoration: none; }
 .card strong { display: block; color: var(--gold); margin-bottom: .25rem; }
