@@ -6,7 +6,8 @@ description: "A short list of Tim 'mithro' Ansell's most significant talks — s
 <section class="sect">
   <h2><span aria-hidden="true">⭐</span> Highlighted talks</h2>
   {% include talks_nav.html %}
-  {% assign picks = site.data.talks | where_exp: "t", "t.highlight" | sort: "highlight" | slice: 0, 10 %}
+  {%- comment -%} highlight: ranks choose WHICH ten; they show newest first. {%- endcomment -%}
+  {% assign picks = site.data.talks | where_exp: "t", "t.highlight" | sort: "highlight" | slice: 0, 10 | sort: "sort_date" | reverse %}
   {% for talk in picks %}
   {%- assign title = talk.talk_title | default: talk.title -%}
   <article class="hl">
