@@ -70,6 +70,11 @@ def main() -> None:
             ranks[h] = slug
             if not t.get("blurb"):
                 problems.append(f"{who}: highlighted talks need a blurb")
+    venues_path = pathlib.Path("_data/talk_venues.yaml")
+    venue_urls = yaml.safe_load(venues_path.read_text()) if venues_path.exists() else {}
+    for v in sorted({t["venue"] for t in talks if t.get("venue")}):
+        if not str(venue_urls.get(v, "")).startswith("https://"):
+            problems.append(f"venue {v!r}: no https link in _data/talk_venues.yaml")
     for key in sorted(keys - used):
         problems.append(f"topic {key}: no talks, its page would be empty")
     for slug, entry in strips.items():
