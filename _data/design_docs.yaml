@@ -1,0 +1,445 @@
+# Public design documents rendered on /design-docs/, grouped by topic.
+#
+# Selection (research pass 2026-09-05): every Google Docs document behind
+# one of Tim's bit.ly / j.mp short links (_data/shortlinks.yaml) was
+# exported anonymously to confirm it is readable by anyone with the link,
+# then read to keep only documents with a design-document shape — a
+# goal/objective, an owner or author line and structured sections — that
+# Tim owns, authored, co-authored or reviewed. FAQs, indexes of links,
+# meeting notes, conference proposals, set-up instructions and the
+# resume were left out, as were design docs owned by colleagues that Tim
+# merely short-linked (Sami Kyöstilä's vsync scheduling and State of
+# Scheduling docs, Unai Martinez-Corral's EDA integration doc).
+#
+# Fields:
+#   alias        mith.ro short-link name; the page links to /<alias>/ when
+#                a redirect stub exists (see scripts/gen_redirect_pages.py)
+#                and falls back to `url` otherwise. Also the thumbnail
+#                file name (scripts/fetch_doc_thumbs.py).
+#   url          canonical Google Docs URL (keep any resourcekey — the
+#                anonymous export needs it).
+#   year         when the document was written (its own header date, or
+#                the Drive creation date); `updated` is the last revision.
+#   authors      from the document's own byline; owner from Drive metadata
+#                when the body has none.
+- id: chrome
+  topic: Chrome & Chromium
+  blurb: >-
+    Chrome team, Sydney (2014–2018) — animation, input & scheduling, plus
+    the build and test infrastructure work that grew out of it.
+  docs:
+  - alias: chrome-tagging
+    title: Content Tagging in Chromium
+    subtitle: Design sketch for detecting content mixing issues
+    authors: T Ansell, N Gordon (tansell@, noel@)
+    year: 2015
+    description: >-
+      Proposes tagging every piece of content Chrome generates with the
+      display properties used to create it, so the long-standing class of
+      rendering bugs caused by mixing content with different properties
+      (resizes, display changes, animation time) can be detected
+      programmatically instead of by user bug reports.
+    url: https://docs.google.com/document/d/1UBmUgbGsalhvWoshuuPJSh7LGNqreg4kBPXK1uavMmU/edit
+  - alias: chrome-repro-build-2015
+    title: State of Reproducible Builds in Chromium
+    authors: T Ansell
+    year: 2015
+    updated: 2016
+    description: >-
+      Platform-by-platform status report (Windows, Linux, Mac, Android; GN
+      and GYP) on deterministic Chromium builds — how non-determinism is
+      detected, what was fixed, and what remained — pinned to a specific
+      revision so the state could be re-checked later.
+    url: https://docs.google.com/document/d/1KtKauRHBYnno29MOJNEoGw496m9xt9sqcyUIF3s6ekY/edit
+  - alias: chrome-build-output
+    title: Build Output Change Impact Tool
+    subtitle: Design document
+    authors: Z Forman · reviewed by T Ansell
+    year: 2015
+    updated: 2016
+    description: >-
+      Design for a pipeline of mappers (build mapper, feature extractor,
+      workspace creator) that builds Chromium at many revisions
+      and relates source-level changes to changes in the produced binaries,
+      so questions like "how does diff size relate to binary diff size" can
+      be answered from data.
+    url: https://docs.google.com/document/d/1OsFCdZ-cnv-uB-hmGY2xs2_IhgC0scvSz3OeKpbcegg/edit
+  - alias: chrome-binary-change
+    title: Binary Change Impact Tool
+    subtitle: Design document
+    authors: Z Forman · reviewed by T Ansell
+    year: 2015
+    description: >-
+      Companion design for a developer tool that shows how a source change
+      (or a whole CL) affects Chrome's built binaries, separating syntactic
+      differences such as register allocation and function ordering from
+      the semantic changes that alter behaviour. Built on the deterministic
+      build work.
+    url: https://docs.google.com/document/d/1fI2rNypRgQ0EjvFldiBUs3NWH-AfPL22jptR8KpB7E0/edit
+  - alias: blink-layout-tests-swarming
+    title: Blink LayoutTests on Swarming
+    subtitle: Design sketch
+    authors: T Ansell
+    year: 2016
+    description: >-
+      Plan for moving Blink's LayoutTests — often the slowest stage on the
+      bots at 10–60 minutes — onto Chrome's Swarming and Isolate sharding
+      infrastructure, targeting under five minutes of wall-clock latency
+      and less than 25% overhead so the tests could run on more CLs.
+    url: https://docs.google.com/document/d/1MzQrrUMnWexZPjrkodDnPAfvS_ZcsPOepMsUrMtWWLE/edit
+
+- id: litex
+  topic: LiteX, FPGA SoCs & TimVideos
+  blurb: >-
+    Designs from the TimVideos / HDMI2USB era and the LiteX ecosystem that
+    grew out of it — video pipelines, Linux bring-up, testing and
+    host-to-FPGA interfaces.
+  docs:
+  - alias: pixelbone
+    title: PixelBone
+    subtitle: MiSoC / LiteX HDMI refactoring
+    authors: T Ansell
+    year: 2015
+    updated: 2023
+    description: >-
+      Refactoring design for the HDMI2USB video path in MiSoC/LiteX — pixel
+      formats, layouts and streams; producer, adapter, converter and
+      consumer components; and the physical interface levels available on
+      Spartan 6 and Series 7 SERDES and transceivers.
+    url: https://docs.google.com/document/d/1L8lz7u2uj6MrzSQv4b1Vk6Rmic26okyRklOju5IWLYA/edit
+  - alias: mpy-fpga
+    title: MicroPython on FPGAs
+    authors: T Ansell
+    year: 2016
+    updated: 2018
+    description: >-
+      Planning note for running MicroPython on LiteX/MiSoC soft cores —
+      current status on lm32, mor1kx and picorv32, a pros-and-cons choice
+      of target framework, CPU architecture and development platform
+      (QEMU, Verilator, hardware), goals, staged steps and the peripheral
+      support matrix.
+    url: https://docs.google.com/document/d/1zUZqIag9rz-jClExGithc4iUSPM-h-9bvxp6FwJ9okQ/edit
+  - alias: litex-tests-doc
+    title: Types of "testing" in LiteX (and Migen/MiSoC)
+    authors: T Ansell
+    year: 2016
+    description: >-
+      Options analysis of seven testing approaches for LiteX designs —
+      linting, Python-only simulation, iverilog co-simulation,
+      generate-and-parse checks, toolchain compile tests, Verilator
+      full-system simulation and running on hardware — with usage,
+      advantages, disadvantages and future work for each.
+    url: https://docs.google.com/document/d/1SLRMCTETNKA0Cfy8dExF8QAn8j0FVbUEgorsicJmoeU/edit
+  - alias: linux-litex-notes
+    title: LiteX Linux Support Random Notes
+    authors: T Ansell
+    year: 2017
+    description: >-
+      Plan for booting Linux on LiteX SoCs with enough peripheral support
+      for HDMI2USB — reusing the kernel's DRM stack for EDID and
+      DisplayPort handling and its userspace for control — with the
+      QEMU, Opsis, Arty and MimasV2 bring-up status for each target.
+    url: https://docs.google.com/document/d/1GfWKjrcfA27qbF8F9EtvRP5mzsaBjRzADfZTb5H8irw/edit
+  - alias: litex-bridge-proto
+    title: LiteX Bridge Protocol
+    authors: T Ansell
+    year: 2018
+    description: >-
+      Aim and protocol definition for bridging a Wishbone bus between
+      systems — FPGA board to board, board to simulator, board to debugger
+      — as a restrictive subset of Etherbone over Ethernet, PCIe, UART and
+      future SPI transports.
+    url: https://docs.google.com/document/d/1d_Uy6oljyYS4vZhSWomF-IWtP-vDN8qYYra6-Q8KLec/edit
+  - alias: softcpu-on-fpgas
+    title: Soft Processor (RISC-V) Performance on modern FPGAs
+    authors: T Ansell
+    year: 2019
+    updated: 2022
+    description: >-
+      Sets LUT budgets, minimum fmax and DMIPS/MHz targets for
+      microcontroller-class and Linux-capable soft CPUs on Artix 7,
+      UltraScale and UltraScale+ parts, then surveys how existing open
+      source RISC-V cores measure up against them.
+    url: https://docs.google.com/document/d/1AXImPy8gu668WqMP_dKUdVTMNTH35udxiFH-wzBFUzk/edit
+  - alias: litex-ha-dd
+    title: LiteX based interface for Hardware Accelerators
+    subtitle: High performance, transport agnostic, data intensive
+    authors: T Ansell
+    year: 2020
+    updated: 2024
+    description: >-
+      Design for a well-lit path that lets accelerator developers ignore
+      how their block is attached to the host — control/status registers
+      and streaming endpoints abstracted over Ethernet, USB 3.0, PCIe and
+      Wishbone, with simulation, debugging and high-performance DMA
+      transfer modes.
+    url: https://docs.google.com/document/d/1oiTqR-6ppiObBRFA91sxl3sgHkPHw2WK_tFD5itx9xg/edit
+  - alias: fpgabmc-bench
+    title: Benchmarking FPGA CPU Designs
+    subtitle: For the FPGA BMC project
+    authors: T Ansell
+    year: 2021
+    description: >-
+      Requirements a soft CPU must meet to be considered for the FPGA BMC
+      project — Linux boot, LiteX integration, DDR3/SDRAM and Ethernet
+      support, fitting on an Arty A7-35T and a ULX3S ECP5-85F with room to
+      spare — and how competing designs are compared.
+    url: https://docs.google.com/document/d/1Z_FAfFPszk8nreLSvssLmDGayXmF4hmh6R8fMxUEZPM/edit
+
+- id: fpga-tooling
+  topic: Open source FPGA tooling
+  blurb: >-
+    SymbiFlow / F4PGA and the packaging, testing and hardware-in-the-loop
+    infrastructure around open FPGA toolchains (Google, 2018–2024).
+  docs:
+  - alias: symbiflow-testing
+    title: F4PGA (SymbiFlow) Checking / Testing Approach
+    authors: T Ansell
+    year: 2019
+    updated: 2024
+    description: >-
+      Step-by-step verification flow for Project X-Ray and any F4PGA
+      target — testbench, vendor tools, Yosys, VPR, fasm2v and bit2fasm —
+      identifying at each stage which tool a failure implicates.
+    url: https://docs.google.com/document/d/11wJUvr2aVBkUiuYYsFN07jkoYr_ccWlLLLFH8YQw8uQ/edit
+  - alias: symbiflow-targets
+    title: SymbiFlow Target Designs
+    authors: T Ansell
+    year: 2019
+    updated: 2024
+    description: >-
+      Staged roadmap for what the SymbiFlow toolchain had to be able to
+      build — an "IoT class" SoC, a "Linux class" SoC, expanded Artix
+      support, then domain-specific targets such as video, SDR and
+      networking — with the common cores and supported boards for each.
+    url: https://docs.google.com/document/d/163Vxde2vLeQCR0V2RJDsxFERbC2P5n0VzwkALtC-OTY/edit
+  - alias: edalize-autosetup
+    title: edalize.autosetup
+    authors: T Ansell
+    year: 2019
+    updated: 2024
+    description: >-
+      Design for an edalize plugin that finds installed EDA tools, checks
+      their versions and capabilities against a project's requirements,
+      installs missing tools and creates isolated environments — a
+      single-command setup aimed at bit-identical reproduction and CI.
+    url: https://docs.google.com/document/d/1IMVrSmMO5wqTV3W22Bv2PeKtMHO3WSyCwHm3N-Wkwbk/edit
+  - alias: ci-arty
+    title: CI system with Arty hardware for FPGA Tooling
+    authors: T Ansell
+    year: 2021
+    updated: 2025
+    description: >-
+      Connectivity diagram, parts table and set-up notes for a
+      hardware-in-the-loop CI rack: a PoE+ switch powering Raspberry Pi
+      runners that netboot from a server and drive Digilent Arty boards
+      through PMOD and USB Ethernet, with the RPi netboot and WiFi-disable
+      configuration steps. Links to Carl's photos of the build.
+    url: https://docs.google.com/document/d/1H3x34bdztWy-uN8EYe-FxJL2YojIjd-0feL9d8BMtN4/edit
+
+- id: silicon
+  topic: Open source silicon & PDKs
+  blurb: >-
+    The SKY130 / GF180MCU PDK releases and Open MPW program at Google
+    (2018–2024) — how an open PDK should be built, tested, documented and
+    verified.
+  docs:
+  - alias: open-source-pdks-naming
+    title: File naming in open source PDKs
+    authors: T Ansell
+    year: 2022
+    updated: 2025
+    description: >-
+      Naming specification for open PDKs — general and file naming,
+      library and standard-cell library names, primitives, prefixes and
+      abbreviations for layers, devices and properties, cell files and a
+      recommended Verilog include structure.
+    url: https://docs.google.com/document/d/1rDN5jw8sh0aTwf1jScn0nP2zy4FWLxC-82M8TL3Lbr4/edit
+  - alias: sky130-user-max
+    title: Theoretical maximums of 10mm² silicon user space
+    subtitle: SKY130 Open MPW program
+    authors: T Ansell
+    year: 2022
+    description: >-
+      Short note on what fits in the 10mm² Open MPW user area on SKY130 —
+      the Cypress PSoC 4200 as a real 130nm reference point, plus measured
+      SRAM and ReRAM densities from Open MPW projects.
+    url: https://docs.google.com/document/d/1k3LuRPa6-7iM1gC6ocFGLlAFboFiXNTpgXEjTLBbpy4/edit
+  - alias: drc-testing
+    title: Design Rule Check (DRC) Testing
+    subtitle: How testing for DRC rules should be done
+    authors: T Ansell
+    year: 2022
+    updated: 2025
+    description: >-
+      Principles and test types for DRC decks — one small GDS per test,
+      pass and fail cases for every rule, interaction tests for rules that
+      affect each other, and integration tests — so rule checking can be
+      validated like software.
+    url: https://docs.google.com/document/d/18z-FBJHni6qt1WR_tF6bbRHfQydKcFMAVnuj4Ixbj90/edit
+  - alias: build-pdk
+    title: Building a (future) open source PDK
+    authors: T Ansell
+    year: 2022
+    updated: 2025
+    description: >-
+      Aspirational end-state for what an open source process design kit
+      should contain — design rules that explain why they exist and can be
+      automated, expected versus measured device behaviour, and where TCAD
+      fits — written to steer today's work toward that end state.
+    url: https://docs.google.com/document/d/1Y-RbdGYOzswOI5EkUuCKZnWjdT1K9UbGQc_CbcIQ9O4/edit
+  - alias: python-pdk
+    title: (Open Source) PDK Python Tooling
+    authors: T Ansell
+    year: 2022
+    updated: 2025
+    description: >-
+      Overview of the Python tooling effort around open PDKs — pure-Python
+      packages on PyPI, Sphinx-based automated documentation that reads
+      like software docs — and how the same tooling serves ASIC, FPGA and
+      EDA documentation projects.
+    url: https://docs.google.com/document/d/1VZIpYx0FN1oMd2KW_oWL1gsQbssSM8JEJjRJVLamNI0/edit
+  - alias: test-open-pdk
+    title: Test structure generation and measurement
+    subtitle: For improving open source PDKs
+    authors: T Ansell
+    year: 2022
+    updated: 2025
+    description: >-
+      Central plan for automatically generating test structures, simulating
+      them, collecting measurements from manufactured silicon and turning
+      the data back into device models — covering process bring-up,
+      parasitics, lithographic modelling and analog model creation.
+    url: https://docs.google.com/document/d/1bjYUnjGlZHi8bQ5vNUcXg4tPJ-BaLDjqHjbtrOhnM9Y/edit
+  - alias: test-asics
+    title: Test and verification for ASIC design
+    subtitle: Options exploration
+    authors: T Ansell
+    year: 2023
+    updated: 2024
+    description: >-
+      High-level map of the verification points in an ASIC flow —
+      functional, equivalence, timing, simulation (including FPGA-based and
+      mixed-signal), manufacturability and LVS — at full-system and
+      component level, with the tools available for each.
+    url: https://docs.google.com/document/d/1_StmqBumyTuTNVcvutiX-INbbLG7DHoGl_fe0lvQPZ8/edit
+  - alias: test-env-asics
+    title: Testing environments (and CI) for open hardware projects
+    subtitle: Open MPW, Caravel, LiteX, F4PGA
+    authors: T Ansell
+    year: 2023
+    updated: 2025
+    description: >-
+      How the test and CI infrastructure of open hardware projects can
+      converge — a matrix of devices under test (Renode, Verilator, FPGA,
+      silicon), the software stacks running on them (bare metal, Zephyr,
+      MicroPython, Linux) and how the host connects to each.
+    url: https://docs.google.com/document/d/1YgJ-MUC-r9-Stl1M98xjTq8Qf-YQy6LNu38Ov5K5pt0/edit
+  - alias: caravel-renode
+    title: Renode for simulation of the Caravel testing system
+    authors: T Ansell
+    year: 2023
+    updated: 2024
+    description: >-
+      Inventory of the Renode models needed to simulate the whole Open MPW
+      bring-up rig — the STM32 Nucleo tester MCU and its peripherals, the
+      Efabless hat and I2C power supply, and the Caravel SoC with its user
+      project — marking which models already exist.
+    url: https://docs.google.com/document/d/1qhin7U1esp58NoVwrdkKkEDZb2k280YF0PKGENGgLSI/edit
+  - alias: trillian-ic
+    title: Trillian applied to Integrated Circuits
+    subtitle: Providing verification and tamper protection to hardware
+    authors: T Ansell
+    year: 2023
+    description: >-
+      Proposal to apply Trillian to chip making — adding enabled-by-default
+      verification and tamper protection across the three parts of IC
+      creation (the hardware design, the PDK data and the EDA tools) as an
+      alternative to the industry's security-through-obscurity habits.
+    url: https://docs.google.com/document/d/1SQHC3eQ4n-VchxuOmgY5JXy0T6rR7LpX9uZckc6UCLQ/edit?resourcekey=0-nQtazqnEVI0OSF7LVq0Hnw
+  - alias: openmpw-viewer-req
+    title: Open MPW viewer website
+    subtitle: Requirements document
+    authors: T Ansell · with Antmicro (K Gugala, P Katarzynski, P Zierhoffer)
+    year: 2023
+    updated: 2024
+    description: >-
+      Requirements for a public portal exploring every design submitted to
+      Google's Open MPW shuttles — tiled submissions with chip-layout
+      miniatures, in the look and feel of developers.google.com/silicon,
+      built in the open on GitHub.
+    url: https://docs.google.com/document/d/1YcVW-sLxFwhEJWe4EfJhXq-fRu_f41RE3cu2z58iaD0/edit
+  - alias: yosys-asics-ops
+    title: Improving operator mapping in Yosys for ASICs
+    subtitle: Adders, multipliers and multiply-accumulate
+    authors: T Ansell
+    year: 2023
+    updated: 2024
+    description: >-
+      Low-effort design for better arithmetic in Yosys ASIC flows — an
+      automatically generated library of equivalent adder and multiplier
+      implementations (via vlsiriffa), scripts mapping Yosys primitives
+      onto it, and characterisation of each implementation's performance,
+      power and area.
+    url: https://docs.google.com/document/d/1N4huvzOsGuEjiBCXDKPMpWfxoxpc40XFDhyxjcdtwwg/edit
+  - alias: tim-asap7
+    title: Tim's understanding of ASAP7
+    subtitle: A quick introduction for new people
+    authors: T Ansell
+    year: 2023
+    updated: 2024
+    description: >-
+      Orientation for newcomers to the ASAP7 predictive 7nm PDK used to
+      benchmark open EDA tools — its RVT, LVT and SLVT transistor flavours,
+      the 6-track and 7.5-track standard cell libraries and the 4×-scaled
+      variants, and which releases each came from.
+    url: https://docs.google.com/document/d/19DGoN5g313NgP8_2QVamzIIrrQs5nPuMUGvJHsp8CXE/edit
+
+- id: wafer-space
+  topic: wafer.space
+  blurb: >-
+    Working documents for wafer.space's low-volume GF180MCU manufacturing
+    — the process, cell libraries and reference designs (2025–).
+  docs:
+  - alias: ws-gf180
+    title: GlobalFoundries 180nm Technologies
+    subtitle: GF180MCU, GF180ULL, GF180BCD, GF180BCDLite
+    authors: T Ansell
+    year: 2025
+    description: >-
+      Reference on GlobalFoundries' family of configurable 180nm
+      processes — decoding stack-up names like 1P5M26ML, the optional mask
+      layers, core voltages and how GF180MCU relates to its siblings.
+    url: https://docs.google.com/document/d/1lrMhid2jS-c8bI_PZVREyryfDxO88WH4Us-1_qfQWWI/edit
+  - alias: ws-gatearray-v1
+    title: GF180MCU Gate Array
+    authors: T Ansell
+    year: 2025
+    updated: 2026
+    description: >-
+      Design for a gate array on GF180MCU that is programmed after
+      manufacturing by adding a single ~2µm metal layer — sized for
+      maskless tools such as the HackerFab stepper, Heidelberg MLA150 and
+      MinimalFab — with the configurable-element budget per die size.
+    url: https://docs.google.com/document/d/1fs6V-7rEOaixsN88ZM_rbp1WFtheEz0K0Ui6tlUtnBk/edit
+  - alias: ws-gf180mcu-stdcells
+    title: Voltages and options for I/O and standard cells
+    subtitle: GF180MCU
+    authors: T Ansell
+    year: 2025
+    description: >-
+      Analysis of running GF180MCU at 5V, 3.3V and down toward 1.8V — the
+      thick-oxide transistors behind it, heat at speed, the foundry's 7- and
+      9-track 5V cell libraries and alternative standard cell options, with
+      a summary comparison table.
+    url: https://docs.google.com/document/d/1vQCrkIvE0MdizFUSRD8Sxo-BBnwj0SztJd-1aU5nRRs/edit
+  - alias: ws-tiny-riscv-proof
+    title: GF180MCU Bit Serial RISC-V Implementation
+    authors: T Ansell
+    year: 2025
+    description: >-
+      Proof-of-concept plan for very cheap custom RISC-V chips — a
+      bit-serial core with SRAM register files on wafer.space's ~$7 dies,
+      subdivided into chiplets with chip-on-board packaging — including the
+      cost breakdown and SRAM sizing that make it viable.
+    url: https://docs.google.com/document/d/1U5tQairqGWx1kK3jr6FB_aSNz2RWzo8jpJg-MWs9UXI/edit
