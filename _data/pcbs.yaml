@@ -1,0 +1,251 @@
+# Snapshot of the 2026 PCB repositories — regenerate with scripts/fetch_pcbs.py
+snapshot_date: '2026-11-19'
+repos:
+- repo: minidc-temp-monitor
+  title: minidc-temp-monitor
+  blurb: 'Daisy-chained 42 x 13 mm temperature sensor strips for a miniature datacenter''s
+    hot and cold aisles: a CH32V003 or CH32V005 RISC-V MCU plus an NTC thermistor,
+    with a JST SH (Qwiic-style) connector at each end. A board''s I2C address is its
+    position in the chain.'
+  credit: null
+  url: https://github.com/mithro/minidc-temp-monitor
+  description: null
+  license: Apache-2.0
+  stars: 0
+  created: '2026-11-16'
+  default_branch: main
+  last_commit:
+    date: '2026-11-18'
+    sha: ab2ef68
+    message: Fix the pull request review findings in the README
+    url: https://github.com/mithro/minidc-temp-monitor/commit/ab2ef685bd02d7905c616a5da10bba0600d94450
+  commits_this_year: 58
+  open_issues: 0
+  open_prs: 0
+  release: null
+  ci:
+    workflow: firmware
+    conclusion: success
+    url: https://github.com/mithro/minidc-temp-monitor/actions/runs/44336104456
+  boards:
+  - name: sensor-ch32v003
+    pcb: hardware/sensor-ch32v003/sensor-ch32v003.kicad_pcb
+    images:
+    - src: /assets/pcbs/minidc-temp-monitor--sensor-ch32v003-0.webp
+      width: 960
+      height: 506
+      source: https://github.com/mithro/minidc-temp-monitor/blob/HEAD/hardware/sensor-ch32v003/out/board-3d.png
+    size_mm:
+    - 42.0
+    - 13.0
+    copper_layers: 2
+    footprints: 18
+    kicad: '9.0'
+    file_version: '20241229'
+    pcb_url: https://github.com/mithro/minidc-temp-monitor/blob/main/hardware/sensor-ch32v003/sensor-ch32v003.kicad_pcb
+    pcb_last_change: '2026-11-18'
+  - name: sensor-ch32v005
+    pcb: hardware/sensor-ch32v005/sensor-ch32v005.kicad_pcb
+    images:
+    - src: /assets/pcbs/minidc-temp-monitor--sensor-ch32v005-0.webp
+      width: 960
+      height: 506
+      source: https://github.com/mithro/minidc-temp-monitor/blob/HEAD/hardware/sensor-ch32v005/out/board-3d.png
+    size_mm:
+    - 42.0
+    - 13.0
+    copper_layers: 2
+    footprints: 21
+    kicad: '9.0'
+    file_version: '20241229'
+    pcb_url: https://github.com/mithro/minidc-temp-monitor/blob/main/hardware/sensor-ch32v005/sensor-ch32v005.kicad_pcb
+    pcb_last_change: '2026-11-18'
+- repo: wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0
+  title: YT9215S 5-port gigabit switch (mirror)
+  blurb: Mirror of pankanwen's open hardware 5-port gigabit Ethernet switch built
+    on the Motorcomm YT9215S, originally published on OSHWHub, with KiCad sources
+    and renders.
+  credit:
+    name: pankanwen
+    url: https://oshwhub.com/pankanwen/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0
+  url: https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0
+  description: null
+  license: NOASSERTION
+  stars: 0
+  created: '2026-10-22'
+  default_branch: main
+  last_commit:
+    date: '2026-11-17'
+    sha: 73d423e
+    message: 'Docs: link every file reference in the KiCad README'
+    url: https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/commit/73d423e3ff15bb3ec900ffc6825e66f6ec3dc1f3
+  commits_this_year: 10
+  open_issues: 0
+  open_prs: 0
+  release: null
+  ci: null
+  boards:
+  - name: YT9215S-5-port-switch
+    pcb: kicad/YT9215S-5-port-switch.kicad_pcb
+    images:
+    - src: /assets/pcbs/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0--YT9215S-5-port-switch-0.webp
+      width: 960
+      height: 631
+      source: https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/HEAD/kicad/render/pcb-3d-top.png
+    - src: /assets/pcbs/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0--YT9215S-5-port-switch-1.webp
+      width: 960
+      height: 631
+      source: https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/HEAD/kicad/render/pcb-3d-bottom.png
+    size_mm:
+    - 100.0
+    - 65.0
+    copper_layers: 2
+    footprints: 135
+    kicad: '9.0'
+    file_version: '20241229'
+    pcb_url: https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/YT9215S-5-port-switch.kicad_pcb
+    pcb_last_change: '2026-11-17'
+- repo: budget-poe-adapter
+  title: budget-poe-adapter
+  blurb: 'Research and design notes for a very cheap, non-isolated PoE to USB-C adapter
+    that passes Ethernet through at gigabit speed. Research stage: no schematic or
+    PCB yet, so the picture is the block diagram.'
+  credit: null
+  url: https://github.com/mithro/budget-poe-adapter
+  description: null
+  license: Apache-2.0
+  stars: 0
+  created: '2026-11-17'
+  default_branch: main
+  last_commit:
+    date: '2026-11-17'
+    sha: 375ceec
+    message: Add project research, design notes and switch IC documentation
+    url: https://github.com/mithro/budget-poe-adapter/commit/375ceec89dc96dcce4a58b44d5b60305ab36f0ba
+  commits_this_year: 3
+  open_issues: 0
+  open_prs: 5
+  release: null
+  ci: null
+  boards:
+  - name: block diagram
+    pcb: null
+    images:
+    - src: /assets/pcbs/budget-poe-adapter--block-diagram-0.webp
+      width: 960
+      height: 476
+      source: https://github.com/mithro/budget-poe-adapter/blob/HEAD/design/block-diagram.png
+- repo: esp32-to-433mhz
+  title: esp32-to-433mhz
+  blurb: Carrier boards that join an ESP32-C3 SuperMini and a cheap 433 MHz radio
+    module (Ebyte E07 / D-Sun CC1101, or an SX1278 LoRa Ra-02) into one small unit,
+    with a 3D-printed case.
+  credit: null
+  url: https://github.com/mithro/esp32-to-433mhz
+  description: ESP32-C3 SuperMini form-factor KiCad board with castellated headers
+  license: Apache-2.0
+  stars: 1
+  created: '2026-09-03'
+  default_branch: main
+  last_commit:
+    date: '2026-10-02'
+    sha: 5be8829
+    message: Point the DIO2 references at the guide again
+    url: https://github.com/mithro/esp32-to-433mhz/commit/5be882933884da98d9194edee2d7f6e0be02c7e3
+  commits_this_year: 220
+  open_issues: 0
+  open_prs: 0
+  release:
+    tag: v0.1
+    date: '2026-09-03'
+    url: https://github.com/mithro/esp32-to-433mhz/releases/tag/v0.1
+  ci:
+    workflow: Firmware
+    conclusion: success
+    url: https://github.com/mithro/esp32-to-433mhz/actions/runs/37720117386
+  boards:
+  - name: esp32c3-radio-adapter
+    pcb: hardware/esp32c3-radio-adapter/esp32c3-radio-adapter.kicad_pcb
+    images:
+    - src: /assets/pcbs/esp32-to-433mhz--esp32c3-radio-adapter-0.webp
+      width: 849
+      height: 889
+      source: https://github.com/mithro/esp32-to-433mhz/blob/HEAD/docs/images/esp32c3-radio-adapter-assembly-e07-iso.png
+    - src: /assets/pcbs/esp32-to-433mhz--esp32c3-radio-adapter-1.webp
+      width: 960
+      height: 1230
+      source: https://github.com/mithro/esp32-to-433mhz/blob/HEAD/docs/images/esp32c3-radio-adapter-3d-top.png
+    size_mm:
+    - 29.0
+    - 38.0
+    copper_layers: 2
+    footprints: 14
+    kicad: '9.0'
+    file_version: '20241229'
+    pcb_url: https://github.com/mithro/esp32-to-433mhz/blob/main/hardware/esp32c3-radio-adapter/esp32c3-radio-adapter.kicad_pcb
+    pcb_last_change: '2026-09-09'
+  - name: esp32c3-sx1278-adapter
+    pcb: hardware/esp32c3-sx1278-adapter/esp32c3-sx1278-adapter.kicad_pcb
+    images:
+    - src: /assets/pcbs/esp32-to-433mhz--esp32c3-sx1278-adapter-0.webp
+      width: 545
+      height: 471
+      source: https://github.com/mithro/esp32-to-433mhz/blob/HEAD/docs/images/esp32c3-sx1278-adapter-assembly-module-iso.png
+    - src: /assets/pcbs/esp32-to-433mhz--esp32c3-sx1278-adapter-1.webp
+      width: 960
+      height: 2169
+      source: https://github.com/mithro/esp32-to-433mhz/blob/HEAD/docs/images/esp32c3-sx1278-adapter-3d-top.png
+    size_mm:
+    - 24.0
+    - 58.0
+    copper_layers: 2
+    footprints: 5
+    kicad: '9.0'
+    file_version: '20241229'
+    pcb_url: https://github.com/mithro/esp32-to-433mhz/blob/main/hardware/esp32c3-sx1278-adapter/esp32c3-sx1278-adapter.kicad_pcb
+    pcb_last_change: '2026-09-06'
+- repo: rpi-camera-led
+  title: rpi-camera-led
+  blurb: 'Interposer for the Raspberry Pi camera flex cable: passes the 15-way CSI
+    bus straight through and adds I2C-controlled camera GPIO, PWM illumination LEDs
+    and an ambient light sensor, driven by a CH32V003.'
+  credit: null
+  url: https://github.com/mithro/rpi-camera-led
+  description: 'Interposer for the Raspberry Pi camera flex cable: passes the 15-way
+    CSI bus straight through and adds I2C-controlled camera GPIO, PWM illumination
+    LEDs and an ambient light sensor, driven by a CH32V003.'
+  license: Apache-2.0
+  stars: 1
+  created: '2026-09-03'
+  default_branch: main
+  last_commit:
+    date: '2026-09-05'
+    sha: 6a00fb7
+    message: Add back the Raspberry Pi camera board's mounting holes
+    url: https://github.com/mithro/rpi-camera-led/commit/6a00fb732f9e9c72309e9a7f588be71e8a03c96f
+  commits_this_year: 71
+  open_issues: 1
+  open_prs: 1
+  release: null
+  ci: null
+  boards:
+  - name: rpi-camera-led
+    pcb: hardware/rpi-camera-led.kicad_pcb
+    images:
+    - src: /assets/pcbs/rpi-camera-led--rpi-camera-led-0.webp
+      width: 960
+      height: 648
+      source: https://github.com/mithro/rpi-camera-led/blob/HEAD/docs/img/board-3d-iso.png
+    - src: /assets/pcbs/rpi-camera-led--rpi-camera-led-1.webp
+      width: 960
+      height: 1139
+      source: https://github.com/mithro/rpi-camera-led/blob/HEAD/docs/img/board-3d-top.png
+    size_mm:
+    - 25.0
+    - 23.9
+    copper_layers: 2
+    footprints: 24
+    kicad: '9.0'
+    file_version: '20241229'
+    pcb_url: https://github.com/mithro/rpi-camera-led/blob/main/hardware/rpi-camera-led.kicad_pcb
+    pcb_last_change: '2026-09-05'
