@@ -300,11 +300,12 @@ ul.deg-list { padding-left: 0; list-style: none; }
 .contrib i.f { background: transparent; box-shadow: inset 0 0 0 1px var(--panel2); }
 .contrib-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin: 0 0 1rem; color: var(--muted); font-size: .72rem; }
 .contrib-legend span { margin-right: .7rem; }
-/* Year rows: total | calendar | organisations. The three columns need
-   about 1,030px; on narrower screens the organisations move under the
+/* Year rows: total | calendar | organisations. With organisation names
+   kept on one line the three columns need nearly the full 1,040px
+   content width, so below that the organisations move under the
    calendar (see the media query below) instead of scrolling out of view. */
-.cy { display: grid; grid-template-columns: auto auto auto; column-gap: .9rem; align-items: start; width: max-content; padding: .45rem 0; }
-.cy-meta { width: 4.6rem; padding-top: 14px; text-align: right; }
+.cy { display: grid; grid-template-columns: auto auto auto; column-gap: .6rem; align-items: start; width: max-content; padding: .45rem 0; }
+.cy-meta { width: 4.2rem; padding-top: 14px; text-align: right; }
 .cy-meta a { display: block; color: var(--silk); font-weight: 700; text-decoration: none; }
 .cy-meta a:hover, .cy-meta a:focus-visible { color: var(--gold); }
 .cy-meta span { display: block; color: var(--muted); font-size: .75rem; font-variant-numeric: tabular-nums; }
@@ -316,17 +317,17 @@ ul.deg-list { padding-left: 0; list-style: none; }
 .cy-grid { display: grid; grid-template-rows: repeat(7, 10px); grid-auto-columns: 10px; grid-auto-flow: column; gap: 3px; }
 /* The year's top organisations by contribution count, styled like the
    organisation buttons on GitHub's profile page. */
-.cy-orgs { list-style: none; margin: 0; padding: 16px 0 0; width: 12.5rem; font-size: .72rem; }
+.cy-orgs { list-style: none; margin: 0; padding: 16px 0 0; font-size: .7rem; }
 .cy-orgs li + li { margin-top: 5px; }
-/* Long logins (sydney-linux-user-group) wrap at their hyphens inside
-   the button rather than being cut off; the count never splits. */
-.cy-orgs a { display: inline-flex; align-items: center; gap: .4rem; max-width: 100%; padding: 1px .45rem 1px 2px; border: 1px solid var(--line); border-radius: 4px; color: var(--silk); text-decoration: none; line-height: 1.35; overflow-wrap: anywhere; }
+/* Each button stays on one line: logins never break at their hyphens. */
+.cy-orgs a { display: inline-flex; align-items: center; gap: .4rem; padding: 1px .45rem 1px 2px; border: 1px solid var(--line); border-radius: 4px; color: var(--silk); text-decoration: none; line-height: 1.35; white-space: nowrap; }
 .cy-orgs a:hover, .cy-orgs a:focus-visible { color: var(--gold); border-color: var(--gold-dim); }
 .cy-orgs img { display: block; flex: none; border-radius: 3px; background: #fff; }
 .cy-orgs span { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
-@media (max-width: 1080px) {
+/* 1100px, not 1080px: a vertical scrollbar takes ~15px of the viewport. */
+@media (max-width: 1100px) {
   .cy { grid-template-columns: auto auto; }
-  .cy-orgs { grid-column: 2; width: auto; display: flex; flex-wrap: wrap; gap: 5px 6px; padding: 6px 0 0 31px; }
+  .cy-orgs { grid-column: 2; display: flex; flex-wrap: wrap; gap: 5px 6px; padding: 6px 0 0 31px; }
   .cy-orgs li + li { margin-top: 0; }
 }
 /* Phones: the calendar itself is wider than the screen and scrolls
