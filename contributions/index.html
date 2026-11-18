@@ -1,0 +1,38 @@
+---
+layout: default
+title: GitHub contributions
+description: "Every year of Tim 'mithro' Ansell's GitHub contribution calendar on one page, shaded on a single all-time scale so the years can be compared."
+---
+{% assign c = site.data.contributions %}
+<section class="sect">
+  <h2><span aria-hidden="true">🟨</span> GitHub contributions · {{ c.first_year }}–{{ c.last_year }}</h2>
+  <p class="contrib-legend">
+    <i></i><span>None</span>{% assign lo = 1 %}{% for t in c.thresholds %}
+    <i class="l{{ forloop.index }}"></i><span>{% if lo == t %}{{ t }}{% else %}{{ lo }}–{{ t }}{% endif %}</span>{% assign lo = t | plus: 1 %}{% endfor %}
+    <i class="l{{ c.thresholds | size | plus: 1 }}"></i><span>{{ lo }}+ per day</span>
+  </p>
+  <div class="table-scroll contrib">
+    {% for y in c.years %}
+    <div class="cy">
+      <div class="cy-meta">
+        <a href="https://github.com/{{ c.login }}?tab=overview&amp;from={{ y.year }}-01-01&amp;to={{ y.year }}-12-31">{{ y.year }}</a>
+        <span>{{ y.total_text }}</span>
+        <b style="width:{{ y.bar }}%"></b>
+      </div>
+      <div class="cy-cal">
+        <div class="cy-months" aria-hidden="true">{% for m in y.months %}<span style="grid-column:{{ m.col }}">{{ m.name }}</span>{% endfor %}</div>
+        <div class="cy-body">
+          <div class="cy-wd" aria-hidden="true"><span style="grid-row:2">Mon</span><span style="grid-row:4">Wed</span><span style="grid-row:6">Fri</span></div>
+          <div class="cy-grid" role="img" aria-label="{{ y.year }}: {{ y.total_text }} contributions">{% if y.pad > 0 %}{% for n in (1..y.pad) %}<i class="p"></i>{% endfor %}{% endif %}{% for d in y.days %}{% if d[0] < 0 %}<i class="f" title="{{ d[2] }}"></i>{% elsif d[0] == 0 %}<i title="None · {{ d[2] }}"></i>{% else %}<i class="l{{ d[1] }}" title="{{ d[0] }} · {{ d[2] }}"></i>{% endif %}{% endfor %}</div>
+        </div>
+      </div>
+      <ul class="cy-orgs" aria-label="Top organisations in {{ y.year }}">{% for o in y.orgs %}
+        <li><a href="https://github.com/{{ o.login | escape }}"><img src="{{ o.avatar | escape }}" alt="" width="16" height="16" loading="lazy">@{{ o.login | escape }}<span>{{ o.count_text }}</span></a></li>{% endfor %}
+      </ul>
+    </div>
+    {% endfor %}
+  </div>
+  <p class="prose meta">Snapshot from {{ c.snapshot_date }} —
+  refresh with scripts/fetch_contributions.py. The bar under each total
+  shows that year relative to the busiest one.</p>
+</section>

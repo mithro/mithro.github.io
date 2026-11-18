@@ -14,3 +14,6 @@ _data/shortlinks.yaml
 
 # Playwright MCP session artifacts (screenshots, logs)
 .playwright-mcp/
+
+# Claude Code worktrees and local session state
+.claude/
