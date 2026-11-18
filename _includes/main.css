@@ -278,6 +278,64 @@ ul.deg-list { padding-left: 0; list-style: none; }
 /* The embeds sit in their own full-width row attached to the talk above. */
 .talks-table tr.embrow td { border-top: 0; padding-top: 0; }
 
+/* ---- Contribution calendar (/contributions/) ------------------------
+   One row per year, GitHub-style: 7 squares down (Sun-Sat), one column
+   per week. Levels l1-l8 are a single all-time scale that doubles each
+   step, so a colour means the same amount of activity in every year. */
+.contrib, .contrib-legend {
+  --c0: var(--panel2); --c1: #2f2710; --c2: #4b3d14; --c3: #6c571a; --c4: #8f7220;
+  --c5: #b38d26; --c6: var(--gold); --c7: #f4cd55; --c8: #fff3bf;
+}
+.contrib { padding-bottom: .4rem; }
+.contrib i, .contrib-legend i { display: block; flex: none; width: 10px; height: 10px; border-radius: 2px; background: var(--c0); }
+.contrib i.l1, .contrib-legend i.l1 { background: var(--c1); }
+.contrib i.l2, .contrib-legend i.l2 { background: var(--c2); }
+.contrib i.l3, .contrib-legend i.l3 { background: var(--c3); }
+.contrib i.l4, .contrib-legend i.l4 { background: var(--c4); }
+.contrib i.l5, .contrib-legend i.l5 { background: var(--c5); }
+.contrib i.l6, .contrib-legend i.l6 { background: var(--c6); }
+.contrib i.l7, .contrib-legend i.l7 { background: var(--c7); }
+.contrib i.l8, .contrib-legend i.l8 { background: var(--c8); }
+.contrib i.p { visibility: hidden; }
+.contrib i.f { background: transparent; box-shadow: inset 0 0 0 1px var(--panel2); }
+.contrib-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin: 0 0 1rem; color: var(--muted); font-size: .72rem; }
+.contrib-legend span { margin-right: .7rem; }
+/* Year rows: total | calendar | organisations. With organisation names
+   kept on one line the three columns need nearly the full 1,040px
+   content width, so below that the organisations move under the
+   calendar (see the media query below) instead of scrolling out of view. */
+.cy { display: grid; grid-template-columns: auto auto auto; column-gap: .6rem; align-items: start; width: max-content; padding: .45rem 0; }
+.cy-meta { width: 4.2rem; padding-top: 14px; text-align: right; }
+.cy-meta a { display: block; color: var(--silk); font-weight: 700; text-decoration: none; }
+.cy-meta a:hover, .cy-meta a:focus-visible { color: var(--gold); }
+.cy-meta span { display: block; color: var(--muted); font-size: .75rem; font-variant-numeric: tabular-nums; }
+.cy-meta b { display: block; height: 3px; margin: 3px 0 0 auto; border-radius: 2px; background: var(--gold); }
+.cy-months { display: grid; grid-template-columns: repeat(54, 10px); gap: 3px; height: 14px; margin-left: 31px; color: var(--muted); font-size: .6rem; line-height: 12px; }
+.cy-months span { grid-row: 1; white-space: nowrap; }
+.cy-body { display: flex; gap: 3px; }
+.cy-wd { display: grid; grid-template-rows: repeat(7, 10px); gap: 3px; width: 28px; color: var(--muted); font-size: .55rem; line-height: 10px; }
+.cy-grid { display: grid; grid-template-rows: repeat(7, 10px); grid-auto-columns: 10px; grid-auto-flow: column; gap: 3px; }
+/* The year's top organisations by contribution count, styled like the
+   organisation buttons on GitHub's profile page. */
+.cy-orgs { list-style: none; margin: 0; padding: 16px 0 0; font-size: .7rem; }
+.cy-orgs li + li { margin-top: 5px; }
+/* Each button stays on one line: logins never break at their hyphens. */
+.cy-orgs a { display: inline-flex; align-items: center; gap: .4rem; padding: 1px .45rem 1px 2px; border: 1px solid var(--line); border-radius: 4px; color: var(--silk); text-decoration: none; line-height: 1.35; white-space: nowrap; }
+.cy-orgs a:hover, .cy-orgs a:focus-visible { color: var(--gold); border-color: var(--gold-dim); }
+.cy-orgs img { display: block; flex: none; border-radius: 3px; background: #fff; }
+.cy-orgs span { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+/* 1100px, not 1080px: a vertical scrollbar takes ~15px of the viewport. */
+@media (max-width: 1100px) {
+  .cy { grid-template-columns: auto auto; }
+  .cy-orgs { grid-column: 2; display: flex; flex-wrap: wrap; gap: 5px 6px; padding: 6px 0 0 31px; }
+  .cy-orgs li + li { margin-top: 0; }
+}
+/* Phones: the calendar itself is wider than the screen and scrolls
+   sideways, so keep the organisations within the visible width. */
+@media (max-width: 640px) {
+  .cy-orgs { grid-column: 1 / -1; max-width: calc(100vw - 2.5rem); padding-left: 0; }
+}
+
 /* ---- Print ----------------------------------------------------------
    The resume page prints like the canonical resume Google Doc: black
    Arial on white, plain section headings, name + contact masthead.
