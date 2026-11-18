@@ -1,0 +1,112 @@
+---
+layout: default
+title: PCBs
+description: "Printed circuit board projects worked on this year: repository state, board statistics and 3D renders."
+# Unlisted: not linked from anywhere, kept out of sitemap.xml and search.
+sitemap: false
+noindex: true
+---
+{%- comment -%}
+Data comes from _data/pcbs.yaml + assets/pcbs/, both written by
+scripts/fetch_pcbs.py. Styles are local to this page so the shared
+stylesheet (inlined into every page) doesn't grow for an unlisted page.
+{%- endcomment -%}
+<style>
+.pcb-intro { max-width: 46rem; }
+.pcb-repo { border-top: 1px solid var(--line); padding: 1.6rem 0 1.4rem; }
+.pcb-repo:first-of-type { border-top: 0; padding-top: .4rem; }
+.pcb-repo h3 { margin: 0; font-size: 1rem; color: var(--silk); }
+.pcb-repo h3 a { color: var(--silk); text-decoration: none; border-bottom: 1px solid var(--gold-dim); }
+.pcb-repo h3 a:hover, .pcb-repo h3 a:focus-visible { color: var(--gold); border-bottom-color: var(--gold); }
+.pcb-blurb { margin: .45rem 0 .8rem; font-family: var(--sans); font-size: .95rem; color: #c4beb2; max-width: 46rem; }
+.pcb-blurb a { color: var(--gold); }
+.pcb-state { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0 0 .7rem; padding: 0; list-style: none; font-size: .74rem; }
+.pcb-state li { border: 1px solid var(--line); background: var(--panel); border-radius: 3px; padding: .12rem .5rem; color: var(--muted); }
+.pcb-state b { color: var(--silk); font-weight: 600; }
+.pcb-state a { color: inherit; text-decoration: none; }
+.pcb-state a:hover, .pcb-state a:focus-visible { color: var(--gold); }
+.pcb-state .ok b { color: #6cc070; }
+.pcb-state .bad b { color: #e06c5a; }
+.pcb-commit { margin: 0 0 1rem; font-size: .78rem; color: var(--muted); overflow-wrap: anywhere; }
+.pcb-commit a { color: var(--muted); }
+.pcb-commit code { color: var(--silk); }
+.pcb-boards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr)); gap: 1rem; }
+.pcb-board { margin: 0; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); overflow: hidden; display: flex; flex-direction: column; }
+.pcb-hero { display: block; background: #f4f3ef; aspect-ratio: 4 / 3; }
+.pcb-hero img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.pcb-thumbs { display: flex; gap: .4rem; padding: .5rem .75rem 0; }
+.pcb-thumbs a { display: block; width: 3.2rem; height: 3.2rem; border: 1px solid var(--line); border-radius: 3px; overflow: hidden; background: #f4f3ef; }
+.pcb-thumbs a:hover, .pcb-thumbs a:focus-visible { border-color: var(--gold); }
+.pcb-thumbs img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pcb-board figcaption { padding: .6rem .75rem .75rem; font-size: .78rem; }
+.pcb-board figcaption .nm { color: var(--silk); font-weight: 600; }
+.pcb-board dl { display: grid; grid-template-columns: auto 1fr; gap: .1rem .8rem; margin: .45rem 0 0; }
+.pcb-board dt { color: var(--muted); }
+.pcb-board dd { margin: 0; color: var(--silk); font-variant-numeric: tabular-nums; }
+.pcb-board dd a { color: var(--gold); }
+.pcb-note { color: var(--muted); margin: .45rem 0 0; }
+</style>
+
+<section class="sect">
+  <h2><span aria-hidden="true">🟩</span> PCBs</h2>
+  <p class="prose pcb-intro">Circuit board repositories with commits in
+  {{ site.data.pcbs.snapshot_date | slice: 0, 4 }}, most recently active first.
+  Renders are the KiCad 3D views each repository keeps alongside its
+  design files; board size, layer and footprint counts are read straight from
+  the <code>.kicad_pcb</code> files.</p>
+
+  {% for r in site.data.pcbs.repos %}
+  <article class="pcb-repo" id="{{ r.repo | slugify }}">
+    <h3><a href="{{ r.url | escape }}">{{ r.title | escape }}</a></h3>
+    <p class="pcb-blurb">{{ r.blurb | escape }}{% if r.credit %}
+      Original design by <a href="{{ r.credit.url | escape }}">{{ r.credit.name | escape }}</a>.{% endif %}</p>
+
+    <ul class="pcb-state" role="list">
+      <li>last change <b>{{ r.last_commit.date }}</b></li>
+      <li><b>{{ r.commits_this_year }}</b> commits this year</li>
+      <li><a href="{{ r.url }}/issues"><b>{{ r.open_issues }}</b> open issue{% if r.open_issues != 1 %}s{% endif %}</a></li>
+      <li><a href="{{ r.url }}/pulls"><b>{{ r.open_prs }}</b> open PR{% if r.open_prs != 1 %}s{% endif %}</a></li>
+      {% if r.release %}<li><a href="{{ r.release.url | escape }}">release <b>{{ r.release.tag | escape }}</b> · {{ r.release.date }}</a></li>
+      {% else %}<li>no release yet</li>{% endif %}
+      {% if r.ci %}<li class="{% if r.ci.conclusion == 'success' %}ok{% elsif r.ci.conclusion == 'failure' %}bad{% endif %}"><a href="{{ r.ci.url | escape }}">CI {{ r.ci.workflow | escape }}: <b>{{ r.ci.conclusion }}</b></a></li>{% endif %}
+      {% if r.license and r.license != "NOASSERTION" %}<li>{{ r.license }}</li>{% endif %}
+      <li>created {{ r.created }}</li>
+    </ul>
+    <p class="pcb-commit">latest: <a href="{{ r.last_commit.url | escape }}"><code>{{ r.last_commit.sha }}</code></a>
+      {{ r.last_commit.message | escape }}</p>
+
+    <div class="pcb-boards">
+      {% for b in r.boards %}{% assign hero = b.images | first %}
+      <figure class="pcb-board">
+        <a class="pcb-hero" href="{{ hero.src | relative_url }}">
+          <img src="{{ hero.src | relative_url }}" width="{{ hero.width }}" height="{{ hero.height }}"
+               alt="{% if b.pcb %}3D render of the {{ b.name | escape }} board{% else %}{{ r.title | escape }} {{ b.name | escape }}{% endif %}" loading="lazy">
+        </a>
+        {% if b.images.size > 1 %}
+        <div class="pcb-thumbs">
+          {% for im in b.images %}<a href="{{ im.src | relative_url }}" aria-label="View {{ b.name | escape }} image {{ forloop.index }}"><img src="{{ im.src | relative_url }}" alt="" loading="lazy"></a>{% endfor %}
+        </div>
+        {% endif %}
+        <figcaption>
+          <span class="nm">{{ b.name | escape }}</span>
+          {% if b.pcb %}
+          <dl>
+            {% if b.size_mm %}<dt>size</dt><dd>{{ b.size_mm[0] }} × {{ b.size_mm[1] }} mm</dd>{% endif %}
+            <dt>copper</dt><dd>{{ b.copper_layers }} layers</dd>
+            <dt>footprints</dt><dd>{{ b.footprints }}</dd>
+            <dt>KiCad</dt><dd>{{ b.kicad | default: b.file_version }}</dd>
+            <dt>board file</dt><dd><a href="{{ b.pcb_url | escape }}">changed {{ b.pcb_last_change }}</a></dd>
+          </dl>
+          {% else %}
+          <p class="pcb-note">No board layout yet — research and block diagram stage.</p>
+          {% endif %}
+        </figcaption>
+      </figure>
+      {% endfor %}
+    </div>
+  </article>
+  {% endfor %}
+
+  <p class="prose meta">Snapshot from {{ site.data.pcbs.snapshot_date }} —
+  refresh with scripts/fetch_pcbs.py.</p>
+</section>
