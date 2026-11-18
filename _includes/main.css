@@ -300,7 +300,10 @@ ul.deg-list { padding-left: 0; list-style: none; }
 .contrib i.f { background: transparent; box-shadow: inset 0 0 0 1px var(--panel2); }
 .contrib-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin: 0 0 1rem; color: var(--muted); font-size: .72rem; }
 .contrib-legend span { margin-right: .7rem; }
-.cy { display: flex; align-items: flex-start; gap: .9rem; width: max-content; padding: .45rem 0; }
+/* Year rows: total | calendar | organisations. The three columns need
+   about 1,030px; on narrower screens the organisations move under the
+   calendar (see the media query below) instead of scrolling out of view. */
+.cy { display: grid; grid-template-columns: auto auto auto; column-gap: .9rem; align-items: start; width: max-content; padding: .45rem 0; }
 .cy-meta { width: 4.6rem; padding-top: 14px; text-align: right; }
 .cy-meta a { display: block; color: var(--silk); font-weight: 700; text-decoration: none; }
 .cy-meta a:hover, .cy-meta a:focus-visible { color: var(--gold); }
@@ -321,6 +324,16 @@ ul.deg-list { padding-left: 0; list-style: none; }
 .cy-orgs a:hover, .cy-orgs a:focus-visible { color: var(--gold); border-color: var(--gold-dim); }
 .cy-orgs img { display: block; flex: none; border-radius: 3px; background: #fff; }
 .cy-orgs span { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+@media (max-width: 1080px) {
+  .cy { grid-template-columns: auto auto; }
+  .cy-orgs { grid-column: 2; width: auto; display: flex; flex-wrap: wrap; gap: 5px 6px; padding: 6px 0 0 31px; }
+  .cy-orgs li + li { margin-top: 0; }
+}
+/* Phones: the calendar itself is wider than the screen and scrolls
+   sideways, so keep the organisations within the visible width. */
+@media (max-width: 640px) {
+  .cy-orgs { grid-column: 1 / -1; max-width: calc(100vw - 2.5rem); padding-left: 0; }
+}
 
 /* ---- Print ----------------------------------------------------------
    The resume page prints like the canonical resume Google Doc: black
