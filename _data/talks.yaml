@@ -234,6 +234,7 @@
   slides: https://docs.google.com/presentation/d/1kpDo7arCUB4I6izbQ63n6E_ffQN4h86-wh36y6xQDhA
   slides_embed: https://docs.google.com/presentation/d/1kpDo7arCUB4I6izbQ63n6E_ffQN4h86-wh36y6xQDhA/embed
   slides_edit: https://docs.google.com/presentation/d/1kpDo7arCUB4I6izbQ63n6E_ffQN4h86-wh36y6xQDhA
+  slides_pub: https://docs.google.com/presentation/d/e/2PACX-1vT3Q9csW1PfaREp42-0VjBSq2Ojda67niIH3pesGnktWBsQ-gwYAGrlyZ_-dcCVSeOxyTA3wjjR1QPX/pub?start=false&loop=false&delayms=3000
   source: sheet
   sort_date: '2022-04-19'
 - title: OpenPOWER Summit 2021 - A fully FOSS memory controller with LPDDR4/5 support for FPGA and ASICs
