@@ -227,8 +227,8 @@ orconf19-artix7:
   url: https://docs.google.com/presentation/d/1EBpThE64ci4nNbQaO5n_Uc7QmDGpcb1Rm-iNAyd7fUw/pub?start=false
   via: pub
 orconf19-yosys:
-  url: null
-  via: none
+  url: https://docs.google.com/presentation/d/e/2PACX-1vT5mOdSiEluSjC5ceI8KAG8HXiUo0dRXOZk4FCbQ0do6OtDv1oBf6rLo-TYCgRq0VD3vJGWo-BomZA-/pub?start=false&loop=false&delayms=3000
+  via: pub
 oto21-sky130:
   url: https://docs.google.com/presentation/d/e/2PACX-1vSI0XbPCnBhRxR8B2i33DyczgmiLtiXMMYp6iEaAmsLSK6SemVL2Cn3ErXbznuTM96Y8f9nzOWVebZe/pub?start=false&loop=false&delayms=3000
   via: pub
