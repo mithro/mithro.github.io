@@ -161,8 +161,8 @@ bit.ly keywords of the form `mithro-<name>` publish under the shorter
 `mith.ro/<name>/` as their primary path, with `mith.ro/mithro-<name>/`
 kept as a working alias (both redirect straight to the long URL). The
 exceptions are `mithro-talks` and `mithro-resume`, whose short names are
-the site's own `/talks/` and `/resume/` pages. Talks use the short name
-via `slides_short` in `_data/talks.yaml`.
+the site's own `/talks/` and `/resume/` pages. The talks and home pages
+pick the short name automatically for `bit.ly/mithro-<name>` slides links.
 
 Workflow after editing Visibility in the sheet:
 
