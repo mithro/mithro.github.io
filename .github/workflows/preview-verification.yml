@@ -39,6 +39,7 @@ concurrency:
 jobs:
   verify-preview:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
       - name: Resolve PR number
@@ -143,7 +144,7 @@ jobs:
             --header="User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" \
             --header="Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" \
             --header="Accept-Language:en-US,en;q=0.9" \
-            "$LOCAL_ORIGIN/" > muffet-report.json 2> muffet-stderr.txt || true
+            "$LOCAL_ORIGIN/" > muffet-report.json 2> muffet-stderr.txt || muffet_rc=$?
 
           if [ -s muffet-stderr.txt ]; then
             echo "muffet stderr:"
@@ -151,14 +152,20 @@ jobs:
           fi
           # muffet prints nothing on stdout when every link passes, and an
           # error message on stderr when the crawl itself could not run.
-          if [ ! -s muffet-report.json ] && grep -q . muffet-stderr.txt; then
-            echo "muffet failed to run"
+          # A non-zero exit with no JSON means the crawl itself failed, even
+          # if it said nothing on stderr.
+          if [ ! -s muffet-report.json ] && { [ "${muffet_rc:-0}" -ne 0 ] || grep -q . muffet-stderr.txt; }; then
+            echo "muffet failed to run (exit ${muffet_rc:-0})"
             exit 1
           fi
 
           python3 .github/scripts/link-report.py muffet-report.json \
             --origin "$LOCAL_ORIGIN" \
             --display-origin "$PREVIEW_URL" \
+            --internal-origin "https://mith.ro" \
+            --internal-origin "https://www.mith.ro" \
+            --internal-origin "$PREVIEW_URL" \
+            --max-chars 60000 \
             --out "$REPORT_FILE" \
             --github-output "$GITHUB_OUTPUT" > "$RUNNER_TEMP/counts.txt"
           cat "$RUNNER_TEMP/counts.txt"
@@ -170,7 +177,8 @@ jobs:
           fi
 
           # Keep the PR comment under GitHub's 65,536-character limit.
-          REPORT=$(head -c 60000 $REPORT_FILE)
+          # (link-report.py already cut the report at a line boundary.)
+          REPORT=$(cat $REPORT_FILE)
           echo "report_content<<REPORT_EOF" >> $GITHUB_OUTPUT
           echo "$REPORT" >> $GITHUB_OUTPUT
           echo "REPORT_EOF" >> $GITHUB_OUTPUT

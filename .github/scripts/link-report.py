@@ -16,6 +16,36 @@ import json
 import sys
 
 
+def existing_chars(path):
+    try:
+        with open(path, encoding="utf-8") as f:
+            return len(f.read())
+    except FileNotFoundError:
+        return 0
+
+
+def truncate(lines, budget):
+    """Cut at a whole line, then close any open code block and <details>."""
+    note = "... report truncated to fit in a PR comment"
+    out, used = [], 0
+    for line in lines:
+        if used + len(line) + 1 > budget - 200:  # room for the closers
+            fence_open = sum(l.startswith("```") for l in out) % 2 == 1
+            details_open = (sum("<details>" in l for l in out)
+                            > sum("</details>" in l for l in out))
+            if fence_open:
+                out.append(note)
+                out.append("```")
+            else:
+                out.append(f"_{note}_")
+            if details_open:
+                out += ["", "</details>"]
+            return out
+        out.append(line)
+        used += len(line) + 1
+    return out
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("report", help="muffet --format=json output")
@@ -23,11 +53,20 @@ def main():
                         help="origin muffet crawled, e.g. http://localhost:4000")
     parser.add_argument("--display-origin", default="",
                         help="origin to show pages under, e.g. the preview URL")
+    parser.add_argument("--internal-origin", action="append", default=[],
+                        help="another origin whose links count as internal, "
+                             "e.g. https://mith.ro (repeatable)")
+    parser.add_argument("--max-chars", type=int, default=0,
+                        help="truncate the appended report at a line boundary "
+                             "to keep the whole file under this many characters")
     parser.add_argument("--out", required=True, help="Markdown report path")
     parser.add_argument("--github-output", help="append outputs to this file")
     args = parser.parse_args()
 
     origin = args.origin.rstrip("/")
+    # The site's own absolute links (https://mith.ro/..., the preview
+    # URL) are just as much "ours" as relative ones.
+    internal_origins = [origin, *(o.rstrip("/") for o in args.internal_origin if o)]
     display = args.display_origin.rstrip("/") or origin
 
     with open(args.report, encoding="utf-8") as f:
@@ -45,7 +84,8 @@ def main():
             error = link.get("error", "")
             if not error:
                 continue
-            is_internal = url == origin or url.startswith(origin + "/")
+            is_internal = any(url == o or url.startswith(o + "/")
+                              for o in internal_origins)
             bucket = internal if is_internal else external
             bucket.setdefault(shown(page["url"]), []).append(
                 (error, shown(url)))
@@ -106,6 +146,8 @@ def main():
     else:
         lines.append("All external links answered.")
 
+    if args.max_chars:
+        lines = truncate(lines, args.max_chars - existing_chars(args.out))
     with open(args.out, "a", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
 

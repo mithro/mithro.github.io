@@ -15,13 +15,17 @@ Modelled on wafer.space's CI
 - **`workflows/preview-verification.yml`** — builds the PR's site itself,
   serves `_site` on `http://localhost:4000` and runs
   [muffet](https://github.com/raviqqe/muffet) over it. A broken internal
-  page or asset fails the check. External links are checked too but only
-  reported, because many sites block or rate-limit GitHub's runners. The
+  page or asset fails the check; absolute links to `https://mith.ro/...`
+  or the preview URL count as internal too. External links are checked
+  too but only reported, because many sites block or rate-limit GitHub's runners. The
   report lands as a PR comment (previous reports are archived into
   `<details>` blocks), with internal failures first and external ones in a
   collapsed list. `.github/scripts/link-report.py` does the split. Checking
   a local build rather than preview.mith.ro means a Pages redeploy for
-  another PR cannot cause 503s in this check.
+  another PR cannot cause 503s in this check. The local build has an empty
+  `baseurl`, like production, so a link written without `relative_url`
+  passes here even though it breaks on the `/pr-<N>` preview; use
+  `relative_url` for every internal link.
 - **`workflows/cleanup-previews.yml`** — every 15 minutes, removes preview
   directories whose PR has closed and marks their GitHub deployments
   inactive.
