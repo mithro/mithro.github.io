@@ -36,13 +36,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout PR
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Create deployment
         id: deployment
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const createDeployment = require('./.github/scripts/create-deployment.js');
@@ -56,7 +56,7 @@ jobs:
 
       - name: Generate PR directory name and slugified redirect
         id: pr-directory
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const generatePrDirectoryName = require('./.github/scripts/generate-pr-directory-name.js');
@@ -198,7 +198,7 @@ jobs:
 
       - name: Update deployment status
         if: always()
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         env:
           DEPLOYMENT_ID: ${{ steps.deployment.outputs.deployment_id }}
           JOB_STATUS: ${{ job.status }}
@@ -210,7 +210,7 @@ jobs:
 
       - name: Comment PR with preview URL
         if: steps.verify-deployment.outputs.deployment_status == 'success'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const commentPrPreview = require('./.github/scripts/comment-pr-preview.js');
@@ -218,7 +218,7 @@ jobs:
 
       - name: Comment PR with deployment warning
         if: steps.verify-deployment.outputs.deployment_status == 'partial'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const prNumber = context.payload.pull_request.number;
