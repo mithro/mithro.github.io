@@ -63,8 +63,9 @@ def main() -> None:
         if t.get("strips") and strips and slug not in strips:
             problems.append(f"{who}: strips: true but no manifest entry (run fetch_slide_strips.py)")
         if (h := t.get("highlight")) is not None:
-            if not isinstance(h, int) or not 1 <= h <= 10:
-                problems.append(f"{who}: highlight must be 1..10")
+            # The hub shows ranks 1-9 (a 3x3 grid) and so does /talks/highlights/.
+            if not isinstance(h, int) or not 1 <= h <= 9:
+                problems.append(f"{who}: highlight must be 1..9")
             elif h in ranks:
                 problems.append(f"{who}: highlight rank {h} also used by {ranks[h]}")
             ranks[h] = slug

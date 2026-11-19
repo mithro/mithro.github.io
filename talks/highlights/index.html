@@ -7,7 +7,7 @@ description: "A short list of Tim 'mithro' Ansell's most significant talks — s
   <h2><span aria-hidden="true">⭐</span> Highlighted talks</h2>
   {% include talks_nav.html %}
   {%- comment -%} highlight: ranks choose WHICH talks; they show by the date given, newest first. {%- endcomment -%}
-  {% assign picks = site.data.talks | where_exp: "t", "t.highlight" | sort: "highlight" | slice: 0, 10 | sort: "sort_date" | reverse %}
+  {% assign picks = site.data.talks | where_exp: "t", "t.highlight" | sort: "highlight" | slice: 0, 9 | sort: "sort_date" | reverse %}
   {% for talk in picks %}
   {%- assign title = talk.talk_title | default: talk.title -%}
   <article class="hl">
@@ -18,7 +18,9 @@ description: "A short list of Tim 'mithro' Ansell's most significant talks — s
     {%- comment -%} Same arrangement as a timeline row: the recording on the left, the film strip beside it. {%- endcomment %}
     <div class="embeds">
       {% include talk_embeds.html talk=talk eager=forloop.first no_slides_tile=has_strip %}
-      {% if has_strip %}{% include strip.html slug=talk.slug title=title limit=24 eager=forloop.first %}{% endif %}
+      {%- assign has_video = false -%}{%- if talk.video contains "youtu.be/" or talk.video contains "watch?v=" -%}{%- assign has_video = true -%}{%- endif -%}
+      {%- if forloop.first and has_video == false -%}{%- assign strip_eager = true -%}{%- else -%}{%- assign strip_eager = false -%}{%- endif %}
+      {% if has_strip %}{% include strip.html slug=talk.slug title=title limit=24 eager=strip_eager %}{% endif %}
     </div>
   </article>
   {% endfor %}

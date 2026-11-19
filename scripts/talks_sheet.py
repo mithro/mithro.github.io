@@ -199,7 +199,13 @@ def validate_slugs(talks: list[dict]) -> None:
 
 
 def col_letter(idx: int) -> str:
-    return chr(ord("A") + idx)
+    """0 -> A, 25 -> Z, 26 -> AA, ..."""
+    out = ""
+    idx += 1
+    while idx:
+        idx, rem = divmod(idx - 1, 26)
+        out = chr(ord("A") + rem) + out
+    return out
 
 
 def do_slugs(s: requests.Session) -> None:

@@ -48,7 +48,9 @@ anything to show, a full-width row with the film strip and embed tiles.
   <td colspan="2">
     <div class="embeds">
       {% include talk_embeds.html talk=talk eager=include.eager no_slides_tile=has_strip %}
-      {% if has_strip %}{% include strip.html slug=talk.slug title=talk.talk_title limit=12 eager=include.eager %}{% endif %}
+      {%- comment -%} Only one image per page asks for high priority: the video tile when there is one, else the strip. {%- endcomment -%}
+      {%- if has_video -%}{%- assign strip_eager = false -%}{%- else -%}{%- assign strip_eager = include.eager -%}{%- endif %}
+      {% if has_strip %}{% include strip.html slug=talk.slug title=talk.talk_title limit=12 eager=strip_eager %}{% endif %}
     </div>
   </td>
 </tr>
