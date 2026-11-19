@@ -586,6 +586,7 @@
   slides: https://docs.google.com/presentation/d/1cGDEIuBgq05G7oJaxhm8tH46azc460EXT_i9hKVvG_g
   slides_embed: https://docs.google.com/presentation/d/1cGDEIuBgq05G7oJaxhm8tH46azc460EXT_i9hKVvG_g/embed
   slides_edit: https://docs.google.com/presentation/d/1cGDEIuBgq05G7oJaxhm8tH46azc460EXT_i9hKVvG_g
+  slides_pub: https://docs.google.com/presentation/d/e/2PACX-1vSZUaxe7qPXkfJ1Y8r2p3p5shPTeNjU7CUiL8u3FO_shoZzlKDdhzrQq2B8_iXjbsKAW0h9J2f_mwTV/pub?start=false&loop=false&delayms=3000
   source: sheet
   sort_date: '2020-12-16'
 - title: google/skywater-pdk - Manufacturable Open Source 130nm PDK - RISC-V Summit 2020
