@@ -22,10 +22,9 @@ layout: default
   <div class="embeds">
     {% include talk_embeds.html talk=talk eager=true %}
   </div>
-  {%- assign stub_path = "/" | append: talk.slug | append: "/" -%}
-  {%- assign stub = site.pages | where: "permalink", stub_path | first -%}
+  {%- include shortlink_stub.html alias=talk.slug -%}
   {%- if stub %}
-  <p class="talk-meta">Short link: <a href="{{ stub_path | relative_url }}">mith.ro/{{ talk.slug }}</a></p>
+  <p class="talk-meta">Short link: <a href="{{ stub_path | relative_url }}">mith.ro/{{ stub_alias }}</a></p>
   {%- endif %}
   <p class="talk-meta prevnext">
     {% if prev %}<a href="{{ '/talks/' | append: prev.slug | append: '/' | relative_url }}">← {{ prev.talk_title | default: prev.title | escape }}</a>{% else %}<span></span>{% endif %}
