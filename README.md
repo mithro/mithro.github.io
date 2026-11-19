@@ -51,8 +51,8 @@ hand-edited, some are refreshed from external sources with a script:
 - **`_data/resume.yaml`** — hand-edited, structured from the resume
   Google Doc. Re-snapshot by hand when the doc changes.
 - **`_data/contact.yaml`** — hand-edited contact links, no source doc.
-- **`_data/design_docs.yaml`** — hand-curated list of Tim's public
-  design documents (Google Docs behind his short links), grouped by
+- **`_data/design_docs.yaml`** — hand-curated list of public design
+  documents Tim wrote, co-wrote or reviewed (Google Docs behind his short links), grouped by
   topic with a one-paragraph summary each; rendered on
   `/design-docs/`. The header comment records the selection rules.
   Each card links through the `/<alias>/` redirect stub when the
@@ -118,8 +118,9 @@ uv run scripts/fetch_doc_thumbs.py
 
 Re-run after adding a document to `_data/design_docs.yaml`. For each
 entry it exports the Google Doc as PDF *anonymously* — the same access
-a visitor has, so a document that has been un-shared is reported
-rather than silently kept — renders page 1, and writes 240px/480px
+a visitor has, checked for every document on every run, so a document
+that has been un-shared is reported and its old previews deleted rather
+than silently kept — renders page 1, and writes 240px/480px
 WebP renditions to `assets/thumbs/docs/<alias>-*.webp` plus the size
 manifest `_data/doc_thumbs.yaml`. Exits non-zero if any card would be
 left without a preview. Existing renditions are reused; delete the
@@ -143,9 +144,8 @@ and after any token has been pasted into a terminal, ticket, or chat.
 Each generated entry defaults `include: false` with a `reason`, pending
 review — except keywords already referenced from public sources (the
 talks sheet, the resume), which default to `include: true`, *unless*
-they collide with a reserved site path (`talks`, `interviews`,
-`papers`, `projects`, `design-docs`, `resume`, `about`, `assets`,
-`docs`, `scripts`, `404`), in which case they are
+they collide with a reserved site path (`talks`, `papers`, `resume`,
+`about`, `assets`, `docs`, `scripts`, `404`), in which case they are
 always excluded regardless of source. See "Short-link redirects" for
 what happens next.
 
