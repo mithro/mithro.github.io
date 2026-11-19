@@ -21,7 +21,11 @@ if not TOKEN:
     sys.exit("Set BITLY_TOKEN in the environment")
 
 GROUP = "Bb5ml3vJt6Z"
-RESERVED = {"talks", "papers", "resume", "about", "assets", "docs", "scripts", "404"}
+# Keep in sync with RESERVED in gen_redirect_pages.py (which also adds
+# every top-level path and permalink it finds at generation time).
+RESERVED = {"talks", "interviews", "papers", "projects", "resume", "about",
+            "assets", "docs", "scripts", "404", "contributions",
+            "design-docs", ".well-known"}
 
 def api(url):
     req = urllib.request.Request(url, headers={"Authorization": f"Bearer {TOKEN}"})
