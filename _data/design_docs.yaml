@@ -7,9 +7,8 @@
 # goal/objective, an owner or author line and structured sections — that
 # Tim owns, authored, co-authored or reviewed. FAQs, indexes of links,
 # meeting notes, conference proposals, set-up instructions and the
-# resume were left out, as were design docs owned by colleagues that Tim
-# merely short-linked (Sami Kyöstilä's vsync scheduling and State of
-# Scheduling docs, Unai Martinez-Corral's EDA integration doc).
+# resume were left out, as were three design docs owned by colleagues
+# that Tim merely short-linked.
 #
 # Fields:
 #   alias        mith.ro short-link name; the page links to /<alias>/ when
