@@ -91,6 +91,14 @@ years are reused from the existing file and a normal run only refetches
 the last two years. The first run, or `--refresh-orgs`, takes around
 half an hour.
 
+`.github/workflows/refresh-contributions.yml` runs it automatically on
+the 2nd of every month and commits the result to `master`. It can also
+be started by hand from the Actions tab ("Refresh Contributions Data" →
+"Run workflow", optionally with *refresh_orgs*). Each run re-enables
+itself through the API so GitHub's 60-day inactivity rule cannot switch
+it off, and a failed run opens an issue labelled
+`contributions-refresh`.
+
 ### `scripts/fetch_photos.py`
 
 ```bash
