@@ -398,24 +398,6 @@
   slides_edit: https://docs.google.com/presentation/d/1m3-NnqkuBOHjSbw2AhBArWhCpw_leGDiTlkPodAi-X4
   source: sheet
   sort_date: '2021-09-21'
-- title: 'ESSCIRC ESSDERC 2021 - Open down to the transistor: A fully open source, manufacturable PDK for 130nm process for IC Creation Silicon Down to the Transistor - Tim Ansell, Google -- Summary'
-  slug: esscirc21-sky130-summary
-  talk_title: Open down to the transistor (summary)
-  categories: [open-silicon]
-  series: Open down to the transistor
-  venue: ESSCIRC/ESSDERC
-  strips: true
-  event: ''
-  year: 2021
-  date: 21 Sep 2021
-  slides: https://docs.google.com/presentation/d/1c-DxFpHgPqwMipwJWPvkU9o_VaCMMa4U9PSZPqiZzZk
-  slides_embed: https://docs.google.com/presentation/d/1c-DxFpHgPqwMipwJWPvkU9o_VaCMMa4U9PSZPqiZzZk/embed
-  slides_edit: https://docs.google.com/presentation/d/1c-DxFpHgPqwMipwJWPvkU9o_VaCMMa4U9PSZPqiZzZk
-  # Cut down from the full ESSCIRC deck, which is the public copy
-  # (checked signed-out 2026-11-19); frames open the matching slide there.
-  slides_pub: https://docs.google.com/presentation/d/e/2PACX-1vR0sAgYr_QP8fuZBQ-eUGAL1vAOIj-51IsNa8-zHkd8JRikrek227_83l2EamDt3jfpq6b6HfjWwo9Q/pub?start=false&loop=false&delayms=3000
-  source: sheet
-  sort_date: '2021-09-21'
 - title: 'ESSCIRC ESSDERC 2021 - Open down to the transistor: A fully open source, manufacturable PDK for 130nm process for IC Creation Silicon Down to the Transistor - Tim Ansell, Google'
   slug: esscirc21-sky130-v2
   talk_title: "Open down to the transistor: a fully open source, manufacturable PDK for a 130nm process"
