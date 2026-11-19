@@ -66,12 +66,18 @@ def get(url: str, params: dict | None = None, tries: int = 8,
 
 
 def slide_ids(pid: str) -> list[str] | None:
-    """Page objectIds in deck order, or None (with a message) on failure."""
-    r = get(f"{SLIDES}/{pid}", params={"fields": "slides.objectId"})
+    """Page objectIds in deck order, or None (with a message) on failure.
+
+    Skipped slides (Slides' "Skip slide") are left out: they are usually
+    drafts or speaker-only material, and a visitor's slideshow hides them.
+    """
+    r = get(f"{SLIDES}/{pid}",
+            params={"fields": "slides(objectId,slideProperties/isSkipped)"})
     if not r.ok:
         print(f"slides {pid}: metadata HTTP {r.status_code}", file=sys.stderr)
         return None
-    return [s["objectId"] for s in r.json().get("slides", [])]
+    return [s["objectId"] for s in r.json().get("slides", [])
+            if not (s.get("slideProperties") or {}).get("isSkipped")]
 
 
 def thumbnail_png(pid: str, page: str, size: str = "MEDIUM") -> bytes | None:

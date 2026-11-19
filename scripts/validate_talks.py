@@ -87,6 +87,20 @@ def main() -> None:
         elif d and (d.get("via") not in ("pub", "embed", "edit", "none")
                     or (d["via"] == "none") != (d.get("url") is None)):
             problems.append(f"{t.get('slug')}: bad deck_links entry {d!r}")
+    # Every talk needs its /talks/<slug>/ page: listings, the feed and
+    # prev/next all link there, so a talk added to talks.yaml without
+    # re-running gen_talk_pages.py would 404 from every one of them.
+    talk_pages = {}
+    for f in pathlib.Path("_talks").glob("*.md"):
+        fm = yaml.safe_load(f.read_text().split("---")[1]) or {}
+        talk_pages[f.stem] = fm.get("slug")
+    for slug in sorted(set(slugs) - set(talk_pages)):
+        problems.append(f"talk {slug}: no _talks/{slug}.md (run gen_talk_pages.py)")
+    for stem, slug in sorted(talk_pages.items()):
+        if stem not in slugs:
+            problems.append(f"_talks/{stem}.md: no such talk (run gen_talk_pages.py)")
+        elif slug != stem:
+            problems.append(f"_talks/{stem}.md: slug {slug!r} does not match file name")
     for key in sorted(keys - used):
         problems.append(f"topic {key}: no talks, its page would be empty")
     for slug, entry in strips.items():
@@ -100,7 +114,7 @@ def main() -> None:
             problems.append(f"strips manifest: {slug} expects {n} slides, files differ")
     for p in problems:
         print(p, file=sys.stderr)
-    print(f"{len(talks)} talks, {len(keys)} categories ({len(stubs)} pages), "
+    print(f"{len(talks)} talks ({len(talk_pages)} pages), {len(keys)} categories ({len(stubs)} pages), "
           f"{len(strips)} strips, "
           f"{len(ranks)} highlights: {'OK' if not problems else f'{len(problems)} problems'}",
           file=sys.stderr)

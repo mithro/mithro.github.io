@@ -8,6 +8,12 @@ Scrollable film strip of a deck's slides.
                  170+ slides, so listings must not carry every frame)
   include.eager  true when the strip is above the fold: the first frames
                  load eagerly (a lazily loaded LCP image costs seconds)
+On listing pages (include.limit set) the frames are previews: they are
+taken out of the tab order and hidden from screen readers, so a page of
+50 talks is not 600 tab stops all named "Slide n of N". The strip itself
+stays focusable for keyboard scrolling, the "+N more" frame stays a
+normal link, and the row's talk title is the way in. On a talk's own
+page every frame is a real, labelled link into the deck.
 {%- endcomment -%}
 {%- assign st = site.data.strips[include.slug] -%}
 {%- comment -%} Frames open the deck at that slide via _data/deck_links.yaml (deck_links.py): published to the web where possible; no link when no visitor could open the deck. {%- endcomment -%}
@@ -16,12 +22,13 @@ Scrollable film strip of a deck's slides.
 {%- assign base = '/assets/strips/' | append: include.slug | append: '/' | relative_url -%}
 {%- assign limit = include.limit | default: st.count -%}
 {%- assign rest = st.count | minus: limit -%}
+{%- if include.limit -%}{%- assign frame_attrs = ' tabindex="-1" aria-hidden="true"' -%}{%- else -%}{%- assign frame_attrs = '' -%}{%- endif -%}
 <div class="strip-wrap{% if include.size == 'lg' %} strip-lg{% endif %}">
   <div class="strip" role="group" aria-label="Slides: {{ include.title | escape }}" tabindex="0">
   {%- for oid in st.slides limit: limit -%}
     {%- assign n = forloop.index -%}
     {%- assign nn = n | prepend: '000' | slice: -3, 3 -%}
-    {%- if dl.url %}<a class="frame" href="{{ dl.url | escape }}{% if dl.via == 'edit' %}#{% else %}&amp;{% endif %}slide=id.{{ oid }}" title="Slide {{ n }} of {{ st.count }}">{% else %}<span class="frame">{% endif %}<img src="{{ base }}{{ nn }}-240.webp" srcset="{{ base }}{{ nn }}-240.webp 240w, {{ base }}{{ nn }}-480.webp 480w" sizes="{% if include.size == 'lg' %}356px{% else %}240px{% endif %}" width="{{ st.w }}" height="{{ st.h }}" alt="Slide {{ n }} of {{ st.count }}" {% if include.eager and n <= 4 %}{% if n == 1 %}fetchpriority="high" {% endif %}loading="eager"{% else %}loading="lazy"{% endif %} decoding="async">{% if dl.url %}</a>{% else %}</span>{% endif %}
+    {%- if dl.url %}<a class="frame" href="{{ dl.url | escape }}{% if dl.via == 'edit' %}#{% else %}&amp;{% endif %}slide=id.{{ oid }}" title="Slide {{ n }} of {{ st.count }}"{{ frame_attrs }}>{% else %}<span class="frame">{% endif %}<img src="{{ base }}{{ nn }}-240.webp" srcset="{{ base }}{{ nn }}-240.webp 240w, {{ base }}{{ nn }}-480.webp 480w" sizes="{% if include.size == 'lg' %}356px{% else %}240px{% endif %}" width="{{ st.w }}" height="{{ st.h }}" alt="Slide {{ n }} of {{ st.count }}" {% if include.eager and n <= 4 %}{% if n == 1 %}fetchpriority="high" {% endif %}loading="eager"{% else %}loading="lazy"{% endif %} decoding="async">{% if dl.url %}</a>{% else %}</span>{% endif %}
   {%- endfor -%}
   {%- if rest > 0 -%}
     <a class="frame more" href="{{ '/talks/' | append: include.slug | append: '/' | relative_url }}" style="aspect-ratio: {{ st.w }} / {{ st.h }}"><span>+{{ rest }} more</span></a>
