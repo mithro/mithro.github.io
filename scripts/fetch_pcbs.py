@@ -33,6 +33,8 @@ CLONES = pathlib.Path("tmp/pcb-repos")  # gitignored scratch clones
 MAX_WIDTH = 960
 
 # image: (path in repo, optional crop box as fractions (left, top, right, bottom))
+# Only the repositories listed here are published. Deliberately left out:
+# the YT9215S switch mirror (someone else's design, not relevant here).
 REPOS = [
     {
         "repo": "minidc-temp-monitor",
@@ -78,21 +80,6 @@ REPOS = [
              "pcb": "hardware/rpi-camera-led.kicad_pcb",
              "images": [("docs/img/board-3d-iso.png", None),
                         ("docs/img/board-3d-top.png", None)]},
-        ],
-    },
-    {
-        "repo": "wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0",
-        "title": "YT9215S 5-port gigabit switch (mirror)",
-        "blurb": "Mirror of pankanwen's open hardware 5-port gigabit Ethernet "
-                 "switch built on the Motorcomm YT9215S, originally published "
-                 "on OSHWHub, with KiCad sources and renders.",
-        "credit": {"name": "pankanwen",
-                   "url": "https://oshwhub.com/pankanwen/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0"},
-        "boards": [
-            {"name": "YT9215S-5-port-switch",
-             "pcb": "kicad/YT9215S-5-port-switch.kicad_pcb",
-             "images": [("kicad/render/pcb-3d-top.png", None),
-                        ("kicad/render/pcb-3d-bottom.png", None)]},
         ],
     },
     {

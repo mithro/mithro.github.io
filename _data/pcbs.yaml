@@ -60,51 +60,6 @@ repos:
     file_version: '20241229'
     pcb_url: https://github.com/mithro/minidc-temp-monitor/blob/main/hardware/sensor-ch32v005/sensor-ch32v005.kicad_pcb
     pcb_last_change: '2026-11-18'
-- repo: wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0
-  title: YT9215S 5-port gigabit switch (mirror)
-  blurb: Mirror of pankanwen's open hardware 5-port gigabit Ethernet switch built
-    on the Motorcomm YT9215S, originally published on OSHWHub, with KiCad sources
-    and renders.
-  credit:
-    name: pankanwen
-    url: https://oshwhub.com/pankanwen/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0
-  url: https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0
-  description: null
-  license: NOASSERTION
-  stars: 0
-  created: '2026-10-22'
-  default_branch: main
-  last_commit:
-    date: '2026-11-17'
-    sha: 73d423e
-    message: 'Docs: link every file reference in the KiCad README'
-    url: https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/commit/73d423e3ff15bb3ec900ffc6825e66f6ec3dc1f3
-  commits_this_year: 10
-  open_issues: 0
-  open_prs: 0
-  release: null
-  ci: null
-  boards:
-  - name: YT9215S-5-port-switch
-    pcb: kicad/YT9215S-5-port-switch.kicad_pcb
-    images:
-    - src: /assets/pcbs/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0--YT9215S-5-port-switch-0.webp
-      width: 960
-      height: 631
-      source: https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/HEAD/kicad/render/pcb-3d-top.png
-    - src: /assets/pcbs/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0--YT9215S-5-port-switch-1.webp
-      width: 960
-      height: 631
-      source: https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/HEAD/kicad/render/pcb-3d-bottom.png
-    size_mm:
-    - 100.0
-    - 65.0
-    copper_layers: 2
-    footprints: 135
-    kicad: '9.0'
-    file_version: '20241229'
-    pcb_url: https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/YT9215S-5-port-switch.kicad_pcb
-    pcb_last_change: '2026-11-17'
 - repo: budget-poe-adapter
   title: budget-poe-adapter
   blurb: 'Research and design notes for a very cheap, non-isolated PoE to USB-C adapter
