@@ -26,11 +26,10 @@ sits on the left).
 {%- elsif talk.slides contains "bit.ly/" or talk.slides contains "j.mp/" -%}
   {%- assign short_disp = talk.slides | replace: "https://", "" | replace: "http://", "" -%}
   {%- assign mith_alias = short_disp | split: "/" | last -%}
-  {%- assign stub_path = "/" | append: mith_alias | append: "/" -%}
-  {%- assign stub = site.pages | where: "permalink", stub_path | first -%}
+  {%- include shortlink_stub.html alias=mith_alias -%}
   {%- if stub -%}
     {%- assign slides_href = stub_path | relative_url -%}
-    {%- assign short_disp = "mith.ro/" | append: mith_alias -%}
+    {%- assign short_disp = "mith.ro/" | append: stub_alias -%}
   {%- endif -%}
 {%- endif -%}
 {%- comment -%} A raw Google Slides URL is swapped for the deck's visitor link (_data/deck_links.yaml): published to the web where possible, and no link at all when no visitor could open the deck. Short links are left as they are. {%- endcomment -%}
