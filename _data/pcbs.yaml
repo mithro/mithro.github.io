@@ -3,6 +3,7 @@ snapshot_date: '2026-11-19'
 repos:
 - repo: minidc-temp-monitor
   title: minidc-temp-monitor
+  emoji: 🌡️
   blurb: 'Daisy-chained 42 x 13 mm temperature sensor strips for a miniature datacenter''s
     hot and cold aisles: a CH32V003 or CH32V005 RISC-V MCU plus an NTC thermistor,
     with a JST SH (Qwiic-style) connector at each end. A board''s I2C address is its
@@ -36,8 +37,8 @@ repos:
       height: 506
       source: https://github.com/mithro/minidc-temp-monitor/blob/HEAD/hardware/sensor-ch32v003/out/board-3d.png
     size_mm:
-    - 42.0
-    - 13.0
+    - 42
+    - 13
     copper_layers: 2
     footprints: 18
     kicad: '9.0'
@@ -52,8 +53,8 @@ repos:
       height: 506
       source: https://github.com/mithro/minidc-temp-monitor/blob/HEAD/hardware/sensor-ch32v005/out/board-3d.png
     size_mm:
-    - 42.0
-    - 13.0
+    - 42
+    - 13
     copper_layers: 2
     footprints: 21
     kicad: '9.0'
@@ -62,6 +63,7 @@ repos:
     pcb_last_change: '2026-11-18'
 - repo: budget-poe-adapter
   title: budget-poe-adapter
+  emoji: 🔌
   blurb: 'Research and design notes for a very cheap, non-isolated PoE to USB-C adapter
     that passes Ethernet through at gigabit speed. Research stage: no schematic or
     PCB yet, so the picture is the block diagram.'
@@ -90,8 +92,45 @@ repos:
       width: 960
       height: 476
       source: https://github.com/mithro/budget-poe-adapter/blob/HEAD/design/block-diagram.png
+- repo: esp32-to-gps
+  title: esp32-to-gps
+  emoji: 🛰️
+  blurb: An ESP32-C3 SuperMini running Tasmota, wired to a GPS receiver (u-blox 7,
+    MAX-M10S, Quectel LC29H or LEA-M8T), publishing position, satellites and time
+    to Home Assistant and feeding the receiver NTRIP corrections. The carrier board
+    waits on bench testing, so the picture is the wiring pinout.
+  credit: null
+  url: https://github.com/mithro/esp32-to-gps
+  description: ESP32 + Tasmota bridge from GPS/GNSS receivers (GT-U7, MAX-M10S, Quectel
+    LC29H, LEA-M8T) to Home Assistant over MQTT, with NTRIP/RTCM corrections
+  license: Apache-2.0
+  stars: 0
+  created: '2026-10-01'
+  default_branch: main
+  last_commit:
+    date: '2026-10-17'
+    sha: 37124b6
+    message: 'Firmware: pin the fork at esp32-to-gps now the bench fixes are merged'
+    url: https://github.com/mithro/esp32-to-gps/commit/37124b627fb3c6b47014807304024ca49f617769
+  commits_this_year: 63
+  open_issues: 1
+  open_prs: 0
+  release: null
+  ci:
+    workflow: Firmware
+    conclusion: success
+    url: https://github.com/mithro/esp32-to-gps/actions/runs/39023262141
+  boards:
+  - name: pinout
+    pcb: null
+    images:
+    - src: /assets/pcbs/esp32-to-gps--pinout-0.webp
+      width: 960
+      height: 415
+      source: https://github.com/mithro/esp32-to-gps/blob/HEAD/docs/images/pinout-supermini-gps.svg
 - repo: esp32-to-433mhz
   title: esp32-to-433mhz
+  emoji: 📡
   blurb: Carrier boards that join an ESP32-C3 SuperMini and a cheap 433 MHz radio
     module (Ebyte E07 / D-Sun CC1101, or an SX1278 LoRa Ra-02) into one small unit,
     with a 3D-printed case.
@@ -131,8 +170,8 @@ repos:
       height: 1230
       source: https://github.com/mithro/esp32-to-433mhz/blob/HEAD/docs/images/esp32c3-radio-adapter-3d-top.png
     size_mm:
-    - 29.0
-    - 38.0
+    - 29
+    - 38
     copper_layers: 2
     footprints: 14
     kicad: '9.0'
@@ -151,8 +190,8 @@ repos:
       height: 2169
       source: https://github.com/mithro/esp32-to-433mhz/blob/HEAD/docs/images/esp32c3-sx1278-adapter-3d-top.png
     size_mm:
-    - 24.0
-    - 58.0
+    - 24
+    - 58
     copper_layers: 2
     footprints: 5
     kicad: '9.0'
@@ -161,6 +200,7 @@ repos:
     pcb_last_change: '2026-09-06'
 - repo: rpi-camera-led
   title: rpi-camera-led
+  emoji: 💡
   blurb: 'Interposer for the Raspberry Pi camera flex cable: passes the 15-way CSI
     bus straight through and adds I2C-controlled camera GPIO, PWM illumination LEDs
     and an ambient light sensor, driven by a CH32V003.'
@@ -196,7 +236,7 @@ repos:
       height: 1139
       source: https://github.com/mithro/rpi-camera-led/blob/HEAD/docs/img/board-3d-top.png
     size_mm:
-    - 25.0
+    - 25
     - 23.9
     copper_layers: 2
     footprints: 24

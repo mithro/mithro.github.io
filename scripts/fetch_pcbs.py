@@ -1,7 +1,7 @@
 #!/usr/bin/env -S uv run
 # /// script
 # requires-python = ">=3.11"
-# dependencies = ["pyyaml", "pillow"]
+# dependencies = ["pyyaml", "pillow", "cairosvg"]
 # ///
 """Snapshot the 2026 PCB repositories into _data/pcbs.yaml + assets/pcbs/.
 
@@ -16,6 +16,7 @@ The repository list is hand-curated: PCB repositories with commits in
 the current year. Re-run whenever the page feels stale.
 """
 
+import io
 import json
 import math
 import pathlib
@@ -39,6 +40,7 @@ REPOS = [
     {
         "repo": "minidc-temp-monitor",
         "title": "minidc-temp-monitor",
+        "emoji": "🌡️",
         "blurb": "Daisy-chained 42 x 13 mm temperature sensor strips for a "
                  "miniature datacenter's hot and cold aisles: a CH32V003 or "
                  "CH32V005 RISC-V MCU plus an NTC thermistor, with a JST SH "
@@ -56,6 +58,7 @@ REPOS = [
     {
         "repo": "esp32-to-433mhz",
         "title": "esp32-to-433mhz",
+        "emoji": "📡",
         "blurb": "Carrier boards that join an ESP32-C3 SuperMini and a cheap "
                  "433 MHz radio module (Ebyte E07 / D-Sun CC1101, or an "
                  "SX1278 LoRa Ra-02) into one small unit, with a 3D-printed "
@@ -74,6 +77,7 @@ REPOS = [
     {
         "repo": "rpi-camera-led",
         "title": "rpi-camera-led",
+        "emoji": "💡",
         "blurb": None,  # GitHub description is good
         "boards": [
             {"name": "rpi-camera-led",
@@ -85,6 +89,7 @@ REPOS = [
     {
         "repo": "budget-poe-adapter",
         "title": "budget-poe-adapter",
+        "emoji": "🔌",
         "blurb": "Research and design notes for a very cheap, non-isolated "
                  "PoE to USB-C adapter that passes Ethernet through at "
                  "gigabit speed. Research stage: no schematic or PCB yet, so "
@@ -92,6 +97,21 @@ REPOS = [
         "boards": [
             {"name": "block diagram", "pcb": None,
              "images": [("design/block-diagram.png", (0, 0, 1, .46))]},
+        ],
+    },
+    {
+        "repo": "esp32-to-gps",
+        "title": "esp32-to-gps",
+        "emoji": "🛰️",
+        "blurb": "An ESP32-C3 SuperMini running Tasmota, wired to a GPS "
+                 "receiver (u-blox 7, MAX-M10S, Quectel LC29H or LEA-M8T), "
+                 "publishing position, satellites and time to Home Assistant "
+                 "and feeding the receiver NTRIP corrections. The carrier "
+                 "board waits on bench testing, so the picture is the wiring "
+                 "pinout.",
+        "boards": [
+            {"name": "pinout", "pcb": None,
+             "images": [("docs/images/pinout-supermini-gps.svg", None)]},
         ],
     },
 ]
@@ -290,7 +310,9 @@ def board_stats(text: str) -> dict:
     size = None
     if pts:
         xs, ys = [p[0] for p in pts], [p[1] for p in pts]
-        size = [round(max(xs) - min(xs), 1), round(max(ys) - min(ys), 1)]
+        # Whole millimetres print as "42", not "42.0".
+        size = [int(v) if v.is_integer() else v
+                for v in (round(max(xs) - min(xs), 1), round(max(ys) - min(ys), 1))]
     return {
         "size_mm": size,
         "copper_layers": len(copper),
@@ -316,7 +338,13 @@ def autotrim(img: Image.Image, pad: int = 16) -> Image.Image:
 
 
 def save_image(repo: str, d: pathlib.Path, path: str, crop, dst: pathlib.Path) -> dict:
-    img = Image.open(d / path)
+    if path.endswith(".svg"):
+        import cairosvg  # only needed for SVG diagrams
+        png = cairosvg.svg2png(url=str(d / path), output_width=MAX_WIDTH * 2,
+                               background_color="white")
+        img = Image.open(io.BytesIO(png))
+    else:
+        img = Image.open(d / path)
     img.load()
     if crop:
         w, h = img.size
@@ -343,6 +371,7 @@ def main() -> None:
         d = checkout(name)
         state = repo_state(name, d)
         entry = {"repo": name, "title": cfg["title"],
+                 "emoji": cfg.get("emoji"),
                  "blurb": cfg["blurb"] or state["description"],
                  "credit": cfg.get("credit"), **state, "boards": []}
         for b in cfg["boards"]:

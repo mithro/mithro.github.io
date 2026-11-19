@@ -13,9 +13,11 @@ stylesheet (inlined into every page) doesn't grow for an unlisted page.
 {%- endcomment -%}
 <style>
 .pcb-intro { max-width: 46rem; }
-/* Each repository reuses the /projects/ entry layout (.proj, .proj-head,
-   .proj-blurb in main.css); the board cards span both columns below it. */
-.pcb-repo .pcb-boards { grid-column: 1 / -1; margin-top: .9rem; }
+/* One .sect per repository, headed like the /projects/ sections, with a
+   rule above each so the projects read as separate blocks. */
+.pcb-repo { margin-top: 2.2rem; }
+.pcb-repo > h2 { border-top: 1px solid var(--line); padding-top: 1.6rem; }
+.pcb-repo .proj { border-top: 0; padding-top: 0; }
 .pcb-repo .proj-blurb a { color: var(--gold); border-bottom: 0; }
 .pcb-repo .pcb-state a, .pcb-repo .pcb-commit a, .pcb-repo .pcb-board a { border-bottom: 0; }
 .pcb-repo .proj-blurb .pcb-state a { color: inherit; }
@@ -27,89 +29,80 @@ stylesheet (inlined into every page) doesn't grow for an unlisted page.
 .pcb-state a:hover, .pcb-state a:focus-visible { color: var(--gold); }
 .pcb-state .ok b { color: #6cc070; }
 .pcb-state .bad b { color: #e06c5a; }
-.pcb-commit { margin: 0 0 1rem; font-size: .78rem; color: var(--muted); overflow-wrap: anywhere; }
-.pcb-commit a { color: var(--muted); }
+.pcb-commit { margin: 0; font-size: .78rem; color: var(--muted); overflow-wrap: anywhere; }
 .pcb-commit code { color: var(--silk); }
-.pcb-boards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr)); gap: 1rem; }
-.pcb-board { margin: 0; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); overflow: hidden; display: flex; flex-direction: column; }
-.pcb-hero { display: block; background: #f4f3ef; aspect-ratio: 4 / 3; }
+/* Every render gets the same fixed-size tile so the page scans as a grid. */
+.pcb-boards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 15rem)); gap: .9rem; margin-top: .4rem; }
+.pcb-board { margin: 0; border: 1px solid var(--line); border-radius: 5px; background: var(--panel); overflow: hidden; }
+.pcb-board:hover, .pcb-board:focus-within { border-color: var(--gold-dim); }
+.pcb-hero { display: block; aspect-ratio: 3 / 2; background: #f4f3ef; padding: .4rem; }
 .pcb-hero img { width: 100%; height: 100%; object-fit: contain; display: block; }
-.pcb-thumbs { display: flex; gap: .4rem; padding: .5rem .75rem 0; }
-.pcb-thumbs a { display: block; width: 3.2rem; height: 3.2rem; border: 1px solid var(--line); border-radius: 3px; overflow: hidden; background: #f4f3ef; }
-.pcb-thumbs a:hover, .pcb-thumbs a:focus-visible { border-color: var(--gold); }
-.pcb-thumbs img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.pcb-board figcaption { padding: .6rem .75rem .75rem; font-size: .78rem; }
-.pcb-board figcaption .nm { color: var(--silk); font-weight: 600; }
-.pcb-board dl { display: grid; grid-template-columns: auto 1fr; gap: .1rem .8rem; margin: .45rem 0 0; }
-.pcb-board dt { color: var(--muted); }
-.pcb-board dd { margin: 0; color: var(--silk); font-variant-numeric: tabular-nums; }
-.pcb-board dd a { color: var(--gold); }
-.pcb-note { color: var(--muted); margin: .45rem 0 0; }
+.pcb-board figcaption { padding: .5rem .65rem .6rem; font-family: var(--mono); font-size: .72rem; line-height: 1.45; color: var(--muted); }
+.pcb-board .nm { display: block; color: var(--silk); font-size: .8rem; font-weight: 600; overflow-wrap: anywhere; }
+.pcb-board figcaption a { color: var(--gold); }
+@media (max-width: 34rem) { .pcb-boards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; } }
 </style>
 
 <section class="sect">
   <h2><span aria-hidden="true">🟩</span> PCBs</h2>
-  <p class="prose pcb-intro">Circuit board repositories with commits in
-  {{ site.data.pcbs.snapshot_date | slice: 0, 4 }}, most recently active first.
+  <p class="prose pcb-intro">Circuit board projects with commits in
+  {{ site.data.pcbs.snapshot_date | slice: 0, 4 }}, most recently active first:
+  {% for r in site.data.pcbs.repos %}<a href="#{{ r.repo | slugify }}">{{ r.title | escape }}</a>{% unless forloop.last %}, {% endunless %}{% endfor %}.
   Renders are the KiCad 3D views each repository keeps alongside its
   design files; board size, layer and footprint counts are read straight from
   the <code>.kicad_pcb</code> files.</p>
+</section>
 
-  {% for r in site.data.pcbs.repos %}
-  {%- assign n_boards = 0 -%}{%- for b in r.boards -%}{%- if b.pcb -%}{%- assign n_boards = n_boards | plus: 1 -%}{%- endif -%}{%- endfor %}
-  <article class="proj pcb-repo" id="{{ r.repo | slugify }}">
+{% for r in site.data.pcbs.repos %}
+{%- assign n_boards = 0 -%}{%- for b in r.boards -%}{%- if b.pcb -%}{%- assign n_boards = n_boards | plus: 1 -%}{%- endif -%}{%- endfor %}
+<section class="sect pcb-repo" id="{{ r.repo | slugify }}">
+  <h2><span aria-hidden="true">{{ r.emoji | default: "🟩" }}</span> {{ r.title | escape }}</h2>
+  <div class="proj">
     <div class="proj-head">
-      <h3><a href="{{ r.url | escape }}">{{ r.title | escape }}</a> · <span class="nowrap">{{ r.created | date: "%b %Y" }} - Present</span></h3>
-      <p class="meta">{% if n_boards > 0 %}{{ n_boards }} board{% if n_boards != 1 %}s{% endif %}{% else %}Research{% endif %} · {{ r.commits_this_year }} commits · last change {{ r.last_commit.date }}</p>
+      <h3><a href="{{ r.url | escape }}">github.com/mithro/{{ r.repo | escape }}</a> · <span class="nowrap">{{ r.created | date: "%b %Y" }} - Present</span></h3>
+      <p class="meta">{% if n_boards > 0 %}{{ n_boards }} board{% if n_boards != 1 %}s{% endif %}{% else %}No board layout yet{% endif %} · {{ r.commits_this_year }} commits · last change {{ r.last_commit.date }}</p>
     </div>
     <div class="proj-blurb">
-    <p>{{ r.blurb | escape }}{% if r.credit %}
-      Original design by <a href="{{ r.credit.url | escape }}">{{ r.credit.name | escape }}</a>.{% endif %}</p>
-
-    <ul class="pcb-state" role="list">
-      <li><a href="{{ r.url }}/issues"><b>{{ r.open_issues }}</b> open issue{% if r.open_issues != 1 %}s{% endif %}</a></li>
-      <li><a href="{{ r.url }}/pulls"><b>{{ r.open_prs }}</b> open PR{% if r.open_prs != 1 %}s{% endif %}</a></li>
-      {% if r.release %}<li><a href="{{ r.release.url | escape }}">release <b>{{ r.release.tag | escape }}</b> · {{ r.release.date }}</a></li>
-      {% else %}<li>no release yet</li>{% endif %}
-      {% if r.ci %}<li class="{% if r.ci.conclusion == 'success' %}ok{% elsif r.ci.conclusion == 'failure' %}bad{% endif %}"><a href="{{ r.ci.url | escape }}">CI {{ r.ci.workflow | escape }}: <b>{{ r.ci.conclusion }}</b></a></li>{% endif %}
-      {% if r.license and r.license != "NOASSERTION" %}<li>{{ r.license }}</li>{% endif %}
-    </ul>
-    <p class="pcb-commit">latest: <a href="{{ r.last_commit.url | escape }}"><code>{{ r.last_commit.sha }}</code></a>
-      {{ r.last_commit.message | escape }}</p>
+      <p>{{ r.blurb | escape }}{% if r.credit %}
+        Original design by <a href="{{ r.credit.url | escape }}">{{ r.credit.name | escape }}</a>.{% endif %}</p>
+      <ul class="pcb-state" role="list">
+        <li><a href="{{ r.url }}/issues"><b>{{ r.open_issues }}</b> open issue{% if r.open_issues != 1 %}s{% endif %}</a></li>
+        <li><a href="{{ r.url }}/pulls"><b>{{ r.open_prs }}</b> open PR{% if r.open_prs != 1 %}s{% endif %}</a></li>
+        {% if r.release %}<li><a href="{{ r.release.url | escape }}">release <b>{{ r.release.tag | escape }}</b> · {{ r.release.date }}</a></li>
+        {% else %}<li>no release yet</li>{% endif %}
+        {% if r.ci %}<li class="{% if r.ci.conclusion == 'success' %}ok{% elsif r.ci.conclusion == 'failure' %}bad{% endif %}"><a href="{{ r.ci.url | escape }}">CI {{ r.ci.workflow | escape }}: <b>{{ r.ci.conclusion }}</b></a></li>{% endif %}
+        {% if r.license and r.license != "NOASSERTION" %}<li>{{ r.license }}</li>{% endif %}
+      </ul>
+      <p class="pcb-commit">latest: <a href="{{ r.last_commit.url | escape }}"><code>{{ r.last_commit.sha }}</code></a>
+        {{ r.last_commit.message | escape }}</p>
     </div>
+  </div>
 
-    <div class="pcb-boards">
-      {% for b in r.boards %}{% assign hero = b.images | first %}
-      <figure class="pcb-board">
-        <a class="pcb-hero" href="{{ hero.src | relative_url }}">
-          <img src="{{ hero.src | relative_url }}" width="{{ hero.width }}" height="{{ hero.height }}"
-               alt="{% if b.pcb %}3D render of the {{ b.name | escape }} board{% else %}{{ r.title | escape }} {{ b.name | escape }}{% endif %}" loading="lazy">
-        </a>
-        {% if b.images.size > 1 %}
-        <div class="pcb-thumbs">
-          {% for im in b.images %}<a href="{{ im.src | relative_url }}" aria-label="View {{ b.name | escape }} image {{ forloop.index }}"><img src="{{ im.src | relative_url }}" alt="" loading="lazy"></a>{% endfor %}
-        </div>
+  <div class="pcb-boards">
+    {% for b in r.boards %}{% assign hero = b.images | first %}
+    <figure class="pcb-board">
+      <a class="pcb-hero" href="{{ hero.src | relative_url }}">
+        <img src="{{ hero.src | relative_url }}" width="{{ hero.width }}" height="{{ hero.height }}"
+             alt="{% if b.pcb %}3D render of the {{ b.name | escape }} board{% else %}{{ r.title | escape }} {{ b.name | escape }}{% endif %}" loading="lazy">
+      </a>
+      <figcaption>
+        <span class="nm">{{ b.name | escape }}</span>
+        {% if b.pcb %}
+        {% if b.size_mm %}<span class="nowrap">{{ b.size_mm[0] }} × {{ b.size_mm[1] }} mm</span><br>{% endif %}
+        <span class="nowrap">{{ b.copper_layers }} layers · {{ b.footprints }} parts</span><br>
+        <span class="nowrap">KiCad {{ b.kicad | default: b.file_version }} · <a href="{{ b.pcb_url | escape }}">{{ b.pcb_last_change }}</a></span>
+        {% else %}
+        No board layout yet
         {% endif %}
-        <figcaption>
-          <span class="nm">{{ b.name | escape }}</span>
-          {% if b.pcb %}
-          <dl>
-            {% if b.size_mm %}<dt>size</dt><dd>{{ b.size_mm[0] }} × {{ b.size_mm[1] }} mm</dd>{% endif %}
-            <dt>copper</dt><dd>{{ b.copper_layers }} layers</dd>
-            <dt>footprints</dt><dd>{{ b.footprints }}</dd>
-            <dt>KiCad</dt><dd>{{ b.kicad | default: b.file_version }}</dd>
-            <dt>board file</dt><dd><a href="{{ b.pcb_url | escape }}">changed {{ b.pcb_last_change }}</a></dd>
-          </dl>
-          {% else %}
-          <p class="pcb-note">No board layout yet — research and block diagram stage.</p>
-          {% endif %}
-        </figcaption>
-      </figure>
-      {% endfor %}
-    </div>
-  </article>
-  {% endfor %}
+        {% if b.images.size > 1 %}<br>{% for im in b.images offset: 1 %}<a href="{{ im.src | relative_url }}" aria-label="{{ b.name | escape }} view {{ forloop.index | plus: 1 }}">view {{ forloop.index | plus: 1 }}</a>{% unless forloop.last %} · {% endunless %}{% endfor %}{% endif %}
+      </figcaption>
+    </figure>
+    {% endfor %}
+  </div>
+</section>
+{% endfor %}
 
+<section class="sect">
   <p class="prose meta">Snapshot from {{ site.data.pcbs.snapshot_date }} —
   refresh with scripts/fetch_pcbs.py.</p>
 </section>
