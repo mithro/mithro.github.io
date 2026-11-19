@@ -13,14 +13,14 @@ stylesheet (inlined into every page) doesn't grow for an unlisted page.
 {%- endcomment -%}
 <style>
 .pcb-intro { max-width: 46rem; }
-.pcb-repo { border-top: 1px solid var(--line); padding: 1.6rem 0 1.4rem; }
-.pcb-repo:first-of-type { border-top: 0; padding-top: .4rem; }
-.pcb-repo h3 { margin: 0; font-size: 1rem; color: var(--silk); }
-.pcb-repo h3 a { color: var(--silk); text-decoration: none; border-bottom: 1px solid var(--gold-dim); }
-.pcb-repo h3 a:hover, .pcb-repo h3 a:focus-visible { color: var(--gold); border-bottom-color: var(--gold); }
-.pcb-blurb { margin: .45rem 0 .8rem; font-family: var(--sans); font-size: .95rem; color: #c4beb2; max-width: 46rem; }
-.pcb-blurb a { color: var(--gold); }
-.pcb-state { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0 0 .7rem; padding: 0; list-style: none; font-size: .74rem; }
+/* Each repository reuses the /projects/ entry layout (.proj, .proj-head,
+   .proj-blurb in main.css); the board cards span both columns below it. */
+.pcb-repo .pcb-boards { grid-column: 1 / -1; margin-top: .9rem; }
+.pcb-repo .proj-blurb a { color: var(--gold); border-bottom: 0; }
+.pcb-repo .pcb-state a, .pcb-repo .pcb-commit a, .pcb-repo .pcb-board a { border-bottom: 0; }
+.pcb-repo .proj-blurb .pcb-state a { color: inherit; }
+.pcb-repo .proj-blurb .pcb-commit a { color: var(--muted); }
+.pcb-state { display: flex; flex-wrap: wrap; gap: .4rem; margin: .7rem 0 .5rem; padding: 0; list-style: none; font-size: .74rem; font-family: var(--mono); }
 .pcb-state li { border: 1px solid var(--line); background: var(--panel); border-radius: 3px; padding: .12rem .5rem; color: var(--muted); }
 .pcb-state b { color: var(--silk); font-weight: 600; }
 .pcb-state a { color: inherit; text-decoration: none; }
@@ -56,24 +56,27 @@ stylesheet (inlined into every page) doesn't grow for an unlisted page.
   the <code>.kicad_pcb</code> files.</p>
 
   {% for r in site.data.pcbs.repos %}
-  <article class="pcb-repo" id="{{ r.repo | slugify }}">
-    <h3><a href="{{ r.url | escape }}">{{ r.title | escape }}</a></h3>
-    <p class="pcb-blurb">{{ r.blurb | escape }}{% if r.credit %}
+  {%- assign n_boards = 0 -%}{%- for b in r.boards -%}{%- if b.pcb -%}{%- assign n_boards = n_boards | plus: 1 -%}{%- endif -%}{%- endfor %}
+  <article class="proj pcb-repo" id="{{ r.repo | slugify }}">
+    <div class="proj-head">
+      <h3><a href="{{ r.url | escape }}">{{ r.title | escape }}</a> · <span class="nowrap">{{ r.created | date: "%b %Y" }} - Present</span></h3>
+      <p class="meta">{% if n_boards > 0 %}{{ n_boards }} board{% if n_boards != 1 %}s{% endif %}{% else %}Research{% endif %} · {{ r.commits_this_year }} commits · last change {{ r.last_commit.date }}</p>
+    </div>
+    <div class="proj-blurb">
+    <p>{{ r.blurb | escape }}{% if r.credit %}
       Original design by <a href="{{ r.credit.url | escape }}">{{ r.credit.name | escape }}</a>.{% endif %}</p>
 
     <ul class="pcb-state" role="list">
-      <li>last change <b>{{ r.last_commit.date }}</b></li>
-      <li><b>{{ r.commits_this_year }}</b> commits this year</li>
       <li><a href="{{ r.url }}/issues"><b>{{ r.open_issues }}</b> open issue{% if r.open_issues != 1 %}s{% endif %}</a></li>
       <li><a href="{{ r.url }}/pulls"><b>{{ r.open_prs }}</b> open PR{% if r.open_prs != 1 %}s{% endif %}</a></li>
       {% if r.release %}<li><a href="{{ r.release.url | escape }}">release <b>{{ r.release.tag | escape }}</b> · {{ r.release.date }}</a></li>
       {% else %}<li>no release yet</li>{% endif %}
       {% if r.ci %}<li class="{% if r.ci.conclusion == 'success' %}ok{% elsif r.ci.conclusion == 'failure' %}bad{% endif %}"><a href="{{ r.ci.url | escape }}">CI {{ r.ci.workflow | escape }}: <b>{{ r.ci.conclusion }}</b></a></li>{% endif %}
       {% if r.license and r.license != "NOASSERTION" %}<li>{{ r.license }}</li>{% endif %}
-      <li>created {{ r.created }}</li>
     </ul>
     <p class="pcb-commit">latest: <a href="{{ r.last_commit.url | escape }}"><code>{{ r.last_commit.sha }}</code></a>
       {{ r.last_commit.message | escape }}</p>
+    </div>
 
     <div class="pcb-boards">
       {% for b in r.boards %}{% assign hero = b.images | first %}
