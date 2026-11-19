@@ -11,7 +11,7 @@ description: "Public design documents, proposals and requirements docs written o
   {%- endfor %}
   <p class="prose">{{ doc_total }} public design documents, proposals and
   requirements docs that Tim wrote, co-wrote or reviewed, all Google Docs
-  shared with anyone who has the link. They open via their <code>mith.ro</code> short links — the same
+  shared with anyone who has the link. Most open via their <code>mith.ro</code> short links — the same
   links quoted in the documents themselves and in talks that reference
   them.</p>
   <nav class="doc-toc" aria-label="Topics">
@@ -49,7 +49,7 @@ description: "Public design documents, proposals and requirements docs written o
         {%- if th -%}
         <img src="{{ '/assets/thumbs/docs/' | relative_url }}{{ doc.alias }}-240.webp"
              srcset="{{ '/assets/thumbs/docs/' | relative_url }}{{ doc.alias }}-240.webp 240w, {{ '/assets/thumbs/docs/' | relative_url }}{{ doc.alias }}-480.webp {{ th.w }}w"
-             sizes="7.5rem" width="{{ th.w }}" height="{{ th.h }}" alt=""
+             sizes="(max-width: 480px) 5.5rem, 7.5rem" width="{{ th.w }}" height="{{ th.h }}" alt=""
              {% if tile_n <= 3 %}fetchpriority="high"{% else %}loading="lazy"{% endif %} decoding="async">
         {%- else -%}
         <span class="doc-blank"><span aria-hidden="true">{% include icons/googledocs.svg %}</span></span>
@@ -62,7 +62,7 @@ description: "Public design documents, proposals and requirements docs written o
         <p class="meta">
           <span class="au">{{ doc.authors | escape }}</span> ·
           <span class="nowrap">{{ doc.year }}{% if doc.updated and doc.updated != doc.year %}–{{ doc.updated }}{% endif %}</span>
-          <span class="nowrap">· <a class="doc-link" href="{{ href | escape }}"><span class="ci-icon" aria-hidden="true">{% include icons/googledocs.svg %}</span> {{ short_disp }}</a></span>
+          <span>·&nbsp;<a class="doc-link" href="{{ href | escape }}"><span class="ci-icon" aria-hidden="true">{% include icons/googledocs.svg %}</span> {{ short_disp }}</a></span>
         </p>
       </div>
     </article>
