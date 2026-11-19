@@ -39,8 +39,14 @@ description: "All of Tim 'mithro' Ansell's talks and presentations, 2012–prese
     {%- elsif talk.slides contains "bit.ly/" or talk.slides contains "j.mp/" -%}
       {%- assign short_disp = talk.slides | replace: "https://", "" | replace: "http://", "" -%}
       {%- assign mith_alias = short_disp | split: "/" | last -%}
-      {%- assign stub_path = "/" | append: mith_alias | append: "/" -%}
+      {%- comment -%}bit.ly "mithro-<name>" links publish as mith.ro/<name> (with the mithro- path kept as an alias); prefer the short name.{%- endcomment -%}
+      {%- assign short_alias = mith_alias -%}{%- assign alias_pfx = mith_alias | slice: 0, 7 -%}{%- if alias_pfx == "mithro-" -%}{%- assign short_alias = mith_alias | slice: 7, 200 -%}{%- endif -%}
+      {%- assign stub_path = "/" | append: short_alias | append: "/" -%}
       {%- assign stub = site.pages | where: "permalink", stub_path | first -%}
+      {%- if stub -%}{%- assign mith_alias = short_alias -%}{%- else -%}
+        {%- assign stub_path = "/" | append: mith_alias | append: "/" -%}
+        {%- assign stub = site.pages | where: "permalink", stub_path | first -%}
+      {%- endif -%}
       {%- if stub -%}
         {%- assign slides_href = stub_path | relative_url -%}
         {%- assign short_disp = "mith.ro/" | append: mith_alias -%}
