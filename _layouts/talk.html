@@ -20,7 +20,9 @@ layout: default
   {% if talk.blurb %}<p class="prose">{{ talk.blurb | escape }}</p>{% endif %}
   {% include strip.html slug=talk.slug title=title size="lg" eager=true %}
   <div class="embeds">
-    {% include talk_embeds.html talk=talk eager=true %}
+    {%- comment -%} The strip's first frame is the page's main image when there is one; only one image should ask for high priority. {%- endcomment -%}
+    {%- if site.data.strips[talk.slug] -%}{%- assign embeds_eager = false -%}{%- else -%}{%- assign embeds_eager = true -%}{%- endif %}
+    {% include talk_embeds.html talk=talk eager=embeds_eager %}
   </div>
   {%- include shortlink_stub.html alias=talk.slug -%}
   {%- if stub %}

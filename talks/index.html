@@ -64,14 +64,14 @@ video/slides_embed are absent (nil) when unknown, so truthiness works;
     <ul class="stat-list">
     {%- for cat in site.data.talk_categories -%}
       {%- assign n = talks | where_exp: "t", "t.categories contains cat.key" | size -%}
-      <li><a href="{{ '/talks/topics/' | append: cat.key | append: '/' | relative_url }}">{{ cat.name }}</a><span class="num">{{ n }}</span></li>
+      <li><a href="{{ '/talks/topics/' | append: cat.key | append: '/' | relative_url }}">{{ cat.name | escape }}</a><span class="num">{{ n }}</span></li>
     {%- endfor -%}
     </ul>
   </div>
   <div>
     <h3 class="year-head">Favourite venues</h3>
     <ul class="stat-list">
-    {%- for v in venues limit: 6 -%}<li><a href="{{ site.data.talk_venues[v.name] | escape }}">{{ v.name }}</a><span class="num">{{ v.size }}</span></li>{%- endfor -%}
+    {%- for v in venues limit: 6 -%}<li><a href="{{ site.data.talk_venues[v.name] | escape }}">{{ v.name | escape }}</a><span class="num">{{ v.size }}</span></li>{%- endfor -%}
     </ul>
   </div>
   <div>
@@ -80,7 +80,7 @@ video/slides_embed are absent (nil) when unknown, so truthiness works;
     {%- for sr in series limit: 5 -%}
       {%- assign yrs = sr.items | where_exp: "t", "t.year != 0" | map: "year" | sort -%}
       {%- assign y0 = yrs | first -%}{%- assign y1 = yrs | last -%}
-      <li>{{ sr.name }}<span class="num">{{ sr.size }}× · {{ y0 }}{% if y1 != y0 %}–{{ y1 }}{% endif %}</span></li>
+      <li>{{ sr.name | escape }}<span class="num">{{ sr.size }}× · {{ y0 }}{% if y1 != y0 %}–{{ y1 }}{% endif %}</span></li>
     {%- endfor -%}
     </ul>
   </div>
