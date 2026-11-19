@@ -13,8 +13,9 @@ layout: default
   <h2>{{ title | escape }}</h2>
   <p class="talk-meta">
     {%- if talk.event and talk.event != "" -%}{%- if talk.event_url %}<a href="{{ talk.event_url | escape }}">{{ talk.event | escape }}</a>{% else %}{{ talk.event | escape }}{% endif -%}{%- endif -%}
-    {%- if talk.date and talk.date != "" %} · <span class="nowrap">{{ talk.date | escape }}</span>{% endif -%}
-    {%- if talk.series %} · part of <em>{{ talk.series | escape }}</em>{% endif %}
+    {%- assign meta_sep = false -%}{%- if talk.event and talk.event != "" -%}{%- assign meta_sep = true -%}{%- endif -%}
+    {%- if talk.date and talk.date != "" %}{% if meta_sep %} · {% endif %}<span class="nowrap">{{ talk.date | escape }}</span>{% assign meta_sep = true %}{% endif -%}
+    {%- if talk.series %}{% if meta_sep %} · p{% else %}P{% endif %}art of <em>{{ talk.series | escape }}</em>{% endif %}
   </p>
   <p class="chips">{% for c in talk.categories %}{% assign cat = site.data.talk_categories | where: "key", c | first %}<a class="chip" href="{{ '/talks/topics/' | append: c | append: '/' | relative_url }}">{{ cat.name | escape }}</a>{% endfor %}</p>
   {% if talk.blurb %}<p class="prose">{{ talk.blurb | escape }}</p>{% endif %}

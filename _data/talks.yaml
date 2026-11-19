@@ -23,7 +23,7 @@
 #   recurring venues for the hub statistics (optional).
 # strips: true = export and show the slide film strip; imported from
 #   the sheets' Strips column (talks_sheet.py import).
-# highlight: 1..10 rank on /talks/highlights/, with a one-line blurb.
+# highlight: 1..9 rank on /talks/highlights/, with a one-line blurb.
 
 - title: ISPD 2023 - Build custom silicon with Google!
   slug: ispd23-goog
