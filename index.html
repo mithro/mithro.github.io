@@ -47,13 +47,7 @@ description: "Tim 'mithro' Ansell — building open source silicon ecosystems: S
         {%- assign slides_href = talk.slides -%}
         {%- if talk.slides contains "bit.ly/" or talk.slides contains "j.mp/" -%}
           {%- assign mith_alias = talk.slides | split: "/" | last -%}
-          {%- assign short_alias = mith_alias -%}{%- assign alias_pfx = mith_alias | slice: 0, 7 -%}{%- if alias_pfx == "mithro-" -%}{%- assign short_alias = mith_alias | slice: 7, 200 -%}{%- endif -%}
-          {%- assign stub_path = "/" | append: short_alias | append: "/" -%}
-          {%- assign stub = site.pages | where: "permalink", stub_path | first -%}
-          {%- unless stub -%}
-            {%- assign stub_path = "/" | append: mith_alias | append: "/" -%}
-            {%- assign stub = site.pages | where: "permalink", stub_path | first -%}
-          {%- endunless -%}
+          {%- include shortlink_stub.html alias=mith_alias -%}
           {%- if stub -%}{%- assign slides_href = stub_path | relative_url -%}{%- endif -%}
         {%- endif %}
         {% if talk.slides != "" and talk.slides %}<a href="{{ slides_href | escape }}">{{ talk.title | escape }}</a>{% else %}{{ talk.title | escape }}{% endif %}

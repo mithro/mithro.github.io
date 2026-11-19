@@ -119,9 +119,12 @@ and after any token has been pasted into a terminal, ticket, or chat.
 Each generated entry defaults `include: false` with a `reason`, pending
 review — except keywords already referenced from public sources (the
 talks sheet, the resume), which default to `include: true`, *unless*
-they collide with a reserved site path (`talks`, `papers`, `resume`,
-`about`, `assets`, `docs`, `scripts`, `404`), in which case they are
-always excluded regardless of source. See "Short-link redirects" for
+they collide with a reserved site path (`talks`, `interviews`, `papers`,
+`projects`, `resume`, `about`, `assets`, `docs`, `scripts`, `404`,
+`contributions`, `design-docs`, `.well-known`), in which case they are
+always excluded regardless of source. `gen_redirect_pages.py` also
+refuses any name that matches a top-level path or front-matter
+permalink already on the site. See "Short-link redirects" for
 what happens next.
 
 ### `scripts/make_og_image.py`
@@ -161,8 +164,11 @@ bit.ly keywords of the form `mithro-<name>` publish under the shorter
 `mith.ro/<name>/` as their primary path, with `mith.ro/mithro-<name>/`
 kept as a working alias (both redirect straight to the long URL). The
 exceptions are `mithro-talks` and `mithro-resume`, whose short names are
-the site's own `/talks/` and `/resume/` pages. The talks and home pages
-pick the short name automatically for `bit.ly/mithro-<name>` slides links.
+the site's own `/talks/` and `/resume/` pages. If bit.ly also has a
+separate `<name>` keyword, that keyword keeps `mith.ro/<name>/` and the
+script prints a warning. The talks and home pages pick the short name
+automatically for `bit.ly/mithro-<name>` slides links, through
+`_includes/shortlink_stub.html`.
 
 Workflow after editing Visibility in the sheet:
 
