@@ -2312,30 +2312,6 @@ eri21-opensilicon:
   - gbb993c9502_1_2200
   - gbb993c9502_1_2043
   w: 480
-esscirc21-sky130-summary:
-  count: 18
-  deck: 1c-DxFpHgPqwMipwJWPvkU9o_VaCMMa4U9PSZPqiZzZk
-  h: 270
-  slides:
-  - ga0d4ecdf0b_0_2089
-  - gb8e29b68b6_0_1023
-  - ga0d4ecdf0b_0_223
-  - ga0d4ecdf0b_0_242
-  - gcce1b75b7b_0_0
-  - ga0d4ecdf0b_0_1343
-  - ge7457a9347_0_298
-  - ga0d4ecdf0b_0_1380
-  - ga0d4ecdf0b_0_1480
-  - ge7457a9347_0_287
-  - ge7457a9347_2_236
-  - ge7457a9347_2_242
-  - gede64762fc_0_15
-  - ge7457a9347_2_230
-  - ge7457a9347_2_103
-  - gea0bebe602_0_120
-  - ge7457a9347_0_22
-  - ge7457a9347_0_436
-  w: 480
 esscirc21-sky130-v2:
   count: 2
   deck: 1NVb3r9k5zZJJl3vweHhIIN6pSjzss9rhalOEeEKx0Uo
