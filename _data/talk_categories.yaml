@@ -1,0 +1,26 @@
+# Talk taxonomy for /talks/topics/ (order = display order).
+# A talk may carry several keys (talks.yaml `categories:`).
+- key: open-silicon
+  name: Open source silicon
+  blurb: SkyWater and GlobalFoundries open PDKs, the Open MPW shuttles, OpenROAD and Google's open silicon programme — and now wafer.space.
+- key: fpga-tools
+  name: Open FPGA toolchains
+  blurb: SymbiFlow/F4PGA, Yosys, VPR, LiteX and the road to a "GCC of FPGAs".
+- key: timvideos
+  name: TimVideos, HDMI2USB & conference recording
+  blurb: The TimVideos project and HDMI2USB, open hardware and software for recording and live-streaming free-software conferences, from GStreamer pipelines to FPGA-based HDMI capture.
+- key: tiny-boards
+  name: Tomu & Fomu
+  blurb: Microcontrollers and FPGAs that fit inside a USB port.
+- key: python
+  name: Python
+  blurb: PyCon talks — Python for hardware, MicroPython on FPGAs, GStreamer pipelines and libraries.
+- key: community
+  name: Community & projects
+  blurb: Mentoring, open source practice, and the long-running "Tim has too many projects" series.
+- key: education
+  name: Education & workforce
+  blurb: Teaching chip design and growing the open silicon workforce.
+- key: games
+  name: Games & early talks
+  blurb: The 2007–2009 game-development and early Google-era talks.

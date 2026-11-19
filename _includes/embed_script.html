@@ -1,0 +1,16 @@
+<script>
+  // Swap a preview tile for the real embed only when it is clicked.
+  document.querySelectorAll('.embed-lite').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var f = document.createElement('iframe');
+      f.src = b.dataset.src;
+      f.title = b.getAttribute('aria-label');
+      f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+      f.referrerPolicy = 'strict-origin-when-cross-origin';
+      f.allowFullscreen = true;
+      f.className = b.classList.contains('lite-video') ? 'emb-video' : 'emb-slides';
+      b.replaceWith(f);
+      f.focus();
+    }, { once: true });
+  });
+</script>

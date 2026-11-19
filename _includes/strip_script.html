@@ -1,0 +1,44 @@
+<script>
+  // Film strips pan towards later slides once a mouse has rested on them
+  // for a moment. Leaving, scrolling, clicking or a key press stops it, and
+  // it never runs for touch or when reduced motion is requested. The mouse
+  // test is per event (pointerType), not (hover: hover): that media query
+  // describes only the primary pointer, so it is false for a mouse on a
+  // touchscreen laptop.
+  (function () {
+    var reduce = matchMedia('(prefers-reduced-motion: reduce)');
+    var DELAY = 600, SPEED = 60; // ms before panning starts; px per second
+    document.querySelectorAll('.strip').forEach(function (s) {
+      var timer = 0, raf = 0, last = 0, pos = 0;
+      function stop() {
+        clearTimeout(timer); timer = 0;
+        cancelAnimationFrame(raf); raf = 0;
+        s.classList.remove('panning');
+      }
+      function step(t) {
+        var max = s.scrollWidth - s.clientWidth;
+        // Track the position ourselves: scrollLeft may round to whole pixels,
+        // which at this speed would stall the pan.
+        pos = Math.min(max, pos + SPEED * (t - last) / 1000);
+        last = t;
+        s.scrollLeft = pos;
+        if (pos >= max) { stop(); return; }
+        raf = requestAnimationFrame(step);
+      }
+      function start() {
+        timer = 0;
+        if (reduce.matches || s.scrollWidth - s.clientWidth < 1) return;
+        s.classList.add('panning'); // snapping would fight a slow pan
+        pos = s.scrollLeft;
+        raf = requestAnimationFrame(function (t) { last = t; raf = requestAnimationFrame(step); });
+      }
+      s.addEventListener('pointerenter', function (e) {
+        if (e.pointerType === 'mouse' && !timer && !raf) timer = setTimeout(start, DELAY);
+      });
+      s.addEventListener('pointerleave', stop);
+      ['wheel', 'pointerdown', 'keydown'].forEach(function (ev) {
+        s.addEventListener(ev, stop, { passive: true });
+      });
+    });
+  })();
+</script>

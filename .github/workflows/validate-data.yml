@@ -1,0 +1,45 @@
+# Validate Site Data
+# Runs scripts/validate_talks.py on every pull request and push to
+# master: every talk has its /talks/<slug>/ page, every topic its page,
+# and the strips manifest, deck links and venues are consistent. Then
+# re-runs the stub generators and fails if _talks/ or _topics/ differ
+# from what is committed (a stale title, description or og:image). These
+# break quietly otherwise (a missing _talks/ stub is a 404 from every
+# listing), so catch them before they reach the live site.
+name: Validate Site Data
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Validate talks data
+        run: uv run scripts/validate_talks.py
+
+      - name: Check generated talk and topic pages are up to date
+        run: |
+          uv run scripts/gen_talk_pages.py
+          uv run scripts/gen_topic_pages.py
+          if ! git diff --exit-code -- _talks _topics; then
+            echo "::error::_talks/ or _topics/ is out of date: run scripts/gen_talk_pages.py and scripts/gen_topic_pages.py and commit the result"
+            exit 1
+          fi
+          if [ -n "$(git status --porcelain -- _talks _topics)" ]; then
+            git status --porcelain -- _talks _topics
+            echo "::error::gen_talk_pages.py / gen_topic_pages.py add or remove stubs: re-run them and commit the result"
+            exit 1
+          fi

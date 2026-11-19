@@ -21,7 +21,11 @@ if not TOKEN:
     sys.exit("Set BITLY_TOKEN in the environment")
 
 GROUP = "Bb5ml3vJt6Z"
-RESERVED = {"talks", "papers", "resume", "about", "assets", "docs", "scripts", "404"}
+# Keep in sync with RESERVED in gen_redirect_pages.py (which also adds
+# every top-level path and permalink it finds at generation time).
+RESERVED = {"talks", "interviews", "papers", "projects", "resume", "about",
+            "assets", "docs", "scripts", "404", "contributions",
+            "design-docs", "pcbs", ".well-known"}
 
 def api(url):
     req = urllib.request.Request(url, headers={"Authorization": f"Bearer {TOKEN}"})
@@ -75,6 +79,19 @@ for l in sorted(links, key=lambda x: x["id"]):
         entry["custom_bitlinks"] = l["custom_bitlinks"]
     out.append(entry)
 
+# Sheet-native entries (mith.ro/<alias> rows imported by format_sheets.py
+# sync, no bitlink behind them) survive regeneration unless bit.ly now has
+# the same keyword.
+try:
+    previous = yaml.safe_load(open("_data/shortlinks.yaml")) or []
+except FileNotFoundError:
+    previous = []
+bitly_keywords = {e["keyword"] for e in out}
+kept = [e for e in previous
+        if e.get("source") == "sheet" and e["keyword"] not in bitly_keywords]
+out.extend(kept)
+
 with open("_data/shortlinks.yaml", "w") as f:
     yaml.safe_dump(out, f, sort_keys=False, allow_unicode=True)
-print(f"Wrote _data/shortlinks.yaml ({sum(e['include'] for e in out)} included / {len(out)} total)", file=sys.stderr)
+print(f"Wrote _data/shortlinks.yaml ({sum(e['include'] for e in out)} included / "
+      f"{len(out)} total, {len(kept)} sheet-native kept)", file=sys.stderr)

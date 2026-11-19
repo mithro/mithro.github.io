@@ -1,0 +1,24 @@
+# A page about each talks.yaml `venue:`, linked from the hub's
+# "Favourite venues" list. Prefer the venue's Wikipedia article (it covers
+# the whole series, not one year), else the venue's own site.
+# validate_talks.py requires an entry for every venue in use.
+linux.conf.au: https://en.wikipedia.org/wiki/Linux.conf.au
+PyCon AU: https://pycon.org.au/
+Chaos Communication Congress/Camp: https://en.wikipedia.org/wiki/Chaos_Communication_Congress
+# darpa.mil's ERI programme page meta-refreshes to itself for automated
+# clients and timed out in a real browser, so link the agency instead.
+DARPA ERI: https://en.wikipedia.org/wiki/DARPA
+NSF: https://en.wikipedia.org/wiki/National_Science_Foundation
+OpenPOWER: https://en.wikipedia.org/wiki/OpenPOWER_Foundation
+COSCUP: https://en.wikipedia.org/wiki/COSCUP
+# ESSCIRC and ESSDERC merged into ESSERC in 2023.
+ESSCIRC/ESSDERC: https://www.esserc.org/
+Hackaday: https://en.wikipedia.org/wiki/Hackaday
+ORConf: https://orconf.org/
+Latch-Up: https://fossi-foundation.org/latch-up/
+NIST: https://en.wikipedia.org/wiki/National_Institute_of_Standards_and_Technology
+RIOS: https://www.rioslab.org/
+CHIPS Alliance: https://www.chipsalliance.org/
+RISC-V Summit: https://events.linuxfoundation.org/riscv-summit/
+Hackware: https://luma.com/hackware
+Teardown: https://www.crowdsupply.com/teardown
