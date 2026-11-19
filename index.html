@@ -45,7 +45,9 @@ description: "Tim 'mithro' Ansell — building open source silicon ecosystems: S
       <td class="yr">{{ talk.year }}</td>
       <td class="ti">
         {%- assign slides_href = talk.slides -%}
-        {%- if talk.slides contains "bit.ly/" or talk.slides contains "j.mp/" -%}
+        {%- if talk.slides_short -%}
+          {%- assign slides_href = talk.slides_short -%}
+        {%- elsif talk.slides contains "bit.ly/" or talk.slides contains "j.mp/" -%}
           {%- assign mith_alias = talk.slides | split: "/" | last -%}
           {%- assign stub_path = "/" | append: mith_alias | append: "/" -%}
           {%- assign stub = site.pages | where: "permalink", stub_path | first -%}
