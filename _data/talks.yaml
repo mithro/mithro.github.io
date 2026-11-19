@@ -410,6 +410,9 @@
   slides: https://docs.google.com/presentation/d/1c-DxFpHgPqwMipwJWPvkU9o_VaCMMa4U9PSZPqiZzZk
   slides_embed: https://docs.google.com/presentation/d/1c-DxFpHgPqwMipwJWPvkU9o_VaCMMa4U9PSZPqiZzZk/embed
   slides_edit: https://docs.google.com/presentation/d/1c-DxFpHgPqwMipwJWPvkU9o_VaCMMa4U9PSZPqiZzZk
+  # Cut down from the full ESSCIRC deck, which is the public copy
+  # (checked signed-out 2026-11-19); frames open the matching slide there.
+  slides_pub: https://docs.google.com/presentation/d/e/2PACX-1vR0sAgYr_QP8fuZBQ-eUGAL1vAOIj-51IsNa8-zHkd8JRikrek227_83l2EamDt3jfpq6b6HfjWwo9Q/pub?start=false&loop=false&delayms=3000
   source: sheet
   sort_date: '2021-09-21'
 - title: 'ESSCIRC ESSDERC 2021 - Open down to the transistor: A fully open source, manufacturable PDK for 130nm process for IC Creation Silicon Down to the Transistor - Tim Ansell, Google'
@@ -425,6 +428,9 @@
   slides: https://docs.google.com/presentation/d/1NVb3r9k5zZJJl3vweHhIIN6pSjzss9rhalOEeEKx0Uo
   slides_embed: https://docs.google.com/presentation/d/1NVb3r9k5zZJJl3vweHhIIN6pSjzss9rhalOEeEKx0Uo/embed
   slides_edit: https://docs.google.com/presentation/d/1NVb3r9k5zZJJl3vweHhIIN6pSjzss9rhalOEeEKx0Uo
+  # Cut down from the full ESSCIRC deck, which is the public copy
+  # (checked signed-out 2026-11-19); frames open the matching slide there.
+  slides_pub: https://docs.google.com/presentation/d/e/2PACX-1vR0sAgYr_QP8fuZBQ-eUGAL1vAOIj-51IsNa8-zHkd8JRikrek227_83l2EamDt3jfpq6b6HfjWwo9Q/pub?start=false&loop=false&delayms=3000
   source: sheet
   sort_date: '2021-09-21'
 - title: Fomu - CCCamp19
