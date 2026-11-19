@@ -31,7 +31,7 @@
   - alias: chrome-tagging
     title: Content Tagging in Chromium
     subtitle: Design sketch for detecting content mixing issues
-    authors: T Ansell, N Gordon (tansell@, noel@)
+    authors: T Ansell, N Gordon
     year: 2015
     description: >-
       Proposes tagging every piece of content Chrome generates with the
@@ -234,7 +234,7 @@
       hardware-in-the-loop CI rack: a PoE+ switch powering Raspberry Pi
       runners that netboot from a server and drive Digilent Arty boards
       through PMOD and USB Ethernet, with the RPi netboot and WiFi-disable
-      configuration steps. Links to Carl's photos of the build.
+      configuration steps. Links to photos of the build.
     url: https://docs.google.com/document/d/1H3x34bdztWy-uN8EYe-FxJL2YojIjd-0feL9d8BMtN4/edit
 
 - id: silicon

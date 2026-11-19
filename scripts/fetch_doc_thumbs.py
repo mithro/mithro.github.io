@@ -14,11 +14,13 @@ render page 1 and emit two locally-hosted WebP renditions:
 
 plus _data/doc_thumbs.yaml recording each large rendition's pixel size.
 
-The anonymous export doubles as the "publicly shared" check: a document
-that bounces to a Google sign-in page is reported and left without a
-thumbnail, and the script exits non-zero so a coverage gap on the page
-can't go unnoticed. Existing renditions are reused; delete them to force
-a refetch.
+The anonymous export doubles as the "publicly shared" check, and it runs
+for every document on every run: a document that bounces to a Google
+sign-in page is reported, its old renditions are deleted (so the first
+page of a document that has since been un-shared is not left on the
+site), and the script exits non-zero so the gap can't go unnoticed.
+Existing renditions of public documents are reused rather than
+re-rendered; delete them to force a refresh.
 """
 
 import io
@@ -65,8 +67,6 @@ def emit(img: Image.Image, base: pathlib.Path) -> dict:
 def fetch(doc: dict) -> tuple[str, dict | None]:
     alias, url = doc["alias"], doc["url"]
     base = OUT / alias
-    if (have := existing(base)):
-        return alias, have
     m = DOC_RE.search(url)
     if not m:
         print(f"{alias}: not a Google Docs URL: {url}", file=sys.stderr)
@@ -79,7 +79,14 @@ def fetch(doc: dict) -> tuple[str, dict | None]:
     if not r.ok or "accounts.google.com" in r.url or r.content[:5] != b"%PDF-":
         print(f"{alias}: NOT publicly readable (HTTP {r.status_code}, "
               f"final URL {r.url[:60]})", file=sys.stderr)
+        for size in (LARGE, SMALL):
+            stale = pathlib.Path(f"{base}-{size}.webp")
+            if stale.exists():
+                stale.unlink()
+                print(f"{alias}: deleted {stale}", file=sys.stderr)
         return alias, None
+    if (have := existing(base)):
+        return alias, have
     with pymupdf.open(stream=r.content, filetype="pdf") as pdf:
         page = pdf[0]
         zoom = LARGE / page.rect.width  # render straight to the large width

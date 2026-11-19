@@ -394,7 +394,8 @@ ul.deg-list { padding-left: 0; list-style: none; }
 .doc-card { display: flex; gap: 1rem; align-items: flex-start; }
 .doc-thumb { flex: 0 0 7.5rem; display: block; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; background: var(--panel); }
 .doc-thumb:hover, .doc-thumb:focus-visible { border-color: var(--gold-dim); }
-.doc-thumb img { display: block; width: 100%; height: auto; }
+/* Same card shape for A4 and US Letter first pages (Letter crops a little at the bottom). */
+.doc-thumb img { display: block; width: 100%; height: auto; aspect-ratio: 480 / 679; object-fit: cover; object-position: top; }
 .doc-blank { display: grid; place-items: center; aspect-ratio: 480 / 679; color: var(--gold-dim); }
 .doc-blank svg { width: 2.4rem; height: 2.4rem; fill: currentColor; }
 .doc-body { min-width: 0; }
