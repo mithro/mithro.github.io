@@ -118,10 +118,19 @@ def fetch(year: int, org: str | None = None) -> Calendar:
                 html = resp.read().decode("utf-8")
             break
         except urllib.error.HTTPError as err:
-            if err.code != 429 or attempt == 7:
+            # Retry rate limiting and transient server errors; anything
+            # else (404, 403, ...) is a real problem and fails the run.
+            if not (err.code == 429 or err.code >= 500) or attempt == 7:
                 raise
             wait = int(err.headers.get("Retry-After") or 0) or 30 * (attempt + 1)
-            print(f"{year}: rate limited, retrying in {wait}s", file=sys.stderr)
+            print(f"{year}: HTTP {err.code}, retrying in {wait}s", file=sys.stderr)
+            time.sleep(wait)
+        except (urllib.error.URLError, TimeoutError, ConnectionError) as err:
+            # Network blips (DNS, reset, timeout) on a CI runner.
+            if attempt == 7:
+                raise
+            wait = 15 * (attempt + 1)
+            print(f"{year}: {err}, retrying in {wait}s", file=sys.stderr)
             time.sleep(wait)
     time.sleep(PAUSE)
     cal = Calendar()
