@@ -99,8 +99,9 @@ itself through the API so GitHub's 60-day inactivity rule cannot switch
 it off. A failed run opens an issue labelled `contributions-refresh`,
 and the next successful run closes it. Before committing, the run
 compares the new data with the committed file and refuses to commit if
-the all-time total drops by more than 5% or any year before last drops
-by more than 10%. If a drop is genuine (for example, a repository was
+the all-time total drops by more than 5%, any year drops by more than
+10% or loses its organisations, or a year's days stop adding up to its
+total. If a drop is genuine (for example, a repository was
 deleted), run it by hand with *allow_drop*.
 
 ### `scripts/fetch_photos.py`
