@@ -18,10 +18,10 @@ original "mithro-<name>" keeps working as an alias to the same target.
 If "<name>" is reserved (e.g. mithro-talks, mithro-resume) only the
 original keyword is published.
 """
-import os
 import pathlib
 import re
 import shutil
+import subprocess
 
 import yaml
 
@@ -32,25 +32,32 @@ import yaml
 # kept free for future sections).
 RESERVED = {"talks", "interviews", "papers", "projects", "resume", "about",
             "assets", "docs", "scripts", "404", "contributions",
-            "design-docs", ".well-known"}
+            "design-docs", "pcbs", ".well-known"}
 PREFIX = "mithro-"
+FRONT_MATTER = re.compile(r"\A---\s*\n(.*?)\n---", re.S)
 
 
 def site_paths() -> set[str]:
-    """First path segment of everything the site already publishes."""
-    found = {p.name.split(".")[0] if p.is_file() else p.name
-             for p in pathlib.Path(".").iterdir()
-             if p.name not in {"redirects"} and not p.name.startswith("_")}
-    skip = {"redirects", "_site", "docs", "vendor", "assets", "node_modules"}
-    for root, dirs, files in os.walk("."):
-        dirs[:] = [d for d in dirs if d not in skip and not d.startswith(".")]
-        for fn in files:
-            if not fn.endswith((".md", ".html")):
-                continue
-            head = pathlib.Path(root, fn).read_text(errors="ignore")[:2000]
-            if not head.startswith("---"):
-                continue
-            m = re.search(r"^permalink:\s*[\"']?/([^/\"'\s]+)", head, re.M)
+    """First path segment of everything the site already publishes.
+
+    Uses the files git tracks (so stray local files and build output
+    don't count), minus what _config.yml excludes from the build, plus
+    every front-matter permalink.
+    """
+    tracked = subprocess.run(["git", "ls-files"], capture_output=True,
+                             text=True, check=True).stdout.splitlines()
+    exclude = {str(x).rstrip("/") for x in
+               (yaml.safe_load(open("_config.yml")) or {}).get("exclude") or []}
+    found = set()
+    for path in tracked:
+        top = path.split("/", 1)[0]
+        if (top.startswith(("_", ".")) or top == "redirects"
+                or top in exclude or path in exclude):
+            continue
+        found.add(top.split(".")[0] if "/" not in path else top)
+        if path.endswith((".md", ".html")):
+            fm = FRONT_MATTER.match(pathlib.Path(path).read_text(errors="ignore"))
+            m = fm and re.search(r"^permalink:\s*[\"']?/([^/\"'\s]+)", fm.group(1), re.M)
             if m:
                 found.add(m.group(1).split(".")[0])
     return {n.lower() for n in found if n}
@@ -64,37 +71,50 @@ if outdir.exists():
     shutil.rmtree(outdir)
 outdir.mkdir()
 
-# Two passes so that a real keyword (or custom alias) always wins over a
-# name made by stripping "mithro-": if bit.ly ever has both "hepic24"
-# and "mithro-hepic24" pointing at different places, /hepic24/ follows
-# the "hepic24" keyword and the stripped name is dropped with a warning.
+# Real keywords and custom aliases always win over a name made by
+# stripping "mithro-", and that includes PRIVATE ones: if bit.ly has a
+# "hepic24" keyword (public or not) as well as "mithro-hepic24", then
+# mith.ro/hepic24 must never point somewhere bit.ly/hepic24 doesn't, so
+# the stripped name is dropped with a warning. Private keywords only
+# claim their name; they never get a stub.
 claims: dict[str, str] = {}   # lowercased name -> long URL
 order: list[tuple[str, str]] = []
 
 
-def claim(name: str, url: str, derived_from: str | None = None) -> None:
+def claim(name: str, url: str, public: bool, derived_from: str | None = None) -> None:
     key = name.lower()
     if key in reserved:
-        print(f"SKIP reserved: {name}")
+        if public:
+            print(f"SKIP reserved: {name}")
         return
     if key in claims:
-        if derived_from and claims[key] != url:
+        if claims[key] != url and public:
+            what = derived_from or name
             print(f"WARN: /{name}/ already belongs to another link; "
-                  f"{derived_from} is published only under its full name")
+                  f"{what} is not published under that name")
         return
     claims[key] = url
-    order.append((name, url))
+    if public:
+        order.append((name, url))
 
 
-public = [e for e in links if e["include"]]
-for e in public:
-    for name in [e["keyword"], *(u.rsplit("/", 1)[-1] for u in e.get("custom_bitlinks") or [])]:
-        claim(name, e["long_url"])
-for e in public:
+def names(e: dict) -> list[str]:
+    return [e["keyword"], *(u.rsplit("/", 1)[-1] for u in e.get("custom_bitlinks") or [])]
+
+
+for e in links:  # public first, so a public link wins a clash with a private one
+    if e["include"]:
+        for name in names(e):
+            claim(name, e["long_url"], public=True)
+for e in links:
+    if not e["include"]:
+        for name in names(e):
+            claim(name, e["long_url"], public=False)
+for e in links:
     kw = e["keyword"]
-    if kw.lower().startswith(PREFIX) and len(kw) > len(PREFIX):
+    if e["include"] and kw.lower().startswith(PREFIX) and len(kw) > len(PREFIX):
         # Primary name drops the redundant "mithro-" prefix.
-        claim(kw[len(PREFIX):], e["long_url"], derived_from=kw)
+        claim(kw[len(PREFIX):], e["long_url"], public=True, derived_from=kw)
 
 # A stub for every name; each redirects straight to the long URL (no hop
 # via the primary) so aliases are as fast as the primary.
