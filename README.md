@@ -119,9 +119,12 @@ and after any token has been pasted into a terminal, ticket, or chat.
 Each generated entry defaults `include: false` with a `reason`, pending
 review — except keywords already referenced from public sources (the
 talks sheet, the resume), which default to `include: true`, *unless*
-they collide with a reserved site path (`talks`, `papers`, `resume`,
-`about`, `assets`, `docs`, `scripts`, `404`), in which case they are
-always excluded regardless of source. See "Short-link redirects" for
+they collide with a reserved site path (`talks`, `interviews`, `papers`,
+`projects`, `resume`, `about`, `assets`, `docs`, `scripts`, `404`,
+`contributions`, `design-docs`, `pcbs`, `.well-known`), in which case
+they are always excluded regardless of source. `gen_redirect_pages.py`
+also refuses any name that matches a top-level path git tracks (minus
+`_config.yml` excludes) or a front-matter permalink already on the site. See "Short-link redirects" for
 what happens next.
 
 ### `scripts/make_og_image.py`
@@ -156,6 +159,20 @@ The source of truth for which short links are published is the private
 one row per bit.ly link with a `Visibility` column — `public` rows get
 a redirect stub on mith.ro (e.g. `mith.ro/tim-silicon-2024/` → the
 long URL), `private` rows do not.
+
+bit.ly keywords of the form `mithro-<name>` publish under the shorter
+`mith.ro/<name>/` as their primary path, with `mith.ro/mithro-<name>/`
+kept as a working alias (both redirect straight to the long URL). The
+exceptions are `mithro-talks` and `mithro-resume`, whose short names are
+the site's own `/talks/` and `/resume/` pages. If bit.ly also has a
+separate `<name>` keyword, public or private, that keyword keeps
+`<name>` (a private one gets no stub, but mith.ro/<name> is never
+pointed elsewhere) and the script prints a warning; any other clash
+between two names that differ only in case also warns. Only keywords
+are shortened, not custom aliases. The talks and home pages pick the
+short name automatically for `bit.ly/mithro-<name>` slides links,
+through `_includes/shortlink_stub.html`, and only when `/<name>/`
+redirects to the same place as `/mithro-<name>/`.
 
 Workflow after editing Visibility in the sheet:
 
