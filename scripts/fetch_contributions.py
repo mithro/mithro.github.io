@@ -35,6 +35,7 @@ data file. Pass --refresh-orgs to fetch them all again.
 Re-run whenever the page feels stale.
 """
 
+import http.client
 import pathlib
 import re
 import sys
@@ -122,11 +123,16 @@ def fetch(year: int, org: str | None = None) -> Calendar:
             # else (404, 403, ...) is a real problem and fails the run.
             if not (err.code == 429 or err.code >= 500) or attempt == 7:
                 raise
-            wait = int(err.headers.get("Retry-After") or 0) or 30 * (attempt + 1)
+            try:
+                wait = int(err.headers.get("Retry-After") or 0)
+            except ValueError:  # an HTTP-date rather than seconds
+                wait = 0
+            wait = min(wait, 300) or 30 * (attempt + 1)
             print(f"{year}: HTTP {err.code}, retrying in {wait}s", file=sys.stderr)
             time.sleep(wait)
-        except (urllib.error.URLError, TimeoutError, ConnectionError) as err:
-            # Network blips (DNS, reset, timeout) on a CI runner.
+        except (urllib.error.URLError, http.client.HTTPException, OSError) as err:
+            # Network blips on a CI runner: DNS, reset, timeout, TLS errors
+            # and truncated reads (OSError covers the socket-level ones).
             if attempt == 7:
                 raise
             wait = 15 * (attempt + 1)

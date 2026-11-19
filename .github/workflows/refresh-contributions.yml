@@ -75,30 +75,40 @@ jobs:
           d = yaml.safe_load(open("_data/contributions.yaml"))
           old = yaml.safe_load(open(sys.argv[1]))
 
-          # Shape: the file is complete and current.
-          assert d["snapshot_date"] == today.isoformat(), d["snapshot_date"]
-          assert d["last_year"] == today.year, d["last_year"]
+          # Shape: the file is complete and current. (A manual run that
+          # starts just before midnight UTC can be stamped the day before.)
+          snap = datetime.date.fromisoformat(str(d["snapshot_date"]))
+          assert (today - snap).days in (0, 1), d["snapshot_date"]
+          assert d["last_year"] == snap.year, d["last_year"]
           assert len(d["years"]) >= 10, f"only {len(d['years'])} years"
           assert d["total"] > 0
 
           # Regression: well-formed but wrong data (for example a degraded
           # page served to a CI runner) must not replace good history.
-          # Contributions only grow, so a finished year or the all-time
-          # total dropping sharply means the fetch went wrong.
+          # Contributions only grow, so any year or the all-time total
+          # dropping sharply, or a year losing its organisations, means
+          # the fetch went wrong.
           problems = []
           if d["total"] < old["total"] * 0.95:
               problems.append(f"all-time total fell from {old['total']} to {d['total']}")
-          new_years = {y["year"]: y["total"] for y in d["years"]}
+          new_years = {y["year"]: y for y in d["years"]}
           for y in old["years"]:
-              if y["year"] >= today.year - 1:
-                  continue  # last year and this year can still move
-              now = new_years.get(y["year"])
-              if now is None:
+              new = new_years.get(y["year"])
+              if new is None:
                   problems.append(f"{y['year']} is missing")
-              elif now < y["total"] * 0.9:
-                  problems.append(f"{y['year']} fell from {y['total']} to {now}")
+                  continue
+              if new["total"] < y["total"] * 0.9:
+                  problems.append(f"{y['year']} fell from {y['total']} to {new['total']}")
+              if y.get("orgs") and not new.get("orgs"):
+                  problems.append(f"{y['year']} lost its organisations")
+          # Each year's day cells must add up to (about) its total, so a
+          # calendar with blanked days but intact totals is caught too.
+          for y in d["years"]:
+              days = sum(c[0] for c in y["days"])
+              if abs(days - y["total"]) > max(5, y["total"] * 0.02):
+                  problems.append(f"{y['year']} days add up to {days}, total says {y['total']}")
           if problems:
-              print("Counts dropped versus the committed data:", *problems, sep="\n  ")
+              print("The new data looks wrong:", *problems, sep="\n  ")
               if os.environ.get("ALLOW_DROP") != "true":
                   sys.exit("Refusing to commit. If the drop is real, re-run with allow_drop.")
               print("allow_drop is set, committing anyway.")
@@ -119,6 +129,7 @@ jobs:
           git commit -m "Refresh contributions data ($(date -u +%Y-%m-%d))"
           for attempt in 1 2 3 4; do
             git pull --rebase origin master && git push origin HEAD:master && exit 0
+            git rebase --abort 2>/dev/null || true
             sleep $((attempt * 15))
           done
           exit 1
@@ -135,7 +146,8 @@ jobs:
             "repos/${{ github.repository }}/actions/workflows/refresh-contributions.yml/enable"
 
       - name: Report failure
-        if: failure()
+        # cancelled() covers hitting timeout-minutes, which is not a failure().
+        if: failure() || cancelled()
         uses: actions/github-script@v8
         with:
           script: |
