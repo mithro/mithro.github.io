@@ -157,6 +157,13 @@ one row per bit.ly link with a `Visibility` column — `public` rows get
 a redirect stub on mith.ro (e.g. `mith.ro/tim-silicon-2024/` → the
 long URL), `private` rows do not.
 
+bit.ly keywords of the form `mithro-<name>` publish under the shorter
+`mith.ro/<name>/` as their primary path, with `mith.ro/mithro-<name>/`
+kept as a working alias (both redirect straight to the long URL). The
+exceptions are `mithro-talks` and `mithro-resume`, whose short names are
+the site's own `/talks/` and `/resume/` pages. Talks use the short name
+via `slides_short` in `_data/talks.yaml`.
+
 Workflow after editing Visibility in the sheet:
 
 1. Ask Claude to sync `_data/shortlinks.yaml` from the sheet (the YAML
