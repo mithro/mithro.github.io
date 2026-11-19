@@ -1,0 +1,125 @@
+# Refresh Contributions Data
+# Once a month, re-runs scripts/fetch_contributions.py and commits the
+# updated _data/contributions.yaml straight to master, so /contributions/
+# never drifts more than a month behind github.com.
+#
+# Staying alive: GitHub disables scheduled workflows in a public repo
+# after 60 days without repository activity. Two things stop that from
+# happening silently here:
+#   1. Every run commits (snapshot_date changes even when the counts do
+#      not), so the repo sees activity at least once a month.
+#   2. Every run also re-enables this workflow through the API, the same
+#      approach keepalive actions use.
+# If a run fails, an issue labelled "contributions-refresh" is opened (or
+# commented on, if one is already open) so the failure is visible.
+name: Refresh Contributions Data
+
+on:
+  schedule:
+    # 06:17 UTC on the 2nd of each month: the previous month is complete
+    # in every time zone, and off the top of the hour when GitHub's
+    # scheduler is busiest.
+    - cron: '17 6 2 * *'
+  workflow_dispatch:
+    inputs:
+      refresh_orgs:
+        description: 'Refetch organisation counts for every year (takes ~30 minutes)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write   # commit the refreshed data file
+  actions: write    # re-enable this workflow (keepalive)
+  issues: write     # report failures
+
+concurrency:
+  group: refresh-contributions
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    # Do not run on forks.
+    if: github.repository == 'mithro/mithro.github.io'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: master
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Fetch contribution calendar
+        run: |
+          args=()
+          if [ "${{ inputs.refresh_orgs }}" = "true" ]; then
+            args+=(--refresh-orgs)
+          fi
+          uv run scripts/fetch_contributions.py "${args[@]}"
+
+      - name: Check the new data
+        run: |
+          uv run --with pyyaml python - <<'EOF'
+          import datetime, yaml
+          d = yaml.safe_load(open("_data/contributions.yaml"))
+          assert d["snapshot_date"] == datetime.date.today().isoformat(), d["snapshot_date"]
+          assert d["last_year"] == datetime.date.today().year, d["last_year"]
+          assert len(d["years"]) >= 10, f"only {len(d['years'])} years"
+          assert d["total"] > 0
+          print(f"OK: {d['total_text']} contributions, {d['first_year']}-{d['last_year']}")
+          EOF
+          git diff --stat
+
+      - name: Commit and push
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add _data/contributions.yaml
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "Refresh contributions data ($(date -u +%Y-%m-%d))"
+          for attempt in 1 2 3 4; do
+            git pull --rebase origin master && git push origin HEAD:master && exit 0
+            sleep $((attempt * 15))
+          done
+          exit 1
+
+      - name: Keep this scheduled workflow enabled
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api -X PUT \
+            "repos/${{ github.repository }}/actions/workflows/refresh-contributions.yml/enable"
+
+      - name: Report failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const label = 'contributions-refresh';
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const body = `The monthly contributions data refresh failed: ${runUrl}\n\n` +
+              `The /contributions/ page keeps showing the previous snapshot until a run succeeds. ` +
+              `Re-run it from the Actions tab ("Refresh Contributions Data" → "Run workflow") once fixed.`;
+            const { data: open } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner, repo: context.repo.repo,
+              state: 'open', labels: label,
+            });
+            if (open.length) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: open[0].number, body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner, repo: context.repo.repo,
+                title: 'Monthly contributions data refresh failed',
+                body, labels: [label],
+              });
+            }
