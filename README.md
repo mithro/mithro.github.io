@@ -142,18 +142,12 @@ and writes 240px/480px WebP renditions to
 `assets/thumbs/docs/<alias>-*.webp` plus the size manifest
 `_data/doc_thumbs.yaml`.
 
-Byline lines (`Owner:`, `Authors:`, `Reviewers:`, `Contributors:`, and
-any line carrying an email address) are painted over before the page is
-rendered. These previews are committed to a **public** repo, so without
-that step the colleagues' addresses and full names that
-`_data/design_docs.yaml` deliberately keeps out of its text would be
-republished as picture text instead.
-
 Only a definitive answer from Google — HTTP 404/410, or the export
 bouncing to the sign-in page — counts as "no longer public" and deletes
-that document's previews. A rate limit, server error, network failure or
-non-PDF body is reported as *could not check* and leaves the existing
-previews alone, so a throttled run can't wipe the page. The script exits
+that document's previews. Anything else at all (a rate limit, a 401 or
+403, a server error, a network failure, a non-PDF body) is reported as
+*could not check* and leaves the existing previews alone, so a throttled
+run can't wipe the page. The script exits
 non-zero if any document is missing a preview **or** could not be
 checked, listing those two cases separately. Existing renditions are
 reused; delete the files to refetch after a document's first page

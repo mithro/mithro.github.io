@@ -24,9 +24,6 @@ not check": the existing preview is kept, because a throttled run must not
 wipe the page. Either way the script exits non-zero so the gap can't go
 unnoticed. Existing renditions of public documents are reused rather than
 re-rendered; delete them to force a refresh.
-
-Byline lines naming authors, reviewers and their email addresses are
-painted out before rendering — see redact_contacts().
 """
 
 import io
@@ -49,34 +46,6 @@ LARGE, SMALL = 480, 240
 DOC_RE = re.compile(r"/document/d/([\w-]+)")
 RKEY_RE = re.compile(r"resourcekey=([\w-]+)")
 UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) mith.ro-thumbs"}
-
-# A document's first page usually carries a byline block naming the people
-# who wrote and reviewed it, with their email addresses. Those previews are
-# committed to a PUBLIC repo, so republishing colleagues' addresses and full
-# names as picture text is exactly what _data/design_docs.yaml deliberately
-# avoids in text. Lines matching either pattern are painted over with the
-# page background before the preview is rasterised.
-EMAILISH = re.compile(r"[\w.+-]+@[\w.-]*")
-BYLINE = re.compile(
-    r"^\s*(owners?|authors?|reviewers?|contributors?|editors?|"
-    r"approvers?|written by|created by|contact)\b\s*[:\-]", re.I)
-
-
-def redact_contacts(page: "pymupdf.Page") -> int:
-    """Paint over byline and email lines. Returns how many were covered."""
-    covered = 0
-    for block in page.get_text("dict")["blocks"]:
-        for line in block.get("lines", []):
-            text = "".join(span["text"] for span in line["spans"])
-            if not text.strip():
-                continue
-            if BYLINE.search(text) or EMAILISH.search(text):
-                rect = pymupdf.Rect(line["bbox"])
-                rect.x0 -= 2; rect.y0 -= 1; rect.x1 += 2; rect.y1 += 1
-                page.draw_rect(rect, color=None, fill=(1, 1, 1))
-                covered += 1
-    return covered
-
 
 def existing(base: pathlib.Path) -> dict | None:
     large = pathlib.Path(f"{base}-{LARGE}.webp")
@@ -104,20 +73,26 @@ def emit(img: Image.Image, base: pathlib.Path) -> dict:
 def fetch(doc: dict) -> tuple[str, dict | None, dict | None]:
     """(alias, fresh preview size or None, kept-but-unchecked size or None).
 
-    Any unexpected failure is treated as "could not check": the existing
-    preview is kept and the run still fails. Only Google answering
+    A download or render failure is treated as "could not check": the
+    existing preview is kept and the run still fails. Only Google answering
     definitively that the document is not public removes a preview.
     """
     alias = doc["alias"]
     try:
         return _fetch(doc)
-    except Exception as e:  # noqa: BLE001 - one bad doc must not abort the run
+    except (OSError, ValueError, RuntimeError) as e:
+        # Network trouble, a corrupt download, a PDF pymupdf will not
+        # render: one bad document must not abort the run before the
+        # manifest is written. A programming error is deliberately NOT
+        # caught here — it should crash loudly rather than be reported as
+        # 34 documents that merely could not be checked.
         print(f"{alias}: error while checking ({e!r}); keeping existing "
               "previews", file=sys.stderr)
         UNCHECKED.add(alias)
         return alias, None, existing(OUT / alias)
 
 
+# Aliases whose public/not-public state this run could not establish.
 UNCHECKED: set[str] = set()
 
 
@@ -167,7 +142,6 @@ def _fetch(doc: dict) -> tuple[str, dict | None, dict | None]:
         page = pdf[0]
         if page.rect.width <= 0:
             raise ValueError(f"page has no width: {page.rect}")
-        redact_contacts(page)
         zoom = LARGE / page.rect.width  # render straight to the large width
         pix = page.get_pixmap(matrix=pymupdf.Matrix(zoom, zoom), alpha=False)
         img = Image.open(io.BytesIO(pix.tobytes("png")))
