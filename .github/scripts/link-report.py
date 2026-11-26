@@ -10,9 +10,15 @@ an external site that did not answer the GitHub runner; those often
 block or rate-limit datacenter IPs, so they are reported but never fail
 the check.
 
-muffet follows links to any page on the crawled host, which for the
-preview host includes other PRs' previews. --page-prefix drops failures
-found on pages outside this PR's own preview.
+With --page-prefix (this PR's own https://preview.mith.ro/pr-<N>/), a
+link from one of this PR's pages to anywhere else on the preview host is
+itself an internal failure, whether or not it loads: such a link leaves
+the preview (for the host's front page or another PR's preview) and
+would be wrong on production too. Seeing those needs muffet --verbose,
+which also lists the links that loaded. muffet follows links to any page
+on the crawled host, so an escaping link can drag other PRs' previews
+into the crawl; failures found on those pages are not this PR's and are
+dropped.
 
 Internal failures that look temporary (5xx, 408, 429, network errors)
 are also counted separately as internal_transient: GitHub Pages answers
@@ -20,8 +26,10 @@ are also counted separately as internal_transient: GitHub Pages answers
 crawls again when it sees any.
 
 Writes a Markdown report to --out and prints GitHub Actions outputs
-(internal_failures=N, internal_transient=N, external_failures=N) to
-stdout and, if given, --github-output.
+(internal_failures=N, internal_transient=N, external_failures=N,
+pages_crawled=N) to
+stdout and, if given, --github-output. --result-out writes the pages
+crawled and every failure as JSON, for comparing two crawls.
 """
 
 import argparse
@@ -49,8 +57,13 @@ def host_of(url):
     return parts.hostname.rstrip(".") if parts.hostname else None
 
 
+ESCAPE = "leaves this preview"
+
+
 def is_transient(error, url):
     """True for errors that a later crawl could plausibly not see."""
+    if error.startswith(ESCAPE):
+        return False  # the link is in the page, whatever its target did
     if host_of(url) is None or error.startswith("parse "):
         # muffet could not parse the link; that is how it was written.
         return False
@@ -108,8 +121,11 @@ def main():
                         help="another origin whose links count as internal, "
                              "e.g. https://mith.ro (repeatable)")
     parser.add_argument("--page-prefix", default="",
-                        help="only report failures found on pages whose URL "
-                             "starts with this, e.g. https://preview.mith.ro/pr-9/")
+                        help="this PR's preview, e.g. https://preview.mith.ro/pr-9/: "
+                             "only its pages are reported, and their links "
+                             "to elsewhere on the --origin host are failures")
+    parser.add_argument("--result-out",
+                        help="write pages crawled and failures here as JSON")
     parser.add_argument("--max-chars", type=int, default=0,
                         help="truncate the appended report at a line boundary "
                              "to keep the whole file under this many bytes")
@@ -129,15 +145,39 @@ def main():
     with open(args.report, encoding="utf-8") as f:
         pages = json.load(f)  # muffet prints "[]" when nothing failed
 
+    origin_host = host_of(args.origin)
+    prefix = args.page_prefix
+    if prefix and not prefix.endswith("/"):
+        parser.error("--page-prefix must end with /")
+
+    def escapes(url):
+        """True for a link to the preview host outside this PR's preview."""
+        if not prefix or host_of(url) != origin_host:
+            return False
+        return not (url.startswith(prefix) or url == prefix[:-1])
+
     internal = {}  # page -> [(error, link)]
     external = {}
+    crawled = []   # this PR's pages
+    foreign_pages = 0
+    n_escapes = 0
     for page in pages:
         page_url = clean(page["url"])
-        if args.page_prefix and not page_url.startswith(args.page_prefix):
+        if prefix and not page_url.startswith(prefix):
+            foreign_pages += 1
             continue
+        crawled.append(page_url)
         for link in page.get("links") or []:
             url = clean(link.get("url", ""))
             error = clean(link.get("error", ""))
+            if escapes(url):
+                # Wrong even when it loads (muffet --verbose reports
+                # those with a status instead of an error).
+                outcome = error or f"answered {link.get('status', '?')}"
+                internal.setdefault(page_url, []).append(
+                    (f"{ESCAPE} ({outcome})", url))
+                n_escapes += 1
+                continue
             if not error:
                 continue
             host = host_of(url)
@@ -166,6 +206,13 @@ def main():
         lines.append("")
         lines.append("These are pages or files of this site that did not "
                      "load. They fail the check.")
+        if n_escapes:
+            lines.append("")
+            lines.append(f"{n_escapes} of them are links that leave this "
+                         f"preview (`{prefix}`) for another part of the "
+                         "preview host. A page of this site must never link "
+                         "there; the link is probably written without "
+                         "`relative_url`.")
         if n_transient:
             lines.append("")
             lines.append(f"{n_transient} of them look temporary (server "
@@ -216,9 +263,20 @@ def main():
     with open(args.out, "a", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
 
+    if args.result_out:
+        def flat(bucket):
+            return sorted([page, url, error] for page, entries in bucket.items()
+                          for error, url in entries)
+        with open(args.result_out, "w", encoding="utf-8") as f:
+            json.dump({"pages": sorted(crawled),
+                       "foreign_pages": foreign_pages,
+                       "internal": flat(internal),
+                       "external": flat(external)}, f, indent=1)
+
     outputs = (f"internal_failures={n_int}\n"
                f"internal_transient={n_transient}\n"
-               f"external_failures={len(ext_links)}\n")
+               f"external_failures={len(ext_links)}\n"
+               f"pages_crawled={len(crawled)}\n")
     if args.github_output:
         with open(args.github_output, "a", encoding="utf-8") as f:
             f.write(outputs)
