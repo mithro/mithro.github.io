@@ -25,6 +25,12 @@ layout: default
     {%- if site.data.strips[talk.slug] -%}{%- assign embeds_eager = false -%}{%- else -%}{%- assign embeds_eager = true -%}{%- endif %}
     {% include talk_embeds.html talk=talk eager=embeds_eager %}
   </div>
+  {%- comment -%} talk_embeds.html only makes tiles for YouTube; any other recording (e.g. a Drive file behind a "-video" short link) gets a plain link, as listing rows do. {%- endcomment -%}
+  {%- if talk.video and talk.video != "" -%}
+    {%- unless talk.video contains "youtu.be/" or talk.video contains "watch?v=" %}
+  <p class="talk-meta">Recording: <a href="{{ talk.video | escape }}"><span aria-hidden="true">▶</span> {{ talk.video | remove: "https://" | remove: "http://" | escape }}</a></p>
+    {%- endunless -%}
+  {%- endif %}
   {%- include shortlink_stub.html alias=talk.slug -%}
   {%- if stub %}
   <p class="talk-meta">Short link: <a href="{{ stub_path | relative_url }}">mith.ro/{{ stub_alias }}</a></p>
