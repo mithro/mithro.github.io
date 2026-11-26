@@ -50,8 +50,14 @@ classic Pages builder, in Actions, and locally — no custom plugin needed.
      preview. A page of this site must never contain one; it usually
      means a link written without `relative_url`. muffet runs with
      `--verbose` so that links which loaded are listed too.
-   - **External failures are only reported**, because many sites block or
-     rate-limit GitHub's runners.
+   - **A dead external link fails the check.** Dead means it answered
+     404 or 410, or its domain no longer resolves, and it still did not
+     load when requested three more times over a minute. The second look
+     matters: hackaday.io answered the runners 404 in three old reports
+     for a page that loads.
+   - **Other external failures are only reported** (403, 429, 5xx,
+     timeouts). That is what a site blocking or rate-limiting GitHub's
+     runners looks like, so it does not show the link is dead.
 4. It re-reads every page muffet crawled and checks the `git-commit`
    hash again, so a crawl that read a stale cached page is not trusted.
 5. The report lands as a PR comment (previous reports are archived into
@@ -86,10 +92,11 @@ are left out.
 
 ## Link-checker exclusions
 
-External links never fail the check, but domains that answer GitHub's
-runners with an error whatever the link are excluded (in
-`scripts/crawl-preview.py`) so that the report stays readable. An
-excluded link is not fetched at all. Each pattern is anchored to the
+Domains that answer GitHub's runners with an error whatever the link
+are excluded (in `scripts/crawl-preview.py`) so that the report stays
+readable. An excluded link is not fetched at all. If a site answers the
+runners 404 for pages that exist, excluding it is also the way to stop
+it failing the check. Each pattern is anchored to the
 URL's host, so it cannot match a path of this site.
 
 Added in November 2026, from the 40 failed reports posted on PRs #2 to

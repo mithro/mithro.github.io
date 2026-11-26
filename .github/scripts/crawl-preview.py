@@ -2,10 +2,14 @@
 """Link-check one PR's deployed preview with muffet and report on it.
 
 Runs muffet over https://preview.mith.ro/pr-<N>/, has link-report.py
-split the result into internal failures (which fail the check) and
-external ones (which are only reported), then has
-check-preview-commit.py confirm that every page muffet crawled serves
-the PR's commit.
+split the result into internal failures and dead external links (which
+fail the check) and other external failures (which are only reported),
+then has check-preview-commit.py confirm that every page muffet crawled
+serves the PR's commit.
+
+An external link only counts as dead if it answered 404 or 410, or its
+domain did not resolve, and it still does not load when requested again
+here: some sites answer a crawler 404 now and then.
 
 The crawl is repeated, up to --max-attempts times a minute apart, when
 its result cannot be trusted yet:
@@ -23,12 +27,15 @@ it is misused; the workflow fails the job from verification_status.
 """
 
 import argparse
+import json
 import pathlib
 import re
 import secrets
 import subprocess
 import sys
 import time
+import urllib.error
+import urllib.request
 
 SCRIPTS = pathlib.Path(__file__).resolve().parent
 
@@ -86,6 +93,51 @@ def printable(text, limit=2000):
     return "".join(c if c.isprintable() or c == "\n" else " " for c in text)
 
 
+BROWSER = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+           "(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36")
+
+
+def loads(url):
+    """True if url answers with a success or redirect status."""
+    request = urllib.request.Request(url, headers={
+        "User-Agent": BROWSER, "Accept": "text/html,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9"})
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            return response.status < 400
+    except (urllib.error.URLError, TimeoutError, OSError, ValueError):
+        return False
+
+
+def recovered(urls, tries, delay):
+    """The urls that load on any of several spaced requests."""
+    pending, alive = set(urls), set()
+    for attempt in range(tries):
+        if attempt:
+            time.sleep(delay)
+        alive |= {url for url in sorted(pending) if loads(url)}
+        pending -= alive
+        if not pending:
+            break
+    return alive
+
+
+def split_report(args, raw, report, header, result, alive=None):
+    """Run link-report.py over muffet's output; returns its process."""
+    report.write_text("\n".join(header) + "\n\n", encoding="utf-8")
+    command = [sys.executable, str(SCRIPTS / "link-report.py"), str(raw),
+               "--origin", args.preview_origin,
+               "--internal-origin", "https://mith.ro",
+               "--internal-origin", "https://www.mith.ro",
+               "--page-prefix", args.preview_url,
+               "--max-chars", "60000",
+               "--out", str(report),
+               "--result-out", str(result)]
+    if alive is not None:
+        command += ["--alive", str(alive)]
+    return subprocess.run(command, stdout=subprocess.PIPE, text=True)
+
+
 def crawl_once(args, attempt, out):
     """One crawl. Returns (problem, counts): problem is None when the
     result can be trusted, else a (heading, detail) pair."""
@@ -115,18 +167,22 @@ def crawl_once(args, attempt, out):
     if attempt > 1:
         header.append(f"**Crawl attempts:** {attempt} (earlier ones could "
                       "not be trusted; see the workflow log)")
-    report.write_text("\n".join(header) + "\n\n", encoding="utf-8")
-
-    split = subprocess.run(
-        [sys.executable, str(SCRIPTS / "link-report.py"), str(raw),
-         "--origin", args.preview_origin,
-         "--internal-origin", "https://mith.ro",
-         "--internal-origin", "https://www.mith.ro",
-         "--page-prefix", args.preview_url,
-         "--max-chars", "60000",
-         "--out", str(report),
-         "--result-out", str(out / "result.json")],
-        stdout=subprocess.PIPE, text=True)
+    result = out / "result.json"
+    split = split_report(args, raw, report, header, result)
+    if split.returncode == 0:
+        # Ask again before calling an external link dead.
+        candidates = {url for _, url, _ in
+                      json.loads(result.read_text(encoding="utf-8"))["dead"]}
+        if candidates:
+            alive = recovered(candidates, 3, args.retry_delay // 2)
+            print(f"{len(candidates)} external link(s) looked dead; "
+                  f"{len(alive)} loaded when requested again")
+            if alive:
+                alive_file = out / "alive.txt"
+                alive_file.write_text("\n".join(sorted(alive)) + "\n",
+                                      encoding="utf-8")
+                split = split_report(args, raw, report, header, result,
+                                     alive_file)
     print(split.stdout, end="")
     if split.returncode != 0:
         # For example JSON cut short because muffet was killed.
@@ -212,7 +268,9 @@ def main():
         # A trusted result, or failures that stayed "temporary" through
         # every attempt, which then count as real.
         outputs += [f"{k}={v}" for k, v in counts.items()]
-        status = "success" if counts.get("internal_failures") == "0" else "failed"
+        passed = (counts.get("internal_failures") == "0"
+                  and counts.get("external_dead") == "0")
+        status = "success" if passed else "failed"
     outputs.append(f"verification_status={status}")
     outputs.append(f"have_result={'true' if result.exists() else 'false'}")
 

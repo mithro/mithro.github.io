@@ -4,11 +4,17 @@
 muffet crawls the deployed PR preview. A failure whose link is on the
 host of --origin (the preview host) or of an --internal-origin is an
 internal problem (a missing page or asset of this site) and fails the
-check. So does a link muffet could not resolve to a URL at all. Any other
-failure is
-an external site that did not answer the GitHub runner; those often
-block or rate-limit datacenter IPs, so they are reported but never fail
-the check.
+check. So does a link muffet could not resolve to a URL at all.
+
+Any other failure is an external one, and what it proves depends on the
+error:
+- 404, 410 or a domain that no longer resolves says the link is dead.
+  These fail the check, unless the URL is listed in --alive (the caller
+  re-requested it and it loaded after all; some sites answer a crawler
+  404 now and then).
+- Anything else (403, 429, 5xx, timeouts) is what a site blocking or
+  rate-limiting GitHub's datacenter IPs looks like, so it is reported
+  but does not fail the check.
 
 With --page-prefix (this PR's own https://preview.mith.ro/pr-<N>/), a
 link from one of this PR's pages to anywhere else on the preview host is
@@ -26,8 +32,8 @@ are also counted separately as internal_transient: GitHub Pages answers
 crawls again when it sees any.
 
 Writes a Markdown report to --out and prints GitHub Actions outputs
-(internal_failures=N, internal_transient=N, external_failures=N,
-pages_crawled=N) to
+(internal_failures=N, internal_transient=N, external_dead=N,
+external_failures=N, pages_crawled=N) to
 stdout and, if given, --github-output. --result-out writes the pages
 crawled and every failure as JSON, for comparing two crawls.
 """
@@ -72,6 +78,11 @@ def is_transient(error, url):
     # muffet reports a missing fragment target as "id #... not found";
     # that is a property of the page, not of the network.
     return not error.startswith("id #")
+
+
+def is_dead(error):
+    """True for an external error that says the link itself is gone."""
+    return error in ("404", "410") or "no such host" in error
 
 
 def size(text):
@@ -124,6 +135,9 @@ def main():
                         help="this PR's preview, e.g. https://preview.mith.ro/pr-9/: "
                              "only its pages are reported, and their links "
                              "to elsewhere on the --origin host are failures")
+    parser.add_argument("--alive",
+                        help="file of external URLs, one per line, that "
+                             "loaded when re-requested; not counted as dead")
     parser.add_argument("--result-out",
                         help="write pages crawled and failures here as JSON")
     parser.add_argument("--max-chars", type=int, default=0,
@@ -156,8 +170,14 @@ def main():
             return False
         return not (url.startswith(prefix) or url == prefix[:-1])
 
+    alive = set()
+    if args.alive:
+        with open(args.alive, encoding="utf-8") as f:
+            alive = {line.strip() for line in f if line.strip()}
+
     internal = {}  # page -> [(error, link)]
-    external = {}
+    external = {}  # did not answer; proves nothing
+    dead = {}      # external and gone
     crawled = []   # this PR's pages
     foreign_pages = 0
     n_escapes = 0
@@ -183,8 +203,12 @@ def main():
             host = host_of(url)
             # No host means muffet could not parse the href, so it is a
             # malformed link in our own page.
-            is_internal = host is None or host in internal_hosts
-            bucket = internal if is_internal else external
+            if host is None or host in internal_hosts:
+                bucket = internal
+            elif is_dead(error) and url not in alive:
+                bucket = dead
+            else:
+                bucket = external
             bucket.setdefault(page_url, []).append((error, url))
 
     def count(bucket):
@@ -230,13 +254,39 @@ def main():
         lines.append("## ✅ All internal links and assets are valid")
     lines.append("")
 
+    def by_link(bucket, links, page_limit=5):
+        rows = []
+        for url in sorted(links):
+            pages_using = sorted(p for p, entries in bucket.items()
+                                 if any(u == url for _, u in entries))
+            rows.append(f"{links[url]}\t{url}")
+            rows += [f"\t\t{p}" for p in pages_using[:page_limit]]
+            if len(pages_using) > page_limit:
+                rows.append(f"\t\t... and {len(pages_using) - page_limit} more")
+        return rows
+
+    dead_links = unique_links(dead)
+    if dead_links:
+        lines.append(f"## ❌ {len(dead_links)} dead external link(s)")
+        lines.append("")
+        lines.append("These answered 404 or 410, or their domain no longer "
+                     "exists, and still did when requested again. They fail "
+                     "the check. Fix the link, point it at an archived copy "
+                     "or remove it.")
+        lines.append("")
+        lines.append("```")
+        lines += by_link(dead, dead_links)
+        lines.append("```")
+        lines.append("")
+
     ext_links = unique_links(external)
     if ext_links:
         lines.append(f"### ⚠️ {len(ext_links)} external link(s) did not "
                      "answer (not blocking)")
         lines.append("")
-        lines.append("Often a site blocking or rate-limiting GitHub's "
-                     "runners rather than a dead link. Check by hand; add "
+        lines.append("Errors like 403, 429 and timeouts are what a site "
+                     "blocking or rate-limiting GitHub's runners looks like, "
+                     "so they do not show the link is dead. Check by hand; add "
                      "persistent false alarms to the exclude list in "
                      "`.github/scripts/crawl-preview.py`.")
         lines.append("")
@@ -244,18 +294,11 @@ def main():
                      "that use them</summary>")
         lines.append("")
         lines.append("```")
-        for url in sorted(ext_links):
-            pages_using = sorted(p for p, entries in external.items()
-                                 if any(u == url for _, u in entries))
-            lines.append(f"{ext_links[url]}\t{url}")
-            for p in pages_using[:5]:
-                lines.append(f"\t\t{p}")
-            if len(pages_using) > 5:
-                lines.append(f"\t\t... and {len(pages_using) - 5} more")
+        lines += by_link(external, ext_links)
         lines.append("```")
         lines.append("")
         lines.append("</details>")
-    else:
+    elif not dead_links:
         lines.append("All external links answered.")
 
     if args.max_chars:
@@ -271,10 +314,12 @@ def main():
             json.dump({"pages": sorted(crawled),
                        "foreign_pages": foreign_pages,
                        "internal": flat(internal),
+                       "dead": flat(dead),
                        "external": flat(external)}, f, indent=1)
 
     outputs = (f"internal_failures={n_int}\n"
                f"internal_transient={n_transient}\n"
+               f"external_dead={len(dead_links)}\n"
                f"external_failures={len(ext_links)}\n"
                f"pages_crawled={len(crawled)}\n")
     if args.github_output:

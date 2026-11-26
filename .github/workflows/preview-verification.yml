@@ -9,8 +9,10 @@
 # - Internal links and assets (anything on the preview host or mith.ro)
 #   fail the check when broken, and so does any link that leaves
 #   /pr-<N>/ for another part of the preview host.
-# - External links are checked too, but many sites block or rate-limit
-#   GitHub's datacenter IPs, so they are only reported in the comment.
+# - External links are checked too. One that is dead (404, 410 or a
+#   domain that no longer resolves, confirmed by asking again) fails the
+#   check. Other errors are what sites blocking or rate-limiting
+#   GitHub's datacenter IPs look like, so they are only reported.
 #
 # sanity-check runs afterwards without holding up that result. It waits
 # out the CDN's maximum cache time, crawls again and checks that it gets
@@ -169,10 +171,10 @@ jobs:
           path: ${{ runner.temp }}/linkcheck/
           retention-days: 7
 
-      - name: Fail workflow if internal links are broken
+      - name: Fail workflow if links are broken
         if: steps.verification.outputs.verification_status == 'failed'
         run: |
-          echo "Broken internal links or assets found; see the report above."
+          echo "Broken internal links or dead external links found; see the report above."
           exit 1
 
   # GitHub Pages serves every URL with Cache-Control: max-age=600, so
