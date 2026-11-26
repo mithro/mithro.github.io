@@ -17,7 +17,7 @@ where_exp takes exactly ONE comparison, hence the separate assigns.
 {%- if idx > 0 %}{% assign prev = site.data.talk_categories[prev_i] %}{% endif -%}
 {%- assign next = site.data.talk_categories[next_i] -%}
 <section class="sect">
-  <h2><span aria-hidden="true">🗂️</span> {{ cat.name | escape }}</h2>
+  <h1><span aria-hidden="true">🗂️</span> {{ cat.name | escape }}</h1>
   {% include talks_nav.html %}
   <p class="talk-meta">
     <a href="{{ '/talks/topics/' | relative_url }}">All topics</a>

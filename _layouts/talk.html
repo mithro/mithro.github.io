@@ -10,7 +10,7 @@ layout: default
 {%- assign title = talk.talk_title | default: talk.title -%}
 <section class="sect talk-page">
   {% include talks_nav.html %}
-  <h2>{{ title | escape }}</h2>
+  <h1>{{ title | escape }}</h1>
   <p class="talk-meta">
     {%- if talk.event and talk.event != "" -%}{%- if talk.event_url %}<a href="{{ talk.event_url | escape }}">{{ talk.event | escape }}</a>{% else %}{{ talk.event | escape }}{% endif -%}{%- endif -%}
     {%- assign meta_sep = false -%}{%- if talk.event and talk.event != "" -%}{%- assign meta_sep = true -%}{%- endif -%}
