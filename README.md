@@ -165,6 +165,10 @@ Workflow after editing Visibility in the sheet:
    governs visibility.
 2. Run `scripts/gen_redirect_pages.py` to regenerate `redirects/`
    (one page per public entry, rendered by `jekyll-redirect-from`).
+   It also merges `_data/manual_shortlinks.yaml`, a committed list of
+   public short links that have no bit.ly counterpart (e.g.
+   `mith.ro/oss-tcad-tools/`); add those there rather than hand-writing
+   a stub, or the next regeneration will delete it.
 3. Rebuild and verify (see "Verification" below), then commit
    `redirects/` and push.
 

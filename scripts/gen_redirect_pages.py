@@ -11,6 +11,10 @@ Source of truth for public/private is the "mith.ro short links" Google
 Sheet (Visibility column); _data/shortlinks.yaml mirrors it (include:
 true == public). Ask Claude to re-sync the YAML from the sheet after
 flipping rows, then re-run this script.
+
+Short links with no bit.ly counterpart live in the committed
+_data/manual_shortlinks.yaml (all public) and are merged in here, so a
+regeneration does not drop them.
 """
 import pathlib
 import shutil
@@ -21,6 +25,7 @@ RESERVED = {"talks", "interviews", "papers", "projects", "resume", "about",
             "assets", "docs", "scripts", "404"}
 
 links = yaml.safe_load(open("_data/shortlinks.yaml"))
+links += yaml.safe_load(open("_data/manual_shortlinks.yaml")) or []
 outdir = pathlib.Path("redirects")
 if outdir.exists():
     shutil.rmtree(outdir)
