@@ -14,6 +14,7 @@ layout: default
   <p class="talk-meta">
     {%- if talk.event and talk.event != "" -%}{%- if talk.event_url %}<a href="{{ talk.event_url | escape }}">{{ talk.event | escape }}</a>{% else %}{{ talk.event | escape }}{% endif -%}{%- endif -%}
     {%- assign meta_sep = false -%}{%- if talk.event and talk.event != "" -%}{%- assign meta_sep = true -%}{%- endif -%}
+    {%- if talk.generic %}Shareable talk (prepared for sharing, not given at a particular event){% assign meta_sep = true %}{% endif -%}
     {%- if talk.date and talk.date != "" %}{% if meta_sep %} · {% endif %}<span class="nowrap">{{ talk.date | escape }}</span>{% assign meta_sep = true %}{% endif -%}
     {%- if talk.series %}{% if meta_sep %} · p{% else %}P{% endif %}art of <em>{{ talk.series | escape }}</em>{% endif %}
   </p>

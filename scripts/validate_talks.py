@@ -58,6 +58,10 @@ def main() -> None:
                     problems.append(f"{who}: unknown category {c!r}")
             if not t.get("talk_title"):
                 problems.append(f"{who}: no talk_title")
+        if "generic" in t and t["generic"] is not True:
+            problems.append(f"{who}: generic must be true or absent")
+        if t.get("generic") and (t.get("event") or "").strip():
+            problems.append(f"{who}: a generic talk has no event; drop event or generic")
         if "allow_private_shortlink" in t and t["allow_private_shortlink"] is not True:
             problems.append(f"{who}: allow_private_shortlink must be true or absent")
         if "strips" in t and t["strips"] is not True:

@@ -27,7 +27,9 @@ anything to show, a full-width row with the film strip and embed tiles.
     {%- endif %}
   </td>
   <td class="ev"><span>
-    {%- if talk.event != "" and talk.event -%}
+    {%- if talk.generic -%}
+      <span class="ev-generic" title="Prepared for sharing, not given at a particular event">Shareable talk</span>{%- if talk.date != "" and talk.date %} · {% endif -%}
+    {%- elsif talk.event != "" and talk.event -%}
       {%- if talk.event_url -%}<a href="{{ talk.event_url | escape }}">{{ talk.event | escape }}</a>{%- else -%}{{ talk.event | escape }}{%- endif -%}
       {%- if talk.date != "" and talk.date %} · {% endif -%}
     {%- endif -%}
@@ -35,9 +37,9 @@ anything to show, a full-width row with the film strip and embed tiles.
       <span class="nowrap">{{ talk.date | escape }}</span>
     {%- endif -%}
     {%- if talk.event == "" or talk.event == nil -%}
-      {%- if talk.date == "" or talk.date == nil -%}
+      {%- if talk.date == "" or talk.date == nil -%}{%- unless talk.generic -%}
         <span class="ev-none" aria-hidden="true">—</span>
-      {%- endif -%}
+      {%- endunless -%}{%- endif -%}
     {%- endif -%}
   </span></td>
 </tr>
