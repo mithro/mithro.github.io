@@ -4,7 +4,8 @@
 muffet crawls the deployed PR preview. A failure whose link is on the
 host of --origin (the preview host) or of an --internal-origin is an
 internal problem (a missing page or asset of this site) and fails the
-check. So does a link muffet could not even parse. Any other failure is
+check. So does a link muffet could not resolve to a URL at all. Any other
+failure is
 an external site that did not answer the GitHub runner; those often
 block or rate-limit datacenter IPs, so they are reported but never fail
 the check.
@@ -44,12 +45,13 @@ def host_of(url):
         return None
     if parts.scheme not in ("http", "https"):
         return None
-    return parts.hostname
+    # "mith.ro." (with the root dot) is the same host as "mith.ro".
+    return parts.hostname.rstrip(".") if parts.hostname else None
 
 
 def is_transient(error, url):
     """True for errors that a later crawl could plausibly not see."""
-    if host_of(url) is None:
+    if host_of(url) is None or error.startswith("parse "):
         # muffet could not parse the link; that is how it was written.
         return False
     if re.fullmatch(r"\d{3}", error):
@@ -79,9 +81,11 @@ def truncate(lines, budget):
     out, used = [], 0
     for line in lines:
         if used + size(line) + 1 > budget - 200:  # room for the closers
-            fence_open = sum(l.startswith("```") for l in out) % 2 == 1
-            details_open = (sum("<details>" in l for l in out)
-                            > sum("</details>" in l for l in out))
+            # Whole-line matches only: a URL in the data may contain
+            # either marker.
+            fence_open = sum(l == "```" for l in out) % 2 == 1
+            details_open = (sum(l.startswith("<details>") for l in out)
+                            > sum(l == "</details>" for l in out))
             if fence_open:
                 out.append(note)
                 out.append("```")
@@ -123,8 +127,7 @@ def main():
         internal_hosts.add(host)
 
     with open(args.report, encoding="utf-8") as f:
-        text = f.read().strip()
-    pages = json.loads(text) if text else []
+        pages = json.load(f)  # muffet prints "[]" when nothing failed
 
     internal = {}  # page -> [(error, link)]
     external = {}

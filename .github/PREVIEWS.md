@@ -26,7 +26,10 @@ Modelled on wafer.space's CI
   503 while it redeploys the preview host for another PR, so when internal
   failures look temporary (5xx, 408, 429 or a network error) the whole
   crawl is repeated, up to three times a minute apart; whatever still
-  fails on the last crawl fails the check.
+  fails on the last crawl fails the check. If the preview never serves
+  the commit, or the checker itself breaks, the PR gets a "did not run to
+  completion" comment so an older pass is not left as the latest result.
+  Manual (`workflow_dispatch`) runs do not comment.
 - **`workflows/cleanup-previews.yml`** — every 15 minutes, removes preview
   directories whose PR has closed and marks their GitHub deployments
   inactive.

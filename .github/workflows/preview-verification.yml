@@ -43,7 +43,9 @@ concurrency:
 jobs:
   verify-preview:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    # Worst case: 15 min waiting for the deployment, then three crawls
+    # of up to ~8 min each with a minute between them.
+    timeout-minutes: 60
 
     steps:
       - name: Checkout repository
@@ -89,7 +91,10 @@ jobs:
         run: |
           echo "Waiting for $PREVIEW_URL/ to serve commit $EXPECTED_COMMIT"
 
-          for i in {1..180}; do
+          # A wall-clock deadline: a host that hangs makes each curl take
+          # 20 seconds, so counting attempts would not bound the wait.
+          DEADLINE=$((SECONDS + 900))
+          while [ "$SECONDS" -lt "$DEADLINE" ]; do
             PAGE_CONTENT=$(curl -s --max-time 20 "$PREVIEW_URL/" || echo "")
             FOUND_COMMIT=$(echo "$PAGE_CONTENT" | grep -oE '<meta name="git-commit" content="[a-f0-9]{40}"' | grep -oE '[a-f0-9]{40}' || echo "")
 
@@ -98,7 +103,7 @@ jobs:
               exit 0
             fi
 
-            echo "Attempt $i/180: found '${FOUND_COMMIT:-nothing}', waiting..."
+            echo "After ${SECONDS}s: found '${FOUND_COMMIT:-nothing}', waiting..."
             sleep 5
           done
 
@@ -124,10 +129,11 @@ jobs:
           # Excluded external domains answer automated clients on GitHub's
           # runners with errors whatever the link (see .github/PREVIEWS.md):
           # they block bots outright (LinkedIn, ACM/DOI, IEEE, Google
-          # Docs/Drive/Scholar, Twitter/X, Mastodon, Crowd Supply),
-          # rate-limit (web.archive.org, Google's blogs), refuse
-          # connections from outside their country (tsri.org.tw), or
-          # chain-redirect into one of these (bit.ly).
+          # Docs/Drive/Scholar, electronics-lab.com, Twitter/X,
+          # fosstodon.org, Crowd Supply), rate-limit (web.archive.org,
+          # opensource.googleblog.com), refuse connections from the
+          # runners (tsri.org.tw), or chain-redirect into one of these
+          # (bit.ly).
           # The last exclude is the preview host's front page, which lists
           # every open PR's preview: muffet follows links to any page on
           # the crawled host, so without it one stray link would pull all
@@ -162,7 +168,7 @@ jobs:
               --exclude="^https?://web\.archive\.org([/?#].*)?$" \
               --exclude="^https?://opensource\.googleblog\.com([/?#].*)?$" \
               --exclude="^https?://(www\.)?tsri\.org\.tw([/?#].*)?$" \
-              --exclude="^${PREVIEW_ORIGIN}/?$" \
+              --exclude="^${PREVIEW_ORIGIN}/?(index\.html)?([?#].*)?$" \
               --header="User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" \
               --header="Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" \
               --header="Accept-Language:en-US,en;q=0.9" \
@@ -175,13 +181,12 @@ jobs:
 
             # muffet prints "[]" when every link passes. It prints an error
             # on stderr, and no JSON, when the crawl itself could not run
-            # (for example the preview's front page answered 503). A
-            # non-zero exit with no JSON means the same even if stderr is
-            # empty.
+            # (for example the preview's front page answered 503). So no
+            # output at all is never a pass, whatever the exit status.
             crawl_failed=false
-            if [ ! -s muffet-report.json ] && { [ "$muffet_rc" -ne 0 ] || [ -s muffet-stderr.txt ]; }; then
+            if [ ! -s muffet-report.json ]; then
               crawl_failed=true
-              echo "muffet failed to run (exit $muffet_rc)"
+              echo "muffet reported nothing (exit $muffet_rc)"
             else
               {
                 echo "**PR:** #$PR_NUMBER"
@@ -198,14 +203,19 @@ jobs:
               # hard-coded absolute links to production. Only pages of
               # this PR's preview are reported, so another PR's broken
               # preview cannot fail this check.
-              python3 .github/scripts/link-report.py muffet-report.json \
+              if python3 .github/scripts/link-report.py muffet-report.json \
                 --origin "$PREVIEW_ORIGIN" \
                 --internal-origin "https://mith.ro" \
                 --internal-origin "https://www.mith.ro" \
                 --page-prefix "$PREVIEW_URL/" \
                 --max-chars 60000 \
-                --out "$REPORT_FILE" > "$COUNTS_FILE"
-              cat "$COUNTS_FILE"
+                --out "$REPORT_FILE" > "$COUNTS_FILE"; then
+                cat "$COUNTS_FILE"
+              else
+                # For example JSON cut short because muffet was killed.
+                crawl_failed=true
+                echo "link-report.py could not read muffet's report (muffet exit $muffet_rc)"
+              fi
             fi
             echo "::endgroup::"
 
@@ -227,7 +237,7 @@ jobs:
               echo ""
               echo "## ❌ The link checker could not crawl the preview"
               echo ""
-              echo "muffet exited with status $muffet_rc on each of $MAX_ATTEMPTS attempts and reported no links."
+              echo "After $MAX_ATTEMPTS attempts muffet still gave no usable report (last exit status $muffet_rc)."
               echo ""
               echo '```'
               head -c 2000 muffet-stderr.txt | tr -d '`' | tr -c '[:print:]\n' ' '
@@ -268,6 +278,24 @@ jobs:
             const commentVerificationResults = require('./.github/scripts/comment-verification-results.js');
             const result = await commentVerificationResults(github, context, core);
             console.log(`Comment ID: ${result.commentId}, Archived: ${result.archivedCount} previous comments`);
+
+      # The wait for the deployment timing out, or any other step failing
+      # before a result exists, must not leave an older "passed" comment
+      # standing as the latest word on the PR.
+      - name: Comment that verification could not run
+        if: failure() && github.event_name == 'pull_request' && steps.verification.outputs.verification_status == ''
+        uses: actions/github-script@v8
+        env:
+          VERIFICATION_STATUS: failed
+          REPORT_CONTENT: |
+            ## ❌ The link check did not run to completion
+
+            The preview may never have served this commit, or the checker itself failed, so no links were checked. See the [workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
+          GITHUB_RUN_ID: ${{ github.run_id }}
+        with:
+          script: |
+            const commentVerificationResults = require('./.github/scripts/comment-verification-results.js');
+            await commentVerificationResults(github, context, core);
 
       - name: Fail workflow if internal links are broken
         if: steps.verification.outputs.verification_status == 'failed'
