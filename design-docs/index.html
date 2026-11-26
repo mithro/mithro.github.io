@@ -3,10 +3,11 @@ layout: default
 title: Design documents
 description: "Public design documents, proposals and requirements docs written or reviewed by Tim 'mithro' Ansell — Chrome, LiteX & FPGA tooling, open source silicon and wafer.space."
 ---
+{%- assign groups = site.data.design_docs | sort: "activity" | reverse -%}
 <section class="sect">
   <h2><span aria-hidden="true">📐</span> Design documents</h2>
   {%- assign doc_total = 0 -%}
-  {%- for group in site.data.design_docs -%}
+  {%- for group in groups -%}
     {%- assign doc_total = doc_total | plus: group.docs.size -%}
   {%- endfor %}
   <p class="prose">{{ doc_total }} public design documents, proposals and
@@ -15,19 +16,20 @@ description: "Public design documents, proposals and requirements docs written o
   links quoted in the documents themselves and in talks that reference
   them.</p>
   <nav class="doc-toc" aria-label="Topics">
-    {%- for group in site.data.design_docs %}
-    <a href="#{{ group.id }}">{{ group.topic | escape }} <span class="n">{{ group.docs.size }}</span></a>
+    {%- for group in groups %}
+    <a href="#{{ group.id | escape }}">{{ group.topic | escape }} <span class="n">{{ group.docs.size }}</span></a>
     {%- endfor %}
   </nav>
 </section>
 
 {% assign tile_n = 0 %}
-{% for group in site.data.design_docs %}
-<section class="sect doc-group" id="{{ group.id }}">
+{% for group in groups %}
+<section class="sect doc-group" id="{{ group.id | escape }}">
   <h3 class="year-head">{{ group.topic | escape }}</h3>
   <p class="prose meta">{{ group.blurb | escape }}</p>
   <div class="doc-grid">
-  {% for doc in group.docs %}
+  {%- assign group_docs = group.docs | sort: "modified" | reverse %}
+  {% for doc in group_docs %}
     {%- assign tile_n = tile_n | plus: 1 -%}
     {%- comment -%}
       Link through the mith.ro redirect stub when one is generated for the
