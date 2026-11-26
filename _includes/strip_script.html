@@ -39,6 +39,25 @@
       ['wheel', 'pointerdown', 'keydown'].forEach(function (ev) {
         s.addEventListener(ev, stop, { passive: true });
       });
+
+      // One tab stop per strip instead of one per slide (a talk page has
+      // up to ~170): only the current slide is tabbable and the arrow keys,
+      // Home and End move between slides. Applied here, not in the HTML,
+      // so every slide stays reachable when scripts don't run.
+      var frames = Array.prototype.slice.call(s.querySelectorAll('a.frame'));
+      if (frames.length > 1) {
+        frames.forEach(function (f, i) { f.tabIndex = i === 0 ? 0 : -1; });
+        s.addEventListener('keydown', function (e) {
+          var i = frames.indexOf(document.activeElement);
+          if (i < 0) return;
+          var j = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: frames.length - 1 }[e.key];
+          if (j === undefined || j < 0 || j >= frames.length || j === i) return;
+          e.preventDefault();
+          frames[i].tabIndex = -1;
+          frames[j].tabIndex = 0;
+          frames[j].focus();
+        });
+      }
     });
   })();
 </script>
