@@ -35,18 +35,19 @@
   </script>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
   <header class="topline">
     <a class="brand" href="{{ '/' | relative_url }}">mith.ro</a>
-    <nav>
+    <nav aria-label="Main">
       <a href="{{ '/' | relative_url }}"{% if page.url == '/' %} class="on" aria-current="page"{% endif %}>About</a>
-      <a href="{{ '/talks/' | relative_url }}"{% if page.url contains '/talks/' %} class="on" aria-current="page"{% endif %}>Talks</a>
-      <a href="{{ '/interviews/' | relative_url }}"{% if page.url contains '/interviews/' %} class="on" aria-current="page"{% endif %}>Interviews</a>
-      <a href="{{ '/papers/' | relative_url }}"{% if page.url contains '/papers/' %} class="on" aria-current="page"{% endif %}>Papers</a>
-      <a href="{{ '/projects/' | relative_url }}"{% if page.url contains '/projects/' %} class="on" aria-current="page"{% endif %}>Projects</a>
-      <a href="{{ '/resume/' | relative_url }}"{% if page.url contains '/resume/' %} class="on" aria-current="page"{% endif %}>Resume</a>
+      <a href="{{ '/talks/' | relative_url }}"{% if page.url contains '/talks/' %} class="on"{% if page.url == '/talks/' %} aria-current="page"{% endif %}{% endif %}>Talks</a>
+      <a href="{{ '/interviews/' | relative_url }}"{% if page.url contains '/interviews/' %} class="on"{% if page.url == '/interviews/' %} aria-current="page"{% endif %}{% endif %}>Interviews</a>
+      <a href="{{ '/papers/' | relative_url }}"{% if page.url contains '/papers/' %} class="on"{% if page.url == '/papers/' %} aria-current="page"{% endif %}{% endif %}>Papers</a>
+      <a href="{{ '/projects/' | relative_url }}"{% if page.url contains '/projects/' %} class="on"{% if page.url == '/projects/' %} aria-current="page"{% endif %}{% endif %}>Projects</a>
+      <a href="{{ '/resume/' | relative_url }}"{% if page.url contains '/resume/' %} class="on"{% if page.url == '/resume/' %} aria-current="page"{% endif %}{% endif %}>Resume</a>
     </nav>
   </header>
-  <main>
+  <main id="main" tabindex="-1">
     {{ content }}
   </main>
   <footer class="footer">
