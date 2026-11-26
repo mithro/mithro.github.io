@@ -1,0 +1,8 @@
+# Public short links that are NOT backed by a bit.ly link, so they are
+# not in the private "mith.ro short links" sheet / _data/shortlinks.yaml.
+# Everything here is public (this file is committed). Same fields as
+# shortlinks.yaml; scripts/gen_redirect_pages.py merges both.
+- keyword: oss-tcad-tools
+  long_url: "https://docs.google.com/spreadsheets/d/1uNKQo7_QK3W0DeRuIFfYPHx3f55vvZfF02fhXy3pH5s/edit"
+  title: "Open source TCAD tools overview"
+  include: true
