@@ -199,7 +199,7 @@
   categories: [education, open-silicon]
   venue: NSF
   strips: true
-  event: ''
+  event: "NSF IC Research, Education, and Workforce Development Workshop"
   year: 2021
   date: 15 Oct 2021
   slides: https://bit.ly/nsf-edu-2021
@@ -290,7 +290,7 @@
   talk_title: Microelectronics workforce development workshop
   categories: [education, open-silicon]
   strips: true
-  event: ''
+  event: Microelectronics Workforce Development Workshop (SUNY)
   year: 2022
   date: 3 Feb 2022
   slides: https://j.mp/suny22-goog
@@ -337,7 +337,7 @@
   series: Enabling new science with open source silicon
   venue: NSF
   strips: true
-  event: ''
+  event: Presentation to National Science Foundation Leadership
   year: 2022
   date: 7 Mar 2022
   slides: https://bit.ly/goog-nsf22
@@ -352,7 +352,7 @@
   series: Enabling new science with open source silicon
   venue: NIST
   strips: true
-  event: ''
+  event: NIST PML Alternative Computing Group
   year: 2021
   date: 17 Dec 2021
   slides: https://j.mp/goog-nist21
@@ -418,7 +418,7 @@
   series: Open down to the transistor
   venue: ESSCIRC/ESSDERC
   strips: true
-  event: ''
+  event: ESSCIRC ESSDERC 2021
   year: 2021
   date: 21 Sep 2021
   slides: https://docs.google.com/presentation/d/1NVb3r9k5zZJJl3vweHhIIN6pSjzss9rhalOEeEKx0Uo
@@ -455,7 +455,7 @@
   categories: [fpga-tools, open-silicon, education]
   series: "Google and open source hardware toolchains & ecosystem"
   strips: true
-  event: ''
+  event: BYU 2021
   year: 2021
   date: Jun 2021
   slides: https://j.mp/byu21-goog
@@ -575,7 +575,7 @@
   categories: [open-silicon]
   venue: NSF
   strips: true
-  event: ''
+  event: "NSF 2020 Micro/Nano Circuits Workshop, Foundry Session"
   year: 2020
   date: 16 Dec 2020
   slides: https://docs.google.com/presentation/d/1cGDEIuBgq05G7oJaxhm8tH46azc460EXT_i9hKVvG_g
@@ -672,7 +672,7 @@
   categories: [open-silicon]
   venue: DARPA ERI
   strips: true
-  event: ''
+  event: "DARPA ERI POSH & Integration Exercise Jan 2020"
   year: 2020
   date: Jan 2020
   slides: https://docs.google.com/presentation/d/1v1Wvn4XuodHHJ9D2Xl-CUdh_ruSWrXLwLzrF7vLwPzs
