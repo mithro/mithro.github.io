@@ -4,7 +4,8 @@
     b.addEventListener('click', function () {
       var f = document.createElement('iframe');
       f.src = b.dataset.src;
-      f.title = b.getAttribute('aria-label');
+      // The iframe is named for what it shows; the button label names an action.
+      f.title = b.dataset.title || b.getAttribute('aria-label');
       f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
       f.referrerPolicy = 'strict-origin-when-cross-origin';
       f.allowFullscreen = true;
