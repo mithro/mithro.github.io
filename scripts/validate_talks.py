@@ -97,6 +97,24 @@ def main() -> None:
         elif d and (d.get("via") not in ("pub", "embed", "edit", "none")
                     or (d["via"] == "none") != (d.get("url") is None)):
             problems.append(f"{t.get('slug')}: bad deck_links entry {d!r}")
+        elif d and d["via"] == "none" and (t.get("strips") or t.get("slides_embed")):
+            # No visitor can open the deck, yet the site would publish its
+            # slides (strip images) or embed it: publish the deck or drop them.
+            problems.append(f"{t.get('slug')}: deck is not viewable anonymously "
+                            "but has strips/slides_embed")
+    talk_slugs = {t.get("slug") for t in talks}
+    for slug in sorted(set(deck_links) - talk_slugs):
+        problems.append(f"deck_links: {slug} is not a talk (run deck_links.py)")
+    # Thumbnails named in the manifest must exist in both renditions.
+    th_path = pathlib.Path("_data/thumbs.yaml")
+    thumbs = (yaml.safe_load(th_path.read_text()) or {}) if th_path.exists() else {}
+    for kind, entries in (("slides", thumbs.get("slides") or {}), ("video", thumbs.get("video") or {})):
+        for key, e in entries.items():
+            base = (e or {}).get("name", key) if kind == "slides" else key
+            for w in (320, 640):
+                if not (pathlib.Path("assets/thumbs") / kind / f"{base}-{w}.webp").exists():
+                    problems.append(f"thumbs: assets/thumbs/{kind}/{base}-{w}.webp missing "
+                                    "(run fetch_talk_thumbs.py)")
     # Every talk needs its /talks/<slug>/ page: listings, the feed and
     # prev/next all link there, so a talk added to talks.yaml without
     # re-running gen_talk_pages.py would 404 from every one of them.
