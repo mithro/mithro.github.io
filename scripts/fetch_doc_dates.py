@@ -3,13 +3,14 @@
 # requires-python = ">=3.11"
 # dependencies = ["requests", "ruamel.yaml"]
 # ///
-"""Refresh the modification dates on _data/design_docs.yaml and re-sort it.
+"""Record each design document's last-modified date from Google Drive.
 
 Each document gets a `modified:` date read from Google Drive, each topic
 group gets an `activity:` date (the *median* of its documents' dates),
-and both lists are sorted newest first — so /design-docs/ leads with the
-most recently edited documents, and with the topics that are active
-rather than the ones holding a single freshly touched old file.
+which /design-docs/ uses to lead with the most recently edited
+documents, and with the topics that are active rather than the ones
+holding a single freshly touched old file. The entries are left where
+they are in the file; the page does the ordering.
 
     uv run scripts/fetch_doc_dates.py
 
@@ -40,13 +41,22 @@ from ruamel.yaml import YAML
 
 DATA = pathlib.Path("_data/design_docs.yaml")
 DOC_RE = re.compile(r"/document/d/([\w-]+)")
+DATE_RE = re.compile(r"\d{4}-\d{2}-\d{2}")
 
 
 def token() -> str:
     """User token with Drive scope (gcloud auth login --enable-gdrive-access)."""
-    return subprocess.run(["gcloud", "auth", "print-access-token"],
-                          capture_output=True, text=True,
-                          check=True).stdout.strip()
+    try:
+        done = subprocess.run(["gcloud", "auth", "print-access-token"],
+                              capture_output=True, text=True, check=True)
+    except FileNotFoundError:
+        sys.exit("gcloud not found: install it, or pass --dates <file.json>")
+    except subprocess.CalledProcessError as e:
+        sys.exit("could not get a Drive token "
+                 f"({e.stderr.strip().splitlines()[-1] if e.stderr else e}).\n"
+                 "Run: gcloud auth login --enable-gdrive-access\n"
+                 "or pass pre-fetched dates with --dates <file.json>")
+    return done.stdout.strip()
 
 
 def drive_dates(docs: list, hdr: dict) -> dict[str, str]:
@@ -69,6 +79,8 @@ def drive_dates(docs: list, hdr: dict) -> dict[str, str]:
 
 def median_date(dates: list[str]) -> str:
     """Middle date; the lower of the two middles for an even count."""
+    if not dates:
+        raise ValueError("cannot take the median of no dates")
     ordered = sorted(dates)
     return ordered[(len(ordered) - 1) // 2]
 
@@ -87,6 +99,15 @@ def main() -> int:
 
     if args.dates:
         dates = json.loads(args.dates.read_text())
+        known = {d["alias"] for d in docs}
+        if bad := sorted(a for a, v in dates.items()
+                         if not isinstance(v, str)
+                         or not DATE_RE.fullmatch(v)):
+            print(f"not YYYY-MM-DD dates: {', '.join(bad)}", file=sys.stderr)
+            return 1
+        if extra := sorted(set(dates) - known):
+            print(f"ignoring aliases not in {DATA}: {', '.join(extra)}",
+                  file=sys.stderr)
     else:
         dates = drive_dates(docs, {"Authorization": f"Bearer {token()}"})
 
@@ -98,14 +119,19 @@ def main() -> int:
     for doc in docs:
         doc["modified"] = dates[doc["alias"]]
     for group in groups:
-        group["docs"] = sorted(group["docs"],
-                               key=lambda d: d["modified"], reverse=True)
+        if not group["docs"]:
+            print(f"topic {group['id']!r} has no documents", file=sys.stderr)
+            return 1
         group["activity"] = median_date([d["modified"] for d in group["docs"]])
-    groups[:] = sorted(groups, key=lambda g: g["activity"], reverse=True)
 
+    # Entries are left in place rather than re-sorted here: ruamel attaches
+    # comments to sequence positions, so reordering would silently move any
+    # comment written beside a topic or document. /design-docs/ sorts on
+    # `modified` and `activity` itself, so file order does not affect it.
     yaml.dump(groups, DATA)
-    print(f"{len(docs)} documents dated; topic order now "
-          + " > ".join(f"{g['id']} ({g['activity']})" for g in groups))
+    ranked = sorted(groups, key=lambda g: g["activity"], reverse=True)
+    print(f"{len(docs)} documents dated; topics rank "
+          + " > ".join(f"{g['id']} ({g['activity']})" for g in ranked))
     return 0
 
 
