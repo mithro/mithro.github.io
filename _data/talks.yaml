@@ -280,9 +280,10 @@
   event: Microelectronics Workforce Development Workshop (SUNY)
   year: 2022
   date: 3 Feb 2022
-  slides: https://j.mp/suny22-goog
+  slides: "https://mith.ro/suny22-goog"
   slides_embed: https://docs.google.com/presentation/d/19DhSmB3I1J9840l2207OkQloKEOps279k717tB-x6qM/embed
   slides_edit: https://docs.google.com/presentation/d/19DhSmB3I1J9840l2207OkQloKEOps279k717tB-x6qM
+  slides_short: "https://mith.ro/suny22-goog"
   source: sheet
   sort_date: '2022-02-03'
 - title: SoC Design using OpenPOWER Cores - 4th March 2022 - Google and open source hardware toolchains & ecosystem
