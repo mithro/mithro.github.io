@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 """Split a muffet JSON report into internal and external link failures.
 
-muffet crawls the deployed PR preview. A failure whose link is on
---origin (the preview host) or an --internal-origin is an internal
-problem (a missing page or asset of this site) and fails the check. Any
-other failure is an external site that did not answer the GitHub runner;
-those often block or rate-limit datacenter IPs, so they are reported but
-never fail the check.
+muffet crawls the deployed PR preview. A failure whose link is on the
+host of --origin (the preview host) or of an --internal-origin is an
+internal problem (a missing page or asset of this site) and fails the
+check. So does a link muffet could not even parse. Any other failure is
+an external site that did not answer the GitHub runner; those often
+block or rate-limit datacenter IPs, so they are reported but never fail
+the check.
+
+muffet follows links to any page on the crawled host, which for the
+preview host includes other PRs' previews. --page-prefix drops failures
+found on pages outside this PR's own preview.
 
 Internal failures that look temporary (5xx, 408, 429, network errors)
 are also counted separately as internal_transient: GitHub Pages answers
@@ -15,17 +20,38 @@ crawls again when it sees any.
 
 Writes a Markdown report to --out and prints GitHub Actions outputs
 (internal_failures=N, internal_transient=N, external_failures=N) to
---github-output.
+stdout and, if given, --github-output.
 """
 
 import argparse
 import json
 import re
 import sys
+from urllib.parse import urlsplit
 
 
-def is_transient(error):
+def clean(text):
+    """One line of plain text: muffet decodes %0A and friends in its
+    error messages, and the report is passed on line by line."""
+    return re.sub(r"[\x00-\x1f\x7f]+", " ", str(text)).strip()
+
+
+def host_of(url):
+    """Lower-case hostname of an absolute http(s) URL, else None."""
+    try:
+        parts = urlsplit(url)
+    except ValueError:
+        return None
+    if parts.scheme not in ("http", "https"):
+        return None
+    return parts.hostname
+
+
+def is_transient(error, url):
     """True for errors that a later crawl could plausibly not see."""
+    if host_of(url) is None:
+        # muffet could not parse the link; that is how it was written.
+        return False
     if re.fullmatch(r"\d{3}", error):
         return error.startswith("5") or error in ("408", "429")
     # muffet reports a missing fragment target as "id #... not found";
@@ -33,10 +59,16 @@ def is_transient(error):
     return not error.startswith("id #")
 
 
-def existing_chars(path):
+def size(text):
+    """GitHub limits comments in characters but environment variables
+    (which carry the report between steps) in bytes; count the larger."""
+    return len(text.encode("utf-8"))
+
+
+def existing_size(path):
     try:
         with open(path, encoding="utf-8") as f:
-            return len(f.read())
+            return size(f.read())
     except FileNotFoundError:
         return 0
 
@@ -46,7 +78,7 @@ def truncate(lines, budget):
     note = "... report truncated to fit in a PR comment"
     out, used = [], 0
     for line in lines:
-        if used + len(line) + 1 > budget - 200:  # room for the closers
+        if used + size(line) + 1 > budget - 200:  # room for the closers
             fence_open = sum(l.startswith("```") for l in out) % 2 == 1
             details_open = (sum("<details>" in l for l in out)
                             > sum("</details>" in l for l in out))
@@ -59,7 +91,7 @@ def truncate(lines, budget):
                 out += ["", "</details>"]
             return out
         out.append(line)
-        used += len(line) + 1
+        used += size(line) + 1
     return out
 
 
@@ -68,44 +100,49 @@ def main():
     parser.add_argument("report", help="muffet --format=json output")
     parser.add_argument("--origin", required=True,
                         help="origin muffet crawled, e.g. https://preview.mith.ro")
-    parser.add_argument("--display-origin", default="",
-                        help="origin to show pages under, if different")
     parser.add_argument("--internal-origin", action="append", default=[],
                         help="another origin whose links count as internal, "
                              "e.g. https://mith.ro (repeatable)")
+    parser.add_argument("--page-prefix", default="",
+                        help="only report failures found on pages whose URL "
+                             "starts with this, e.g. https://preview.mith.ro/pr-9/")
     parser.add_argument("--max-chars", type=int, default=0,
                         help="truncate the appended report at a line boundary "
-                             "to keep the whole file under this many characters")
+                             "to keep the whole file under this many bytes")
     parser.add_argument("--out", required=True, help="Markdown report path")
     parser.add_argument("--github-output", help="append outputs to this file")
     args = parser.parse_args()
 
-    origin = args.origin.rstrip("/")
-    # The site's own absolute links (https://mith.ro/..., the preview
-    # URL) are just as much "ours" as relative ones.
-    internal_origins = [origin, *(o.rstrip("/") for o in args.internal_origin if o)]
-    display = args.display_origin.rstrip("/") or origin
+    # The site's own absolute links (https://mith.ro/...) are just as
+    # much "ours" as relative ones, whatever scheme they are written with.
+    internal_hosts = set()
+    for origin in [args.origin, *args.internal_origin]:
+        host = host_of(origin)
+        if host is None:
+            parser.error(f"not an http(s) origin: {origin!r}")
+        internal_hosts.add(host)
 
     with open(args.report, encoding="utf-8") as f:
         text = f.read().strip()
     pages = json.loads(text) if text else []
 
-    def shown(url):
-        return display + url[len(origin):] if url.startswith(origin) else url
-
     internal = {}  # page -> [(error, link)]
     external = {}
     for page in pages:
+        page_url = clean(page["url"])
+        if args.page_prefix and not page_url.startswith(args.page_prefix):
+            continue
         for link in page.get("links") or []:
-            url = link.get("url", "")
-            error = link.get("error", "")
+            url = clean(link.get("url", ""))
+            error = clean(link.get("error", ""))
             if not error:
                 continue
-            is_internal = any(url == o or url.startswith(o + "/")
-                              for o in internal_origins)
+            host = host_of(url)
+            # No host means muffet could not parse the href, so it is a
+            # malformed link in our own page.
+            is_internal = host is None or host in internal_hosts
             bucket = internal if is_internal else external
-            bucket.setdefault(shown(page["url"]), []).append(
-                (error, shown(url)))
+            bucket.setdefault(page_url, []).append((error, url))
 
     def count(bucket):
         return sum(len(v) for v in bucket.values())
@@ -119,13 +156,13 @@ def main():
 
     lines = []
     n_int = count(internal)
-    n_transient = sum(is_transient(error)
-                      for entries in internal.values() for error, _ in entries)
+    n_transient = sum(is_transient(error, url)
+                      for entries in internal.values() for error, url in entries)
     if n_int:
         lines.append(f"## ❌ {n_int} broken internal link(s) or asset(s)")
         lines.append("")
-        lines.append("These are pages or files of this site that the "
-                     "preview does not serve. They fail the check.")
+        lines.append("These are pages or files of this site that did not "
+                     "load. They fail the check.")
         if n_transient:
             lines.append("")
             lines.append(f"{n_transient} of them look temporary (server "
@@ -172,7 +209,7 @@ def main():
         lines.append("All external links answered.")
 
     if args.max_chars:
-        lines = truncate(lines, args.max_chars - existing_chars(args.out))
+        lines = truncate(lines, args.max_chars - existing_size(args.out))
     with open(args.out, "a", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
 

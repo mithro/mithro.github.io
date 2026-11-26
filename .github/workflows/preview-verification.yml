@@ -35,8 +35,9 @@ env:
   MUFFET_VERSION: v2.11.8
 
 # A newer push to the same PR supersedes the run for the older commit.
+# Manual runs are grouped apart so they do not cancel the PR's own check.
 concurrency:
-  group: preview-verification-${{ github.event.pull_request.number || github.event.inputs.pr_number }}
+  group: preview-verification-${{ github.event_name }}-${{ github.event.pull_request.number || github.event.inputs.pr_number }}
   cancel-in-progress: true
 
 jobs:
@@ -47,6 +48,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+        with:
+          # Only the scripts in .github/ are needed; nothing pushes.
+          persist-credentials: false
 
       - name: Get PR information
         id: pr-info
@@ -124,6 +128,10 @@ jobs:
           # rate-limit (web.archive.org, Google's blogs), refuse
           # connections from outside their country (tsri.org.tw), or
           # chain-redirect into one of these (bit.ly).
+          # The last exclude is the preview host's front page, which lists
+          # every open PR's preview: muffet follows links to any page on
+          # the crawled host, so without it one stray link would pull all
+          # the other previews into this crawl.
           # muffet exits non-zero whenever any link fails; link-report.py
           # decides whether the check fails.
           for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
@@ -138,23 +146,23 @@ jobs:
               --max-retries=3 \
               --buffer-size=16384 \
               --max-response-body-size=33554432 \
-              --exclude=".*mailto:.*" \
-              --exclude=".*linkedin\.com.*" \
-              --exclude=".*docs\.google\.com.*" \
-              --exclude=".*drive\.google\.com.*" \
-              --exclude=".*doi\.org.*" \
-              --exclude=".*dl\.acm\.org.*" \
-              --exclude=".*ieeexplore\.ieee\.org.*" \
-              --exclude=".*electronics-lab\.com.*" \
-              --exclude=".*bit\.ly.*" \
-              --exclude=".*scholar\.google\.com.*" \
-              --exclude="^https?://([a-z0-9-]+\.)?twitter\.com.*" \
-              --exclude="^https?://(www\.)?x\.com.*" \
-              --exclude="^https?://fosstodon\.org.*" \
-              --exclude="^https?://(www\.)?crowdsupply\.com.*" \
-              --exclude="^https?://web\.archive\.org.*" \
-              --exclude="^https?://opensource\.googleblog\.com.*" \
-              --exclude="^https?://(www\.)?tsri\.org\.tw.*" \
+              --exclude="^https?://([a-z0-9-]+\.)*linkedin\.com([/?#].*)?$" \
+              --exclude="^https?://([a-z0-9-]+\.)*docs\.google\.com([/?#].*)?$" \
+              --exclude="^https?://([a-z0-9-]+\.)*drive\.google\.com([/?#].*)?$" \
+              --exclude="^https?://([a-z0-9-]+\.)*doi\.org([/?#].*)?$" \
+              --exclude="^https?://([a-z0-9-]+\.)*dl\.acm\.org([/?#].*)?$" \
+              --exclude="^https?://([a-z0-9-]+\.)*ieeexplore\.ieee\.org([/?#].*)?$" \
+              --exclude="^https?://([a-z0-9-]+\.)*electronics-lab\.com([/?#].*)?$" \
+              --exclude="^https?://([a-z0-9-]+\.)*bit\.ly([/?#].*)?$" \
+              --exclude="^https?://([a-z0-9-]+\.)*scholar\.google\.com([/?#].*)?$" \
+              --exclude="^https?://([a-z0-9-]+\.)?twitter\.com([/?#].*)?$" \
+              --exclude="^https?://(www\.)?x\.com([/?#].*)?$" \
+              --exclude="^https?://fosstodon\.org([/?#].*)?$" \
+              --exclude="^https?://(www\.)?crowdsupply\.com([/?#].*)?$" \
+              --exclude="^https?://web\.archive\.org([/?#].*)?$" \
+              --exclude="^https?://opensource\.googleblog\.com([/?#].*)?$" \
+              --exclude="^https?://(www\.)?tsri\.org\.tw([/?#].*)?$" \
+              --exclude="^${PREVIEW_ORIGIN}/?$" \
               --header="User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" \
               --header="Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" \
               --header="Accept-Language:en-US,en;q=0.9" \
@@ -165,10 +173,11 @@ jobs:
               cat muffet-stderr.txt
             fi
 
-            # muffet prints an error on stderr, and no JSON, when the crawl
-            # itself could not run (for example the preview's front page
-            # answered 503). A non-zero exit with no JSON means the same
-            # even if stderr is empty.
+            # muffet prints "[]" when every link passes. It prints an error
+            # on stderr, and no JSON, when the crawl itself could not run
+            # (for example the preview's front page answered 503). A
+            # non-zero exit with no JSON means the same even if stderr is
+            # empty.
             crawl_failed=false
             if [ ! -s muffet-report.json ] && { [ "$muffet_rc" -ne 0 ] || [ -s muffet-stderr.txt ]; }; then
               crawl_failed=true
@@ -183,14 +192,17 @@ jobs:
                 echo ""
               } > "$REPORT_FILE"
 
-              # Everything on the preview host counts as internal, not just
-              # /pr-<N>/: a link written without relative_url lands at the
-              # host root and must fail. So do the site's hard-coded
-              # absolute links to production.
+              # A link to anywhere on the preview host counts as internal,
+              # not just to /pr-<N>/: one written without relative_url
+              # lands at the host root and must fail. So do the site's
+              # hard-coded absolute links to production. Only pages of
+              # this PR's preview are reported, so another PR's broken
+              # preview cannot fail this check.
               python3 .github/scripts/link-report.py muffet-report.json \
                 --origin "$PREVIEW_ORIGIN" \
                 --internal-origin "https://mith.ro" \
                 --internal-origin "https://www.mith.ro" \
+                --page-prefix "$PREVIEW_URL/" \
                 --max-chars 60000 \
                 --out "$REPORT_FILE" > "$COUNTS_FILE"
               cat "$COUNTS_FILE"
@@ -207,23 +219,39 @@ jobs:
           done
 
           if [ "$crawl_failed" = true ]; then
-            echo "muffet could not crawl $PREVIEW_URL/ after $MAX_ATTEMPTS attempts"
-            exit 1
-          fi
-
-          cat "$COUNTS_FILE" >> "$GITHUB_OUTPUT"
-          if grep -q '^internal_failures=0$' "$COUNTS_FILE"; then
+            # Still report on the PR, so an older "passed" comment is not
+            # left standing as the latest result.
+            {
+              echo "**PR:** #$PR_NUMBER"
+              echo "**Preview:** $PREVIEW_URL/"
+              echo ""
+              echo "## ❌ The link checker could not crawl the preview"
+              echo ""
+              echo "muffet exited with status $muffet_rc on each of $MAX_ATTEMPTS attempts and reported no links."
+              echo ""
+              echo '```'
+              head -c 2000 muffet-stderr.txt | tr -d '`' | tr -c '[:print:]\n' ' '
+              echo ""
+              echo '```'
+            } > "$REPORT_FILE"
+            echo "verification_status=failed" >> "$GITHUB_OUTPUT"
+          elif grep -q '^internal_failures=0$' "$COUNTS_FILE"; then
+            cat "$COUNTS_FILE" >> "$GITHUB_OUTPUT"
             echo "verification_status=success" >> "$GITHUB_OUTPUT"
           else
+            cat "$COUNTS_FILE" >> "$GITHUB_OUTPUT"
             echo "verification_status=failed" >> "$GITHUB_OUTPUT"
           fi
 
           # link-report.py already cut the report at a line boundary to
           # keep the PR comment under GitHub's 65,536-character limit.
+          # The delimiter is random so no line of the report can end the
+          # value early.
+          DELIMITER="REPORT_$(openssl rand -hex 16)"
           {
-            echo "report_content<<REPORT_EOF"
+            echo "report_content<<$DELIMITER"
             cat "$REPORT_FILE"
-            echo "REPORT_EOF"
+            echo "$DELIMITER"
           } >> "$GITHUB_OUTPUT"
 
           cat "$REPORT_FILE"

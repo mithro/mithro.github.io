@@ -6,7 +6,7 @@ Modelled on wafer.space's CI
 ## How it works
 
 - **`workflows/pr-preview.yml`** — on every PR against `master`: builds the
-  site with `--baseurl /preview.mith.ro/pr-<N>`, pushes the result into the
+  site with `--baseurl /pr-<N>`, pushes the result into the
   [mithro/preview.mith.ro](https://github.com/mithro/preview.mith.ro)
   repository, then polls the deployed URL until the page's
   `<meta name="git-commit">` matches the PR's HEAD commit and comments the
@@ -54,9 +54,21 @@ stays readable:
 - Refuse connections from the runners: tsri.org.tw (connect timeout).
 - Redirect into blocked domains: bit.ly.
 
+Each pattern is anchored to the URL's host, so it cannot match a path of
+this site. The preview host's front page (`https://preview.mith.ro/`) is
+excluded as well: it lists every open PR's preview and muffet follows
+links to any page on the host it crawls, so one stray link would pull
+the other previews into the crawl. Failures on pages outside this PR's
+`/pr-<N>/` are dropped from the report for the same reason.
+
 Everything else, including YouTube and every internal page, PDF and
-thumbnail, is checked. `--max-retries=3` absorbs transient DNS/network
-failures. muffet is pinned by `MUFFET_VERSION` in the workflow.
+thumbnail, is checked. `--max-retries=3` only retries requests that time
+out; muffet does not retry a 5xx or 429 answer, which is why the workflow
+repeats the crawl itself. muffet is pinned by `MUFFET_VERSION` in the
+workflow.
+
+Known gap: a link written as `/` without `relative_url` lands on that
+front page, which answers 200, so the link check cannot see it.
 
 ## One-time setup (already done)
 
