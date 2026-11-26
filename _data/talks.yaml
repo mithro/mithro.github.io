@@ -1016,8 +1016,9 @@
   talk_title: "FuPy: FPGAs and MicroPython!"
   categories: [python, fpga-tools]
   series: "FuPy: FPGAs and MicroPython"
+  venue: PyCon AU
   strips: true
-  event: ''
+  event: PyCon AU 2018
   year: 2018
   date: Aug 2018
   slides: https://docs.google.com/presentation/d/1EaIt_TEz97ez7ao_--oPgL5TPJ0ktsthTF3bJmoF6es
@@ -1385,8 +1386,9 @@
   slug: kicad15
   talk_title: Why you should use KiCad
   categories: [community]
+  venue: linux.conf.au
   strips: true
-  event: ''
+  event: LCA2015 Open Hardware Miniconf
   year: 2015
   date: 13 Jan 2015
   slides: https://docs.google.com/presentation/d/1AC5EJgqszAcYQUq0s5rGs3JVY2nz0a7W1gLxTK1hWTs
