@@ -11,7 +11,7 @@ description: "Every talk by Tim 'mithro' Ansell in date order, 2007–present."
   {% assign years = talks_sorted | map: "year" | uniq %}
   {% assign tile_n = 0 %}
   {% for y in years %}
-  <h3 class="year-head">{% if y == 0 %}Undated{% else %}{{ y }}{% endif %}</h3>
+  <h2 class="year-head">{% if y == 0 %}Undated{% else %}{{ y }}{% endif %}</h2>
   <div class="table-scroll" tabindex="0" role="region" aria-label="{% if y == 0 %}Undated talks{% else %}Talks from {{ y }}{% endif %}">
   <table class="talks-table">
     <caption class="visually-hidden">{% if y == 0 %}Undated talks{% else %}Talks from {{ y }}{% endif %}</caption>
