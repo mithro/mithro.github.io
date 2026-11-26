@@ -238,7 +238,7 @@ def main():
         lines.append("Often a site blocking or rate-limiting GitHub's "
                      "runners rather than a dead link. Check by hand; add "
                      "persistent false alarms to the exclude list in "
-                     "`preview-verification.yml`.")
+                     "`.github/scripts/crawl-preview.py`.")
         lines.append("")
         lines.append("<details><summary>External links and the pages "
                      "that use them</summary>")
