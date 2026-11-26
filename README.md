@@ -117,7 +117,10 @@ BITLY_TOKEN=<token> uv run scripts/fetch_bitly.py
 ```
 
 Fetches every bitlink in the mithro bit.ly group and rewrites
-`_data/shortlinks.yaml`. Requires a bit.ly API token with access to
+`_data/shortlinks.yaml`. It never decides visibility: each link keeps
+the `include:` the sheet gave it, and a link bit.ly reports for the
+first time is private until marked public in the sheet (listed at the
+end of the run). Requires a bit.ly API token with access to
 that group, passed via the `BITLY_TOKEN` environment variable — never
 commit the token or put it directly on a command line that lands in
 shell history (e.g. `read -s BITLY_TOKEN && export BITLY_TOKEN`). No
