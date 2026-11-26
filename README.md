@@ -172,6 +172,7 @@ step:
 | Script | Purpose |
 |---|---|
 | `scripts/validate_talks.py` | Data invariants (slugs, categories, highlights, strips manifest). Run before committing `_data/` changes. |
+| `scripts/enrich_talk_embeds.py` | Derives each talk's `slides_embed` from its Google Slides URL, or from a bit.ly/j.mp slides link via the gitignored short-link mirror. A PRIVATE short link is only followed when the talk has `allow_private_shortlink: true`; otherwise it is reported and skipped, so private targets never reach committed data. |
 | `scripts/gen_talk_pages.py` | Rebuilds `_talks/` (front-matter stubs; content comes from the layout). |
 | `scripts/gen_topic_pages.py` | Rebuilds `_topics/` — one stub per `_data/talk_categories.yaml` entry. Jekyll cannot page a data file, so each topic needs a real file. |
 | `scripts/fetch_slide_strips.py` | Exports per-slide thumbnails via the Slides API into `assets/strips/<slug>/` + `_data/strips.yaml`. Slow (the API paces renders); `--only <slug>` / `--force` for one deck. |

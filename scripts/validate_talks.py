@@ -58,6 +58,8 @@ def main() -> None:
                     problems.append(f"{who}: unknown category {c!r}")
             if not t.get("talk_title"):
                 problems.append(f"{who}: no talk_title")
+        if "allow_private_shortlink" in t and t["allow_private_shortlink"] is not True:
+            problems.append(f"{who}: allow_private_shortlink must be true or absent")
         if "strips" in t and t["strips"] is not True:
             problems.append(f"{who}: strips must be true or absent")
         if t.get("strips") and strips and slug not in strips:
