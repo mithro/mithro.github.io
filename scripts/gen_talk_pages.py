@@ -23,7 +23,8 @@ shutil.rmtree(out, ignore_errors=True)
 out.mkdir()
 for t in talks:
     fm = {"slug": t["slug"], "title": t.get("talk_title") or t["title"]}
-    where = " · ".join(p for p in (t.get("event"), t.get("date")) if p)
+    event = t.get("event") or ("Shareable talk" if t.get("generic") else None)
+    where = " · ".join(p for p in (event, t.get("date")) if p)
     fm["description"] = ("Talk by Tim 'mithro' Ansell"
                          + (f" — {where}" if where else "") + ".")
     m = PRES_RE.search(t.get("slides_embed") or "")
