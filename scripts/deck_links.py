@@ -57,6 +57,9 @@ DOC_RE = re.compile(r"docs\.google\.com/presentation/d/(?!e/)([\w-]+)")
 PUB_RE = re.compile(r"docs\.google\.com/presentation/d/e/([\w-]+)")
 KEY_RE = re.compile(r"resourcekey=([\w-]+)")
 SHORT_RE = re.compile(r"^https?://(bit\.ly|j\.mp|mith\.ro|wafer\.space)/")
+# Front matter is the YAML between a leading "---" line and the next
+# "---" line; a plain split("---") would also cut at a "---" inside a value.
+FRONT_MATTER = re.compile(r"\A---\s*\n(.*?)\n---", re.S)
 UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
                     "(KHTML, like Gecko) Chrome/122.0 Safari/537.36"}
 FIELDS = ("slides_pub", "slides_edit", "slides", "slides_embed")
@@ -86,7 +89,8 @@ def public_pub_links() -> dict[str, str]:
     """
     out = {}
     for f in REDIRECTS.glob("*.md"):
-        fm = yaml.safe_load(f.read_text().split("---")[1]) or {}
+        m = FRONT_MATTER.match(f.read_text())
+        fm = (yaml.safe_load(m.group(1)) if m else None) or {}
         url = fm.get("redirect_to") or ""
         if PUB_RE.search(url) and "/pub" in url:
             out[fm["permalink"].strip("/")] = url

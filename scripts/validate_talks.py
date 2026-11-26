@@ -13,6 +13,9 @@ import sys
 
 import yaml
 
+# Front matter is the YAML between a leading "---" line and the next
+# "---" line; a plain split("---") would also cut at a "---" inside a value.
+FRONT_MATTER = re.compile(r"\A---\s*\n(.*?)\n---", re.S)
 SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 RESERVED = {"timeline", "topics", "highlights", "feed", "index"}
 
@@ -99,7 +102,8 @@ def main() -> None:
     # re-running gen_talk_pages.py would 404 from every one of them.
     talk_pages = {}
     for f in pathlib.Path("_talks").glob("*.md"):
-        fm = yaml.safe_load(f.read_text().split("---")[1]) or {}
+        m = FRONT_MATTER.match(f.read_text())
+        fm = (yaml.safe_load(m.group(1)) if m else None) or {}
         talk_pages[f.stem] = fm.get("slug")
     for slug in sorted(set(slugs) - set(talk_pages)):
         problems.append(f"talk {slug}: no _talks/{slug}.md (run gen_talk_pages.py)")
