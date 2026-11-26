@@ -12,20 +12,21 @@ Modelled on wafer.space's CI
   `<meta name="git-commit">` matches the PR's HEAD commit and comments the
   preview link on the PR. Each PR also gets a slugified alias directory
   (`pr-12-fix-title-wrapping/`) that redirects to `pr-12/`.
-- **`workflows/preview-verification.yml`** — builds the PR's site itself,
-  serves `_site` on `http://localhost:4000` and runs
-  [muffet](https://github.com/raviqqe/muffet) over it. A broken internal
-  page or asset fails the check; absolute links to `https://mith.ro/...`
-  or the preview URL count as internal too. External links are checked
-  too but only reported, because many sites block or rate-limit GitHub's runners. The
-  report lands as a PR comment (previous reports are archived into
-  `<details>` blocks), with internal failures first and external ones in a
-  collapsed list. `.github/scripts/link-report.py` does the split. Checking
-  a local build rather than preview.mith.ro means a Pages redeploy for
-  another PR cannot cause 503s in this check. The local build has an empty
-  `baseurl`, like production, so a link written without `relative_url`
-  passes here even though it breaks on the `/pr-<N>` preview; use
-  `relative_url` for every internal link.
+- **`workflows/preview-verification.yml`** — waits for the same
+  commit-verified deployment, then runs
+  [muffet](https://github.com/raviqqe/muffet) over the deployed preview,
+  so it checks exactly what a reviewer sees. A broken internal page or
+  asset fails the check. "Internal" is anything on `preview.mith.ro` or
+  `mith.ro`, so a link written without `relative_url` (which lands outside
+  `/pr-<N>/`) fails too. External links are checked but only reported,
+  because many sites block or rate-limit GitHub's runners. The report
+  lands as a PR comment (previous reports are archived into `<details>`
+  blocks), with internal failures first and external ones in a collapsed
+  list. `.github/scripts/link-report.py` does the split. Pages can answer
+  503 while it redeploys the preview host for another PR, so when internal
+  failures look temporary (5xx, 408, 429 or a network error) the whole
+  crawl is repeated, up to three times a minute apart; whatever still
+  fails on the last crawl fails the check.
 - **`workflows/cleanup-previews.yml`** — every 15 minutes, removes preview
   directories whose PR has closed and marks their GitHub deployments
   inactive.

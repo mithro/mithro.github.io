@@ -1,11 +1,15 @@
 # Preview Site Verification
-# Builds the PR's site, serves the build locally and link-checks it with
-# muffet, then posts the report as a PR comment.
+# Waits for the PR preview deployment (published by pr-preview.yml) to
+# serve the expected commit, then link-checks the deployed preview with
+# muffet and posts the report as a PR comment. The crawl runs against
+# preview.mith.ro so it checks exactly what a reviewer will see,
+# including the /pr-<N> baseurl.
 #
 # Two kinds of failure are kept apart:
-# - Internal links and assets (pages and files of this build) are checked
-#   against the local server, so the result does not depend on GitHub
-#   Pages timing on preview.mith.ro. Any broken one fails the check.
+# - Internal links and assets (anything on the preview host or mith.ro)
+#   fail the check when broken. GitHub Pages can answer 503 while it
+#   redeploys the preview host for another PR, so the crawl is repeated
+#   while internal failures look temporary.
 # - External links are checked too, but many sites block or rate-limit
 #   GitHub's datacenter IPs, so they are only reported in the comment.
 name: Preview Site Verification
@@ -28,7 +32,6 @@ permissions:
 
 env:
   PREVIEW_ORIGIN: https://preview.mith.ro
-  LOCAL_ORIGIN: http://localhost:4000
   MUFFET_VERSION: v2.11.8
 
 # A newer push to the same PR supersedes the run for the older commit.
@@ -39,72 +42,80 @@ concurrency:
 jobs:
   verify-preview:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
-      - name: Resolve PR number
-        id: pr-info
-        env:
-          PR_NUMBER: ${{ github.event.pull_request.number || github.event.inputs.pr_number }}
-        run: |
-          if ! [[ "$PR_NUMBER" =~ ^[0-9]+$ ]]; then
-            echo "Invalid PR number: $PR_NUMBER"
-            exit 1
-          fi
-          echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
-          echo "preview_url=${PREVIEW_ORIGIN}/pr-${PR_NUMBER}" >> "$GITHUB_OUTPUT"
-
       - name: Checkout repository
         uses: actions/checkout@v5
-        with:
-          # pull_request runs check out the merge commit by default; a
-          # manual run checks out the PR's head.
-          ref: ${{ github.event_name == 'workflow_dispatch' && format('refs/pull/{0}/head', steps.pr-info.outputs.pr_number) || '' }}
 
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.3'
-          bundler-cache: true
-
-      - name: Build Jekyll site for the local server
-        run: |
-          # Point absolute_url links (canonical, og:image, feed) at the
-          # local server so they are checked as part of this build.
-          printf 'url: "%s"\n' "$LOCAL_ORIGIN" > "$RUNNER_TEMP/local-url.yml"
-          bundle exec jekyll build --config "_config.yml,$RUNNER_TEMP/local-url.yml" --baseurl "" --future
+      - name: Get PR information
+        id: pr-info
+        uses: actions/github-script@v8
         env:
-          JEKYLL_ENV: production
-          LANG: C.UTF-8
-          LC_ALL: C.UTF-8
+          PR_NUMBER: ${{ github.event.pull_request.number || github.event.inputs.pr_number }}
+        with:
+          script: |
+            if (!/^[0-9]+$/.test(process.env.PR_NUMBER || '')) {
+              core.setFailed(`Invalid PR number: ${process.env.PR_NUMBER}`);
+              return;
+            }
+            const prNumber = parseInt(process.env.PR_NUMBER, 10);
+            const previewUrl = `${process.env.PREVIEW_ORIGIN}/pr-${prNumber}`;
+
+            // The preview must serve the PR's current head commit, which
+            // a manual run does not have in its event payload.
+            const { data: pullRequest } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber
+            });
+
+            console.log(`PR #${prNumber}: ${pullRequest.title}`);
+            console.log(`Preview URL: ${previewUrl}/`);
+            console.log(`HEAD: ${pullRequest.head.sha}`);
+
+            core.setOutput('pr_number', prNumber);
+            core.setOutput('preview_url', previewUrl);
+            core.setOutput('head_sha', pullRequest.head.sha);
+
+      - name: Wait for preview deployment to complete
+        env:
+          PREVIEW_URL: ${{ steps.pr-info.outputs.preview_url }}
+          EXPECTED_COMMIT: ${{ steps.pr-info.outputs.head_sha }}
+        run: |
+          echo "Waiting for $PREVIEW_URL/ to serve commit $EXPECTED_COMMIT"
+
+          for i in {1..180}; do
+            PAGE_CONTENT=$(curl -s --max-time 20 "$PREVIEW_URL/" || echo "")
+            FOUND_COMMIT=$(echo "$PAGE_CONTENT" | grep -oE '<meta name="git-commit" content="[a-f0-9]{40}"' | grep -oE '[a-f0-9]{40}' || echo "")
+
+            if [ "$FOUND_COMMIT" = "$EXPECTED_COMMIT" ]; then
+              echo "✅ Preview serves the expected commit"
+              exit 0
+            fi
+
+            echo "Attempt $i/180: found '${FOUND_COMMIT:-nothing}', waiting..."
+            sleep 5
+          done
+
+          echo "ERROR: Preview not ready with correct commit after 15 minutes"
+          exit 1
 
       - name: Install muffet
         run: |
-          wget -qO- "https://github.com/raviqqe/muffet/releases/download/${MUFFET_VERSION}/muffet_linux_amd64.tar.gz" | tar -xzf - -C /tmp
-          sudo mv /tmp/muffet /usr/local/bin/
+          wget -qO- "https://github.com/raviqqe/muffet/releases/download/${MUFFET_VERSION}/muffet_linux_amd64.tar.gz" | tar -xzf - -C "$RUNNER_TEMP"
+          sudo mv "$RUNNER_TEMP/muffet" /usr/local/bin/
           muffet --version
 
-      - name: Serve the build locally
-        run: |
-          python3 -m http.server 4000 --bind 127.0.0.1 --directory _site > "$RUNNER_TEMP/http.log" 2>&1 &
-          for i in {1..30}; do
-            curl -sf -o /dev/null "$LOCAL_ORIGIN/" && exit 0
-            sleep 1
-          done
-          echo "Local server did not start"
-          cat "$RUNNER_TEMP/http.log"
-          exit 1
-
-      - name: Link check the build
+      - name: Link check the deployed preview
         id: verification
+        env:
+          PR_NUMBER: ${{ steps.pr-info.outputs.pr_number }}
+          PREVIEW_URL: ${{ steps.pr-info.outputs.preview_url }}
+          MAX_ATTEMPTS: 3
         run: |
-          PR_NUMBER="${{ steps.pr-info.outputs.pr_number }}"
-          PREVIEW_URL="${{ steps.pr-info.outputs.preview_url }}"
-
           REPORT_FILE="verification-report.md"
-          echo "**PR:** #$PR_NUMBER" > $REPORT_FILE
-          echo "**Preview:** $PREVIEW_URL/" >> $REPORT_FILE
-          echo "" >> $REPORT_FILE
+          COUNTS_FILE="$RUNNER_TEMP/counts.txt"
 
           # Excluded external domains answer automated clients on GitHub's
           # runners with errors whatever the link (see .github/PREVIEWS.md):
@@ -113,77 +124,109 @@ jobs:
           # rate-limit (web.archive.org, Google's blogs), refuse
           # connections from outside their country (tsri.org.tw), or
           # chain-redirect into one of these (bit.ly).
-          # muffet exits non-zero whenever any link fails; the split below
+          # muffet exits non-zero whenever any link fails; link-report.py
           # decides whether the check fails.
-          muffet \
-            --format=json \
-            --timeout=30 \
-            --max-connections=10 \
-            --max-connections-per-host=5 \
-            --rate-limit=20 \
-            --max-retries=3 \
-            --buffer-size=16384 \
-            --max-response-body-size=33554432 \
-            --exclude=".*mailto:.*" \
-            --exclude=".*linkedin\.com.*" \
-            --exclude=".*docs\.google\.com.*" \
-            --exclude=".*drive\.google\.com.*" \
-            --exclude=".*doi\.org.*" \
-            --exclude=".*dl\.acm\.org.*" \
-            --exclude=".*ieeexplore\.ieee\.org.*" \
-            --exclude=".*electronics-lab\.com.*" \
-            --exclude=".*bit\.ly.*" \
-            --exclude=".*scholar\.google\.com.*" \
-            --exclude="^https?://([a-z0-9-]+\.)?twitter\.com.*" \
-            --exclude="^https?://(www\.)?x\.com.*" \
-            --exclude="^https?://fosstodon\.org.*" \
-            --exclude="^https?://(www\.)?crowdsupply\.com.*" \
-            --exclude="^https?://web\.archive\.org.*" \
-            --exclude="^https?://opensource\.googleblog\.com.*" \
-            --exclude="^https?://(www\.)?tsri\.org\.tw.*" \
-            --header="User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" \
-            --header="Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" \
-            --header="Accept-Language:en-US,en;q=0.9" \
-            "$LOCAL_ORIGIN/" > muffet-report.json 2> muffet-stderr.txt || muffet_rc=$?
+          for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
+            echo "::group::Crawl attempt $attempt of $MAX_ATTEMPTS"
+            muffet_rc=0
+            muffet \
+              --format=json \
+              --timeout=30 \
+              --max-connections=10 \
+              --max-connections-per-host=5 \
+              --rate-limit=20 \
+              --max-retries=3 \
+              --buffer-size=16384 \
+              --max-response-body-size=33554432 \
+              --exclude=".*mailto:.*" \
+              --exclude=".*linkedin\.com.*" \
+              --exclude=".*docs\.google\.com.*" \
+              --exclude=".*drive\.google\.com.*" \
+              --exclude=".*doi\.org.*" \
+              --exclude=".*dl\.acm\.org.*" \
+              --exclude=".*ieeexplore\.ieee\.org.*" \
+              --exclude=".*electronics-lab\.com.*" \
+              --exclude=".*bit\.ly.*" \
+              --exclude=".*scholar\.google\.com.*" \
+              --exclude="^https?://([a-z0-9-]+\.)?twitter\.com.*" \
+              --exclude="^https?://(www\.)?x\.com.*" \
+              --exclude="^https?://fosstodon\.org.*" \
+              --exclude="^https?://(www\.)?crowdsupply\.com.*" \
+              --exclude="^https?://web\.archive\.org.*" \
+              --exclude="^https?://opensource\.googleblog\.com.*" \
+              --exclude="^https?://(www\.)?tsri\.org\.tw.*" \
+              --header="User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" \
+              --header="Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" \
+              --header="Accept-Language:en-US,en;q=0.9" \
+              "$PREVIEW_URL/" > muffet-report.json 2> muffet-stderr.txt || muffet_rc=$?
 
-          if [ -s muffet-stderr.txt ]; then
-            echo "muffet stderr:"
-            cat muffet-stderr.txt
-          fi
-          # muffet prints nothing on stdout when every link passes, and an
-          # error message on stderr when the crawl itself could not run.
-          # A non-zero exit with no JSON means the crawl itself failed, even
-          # if it said nothing on stderr.
-          if [ ! -s muffet-report.json ] && { [ "${muffet_rc:-0}" -ne 0 ] || grep -q . muffet-stderr.txt; }; then
-            echo "muffet failed to run (exit ${muffet_rc:-0})"
+            if [ -s muffet-stderr.txt ]; then
+              echo "muffet stderr:"
+              cat muffet-stderr.txt
+            fi
+
+            # muffet prints an error on stderr, and no JSON, when the crawl
+            # itself could not run (for example the preview's front page
+            # answered 503). A non-zero exit with no JSON means the same
+            # even if stderr is empty.
+            crawl_failed=false
+            if [ ! -s muffet-report.json ] && { [ "$muffet_rc" -ne 0 ] || [ -s muffet-stderr.txt ]; }; then
+              crawl_failed=true
+              echo "muffet failed to run (exit $muffet_rc)"
+            else
+              {
+                echo "**PR:** #$PR_NUMBER"
+                echo "**Preview:** $PREVIEW_URL/"
+                if [ "$attempt" -gt 1 ]; then
+                  echo "**Crawl attempts:** $attempt (earlier ones hit temporary errors on the preview host)"
+                fi
+                echo ""
+              } > "$REPORT_FILE"
+
+              # Everything on the preview host counts as internal, not just
+              # /pr-<N>/: a link written without relative_url lands at the
+              # host root and must fail. So do the site's hard-coded
+              # absolute links to production.
+              python3 .github/scripts/link-report.py muffet-report.json \
+                --origin "$PREVIEW_ORIGIN" \
+                --internal-origin "https://mith.ro" \
+                --internal-origin "https://www.mith.ro" \
+                --max-chars 60000 \
+                --out "$REPORT_FILE" > "$COUNTS_FILE"
+              cat "$COUNTS_FILE"
+            fi
+            echo "::endgroup::"
+
+            if [ "$crawl_failed" = false ] && grep -q '^internal_transient=0$' "$COUNTS_FILE"; then
+              break
+            fi
+            if [ "$attempt" -lt "$MAX_ATTEMPTS" ]; then
+              echo "Temporary errors on the preview host; crawling again in 60 seconds"
+              sleep 60
+            fi
+          done
+
+          if [ "$crawl_failed" = true ]; then
+            echo "muffet could not crawl $PREVIEW_URL/ after $MAX_ATTEMPTS attempts"
             exit 1
           fi
 
-          python3 .github/scripts/link-report.py muffet-report.json \
-            --origin "$LOCAL_ORIGIN" \
-            --display-origin "$PREVIEW_URL" \
-            --internal-origin "https://mith.ro" \
-            --internal-origin "https://www.mith.ro" \
-            --internal-origin "$PREVIEW_URL" \
-            --max-chars 60000 \
-            --out "$REPORT_FILE" \
-            --github-output "$GITHUB_OUTPUT" > "$RUNNER_TEMP/counts.txt"
-          cat "$RUNNER_TEMP/counts.txt"
-
-          if grep -q '^internal_failures=0$' "$RUNNER_TEMP/counts.txt"; then
-            echo "verification_status=success" >> $GITHUB_OUTPUT
+          cat "$COUNTS_FILE" >> "$GITHUB_OUTPUT"
+          if grep -q '^internal_failures=0$' "$COUNTS_FILE"; then
+            echo "verification_status=success" >> "$GITHUB_OUTPUT"
           else
-            echo "verification_status=failed" >> $GITHUB_OUTPUT
+            echo "verification_status=failed" >> "$GITHUB_OUTPUT"
           fi
 
-          # Keep the PR comment under GitHub's 65,536-character limit.
-          # (link-report.py already cut the report at a line boundary.)
-          REPORT=$(cat $REPORT_FILE)
-          echo "report_content<<REPORT_EOF" >> $GITHUB_OUTPUT
-          echo "$REPORT" >> $GITHUB_OUTPUT
-          echo "REPORT_EOF" >> $GITHUB_OUTPUT
+          # link-report.py already cut the report at a line boundary to
+          # keep the PR comment under GitHub's 65,536-character limit.
+          {
+            echo "report_content<<REPORT_EOF"
+            cat "$REPORT_FILE"
+            echo "REPORT_EOF"
+          } >> "$GITHUB_OUTPUT"
 
-          cat $REPORT_FILE
+          cat "$REPORT_FILE"
 
       - name: Comment verification results on PR
         if: github.event_name == 'pull_request'
