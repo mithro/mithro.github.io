@@ -15,12 +15,18 @@ render page 1 and emit two locally-hosted WebP renditions:
 plus _data/doc_thumbs.yaml recording each large rendition's pixel size.
 
 The anonymous export doubles as the "publicly shared" check, and it runs
-for every document on every run: a document that bounces to a Google
-sign-in page is reported, its old renditions are deleted (so the first
-page of a document that has since been un-shared is not left on the
-site), and the script exits non-zero so the gap can't go unnoticed.
-Existing renditions of public documents are reused rather than
+for every document on every run. A document Google answers for
+definitively — 404/410, or a bounce to the sign-in page — is reported and
+its old renditions are deleted, so the first page of a document that has
+since been un-shared is not left on the site. Any other failure (rate
+limit, server error, network trouble, a non-PDF body) is treated as "could
+not check": the existing preview is kept, because a throttled run must not
+wipe the page. Either way the script exits non-zero so the gap can't go
+unnoticed. Existing renditions of public documents are reused rather than
 re-rendered; delete them to force a refresh.
+
+Byline lines naming authors, reviewers and their email addresses are
+painted out before rendering — see redact_contacts().
 """
 
 import io
@@ -44,12 +50,43 @@ DOC_RE = re.compile(r"/document/d/([\w-]+)")
 RKEY_RE = re.compile(r"resourcekey=([\w-]+)")
 UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) mith.ro-thumbs"}
 
+# A document's first page usually carries a byline block naming the people
+# who wrote and reviewed it, with their email addresses. Those previews are
+# committed to a PUBLIC repo, so republishing colleagues' addresses and full
+# names as picture text is exactly what _data/design_docs.yaml deliberately
+# avoids in text. Lines matching either pattern are painted over with the
+# page background before the preview is rasterised.
+EMAILISH = re.compile(r"[\w.+-]+@[\w.-]*")
+BYLINE = re.compile(
+    r"^\s*(owners?|authors?|reviewers?|contributors?|editors?|"
+    r"approvers?|written by|created by|contact)\b\s*[:\-]", re.I)
+
+
+def redact_contacts(page: "pymupdf.Page") -> int:
+    """Paint over byline and email lines. Returns how many were covered."""
+    covered = 0
+    for block in page.get_text("dict")["blocks"]:
+        for line in block.get("lines", []):
+            text = "".join(span["text"] for span in line["spans"])
+            if not text.strip():
+                continue
+            if BYLINE.search(text) or EMAILISH.search(text):
+                rect = pymupdf.Rect(line["bbox"])
+                rect.x0 -= 2; rect.y0 -= 1; rect.x1 += 2; rect.y1 += 1
+                page.draw_rect(rect, color=None, fill=(1, 1, 1))
+                covered += 1
+    return covered
+
 
 def existing(base: pathlib.Path) -> dict | None:
     large = pathlib.Path(f"{base}-{LARGE}.webp")
     if large.exists() and pathlib.Path(f"{base}-{SMALL}.webp").exists():
-        with Image.open(large) as img:
-            return {"w": img.width, "h": img.height}
+        try:
+            with Image.open(large) as img:
+                return {"w": img.width, "h": img.height}
+        except OSError as e:  # corrupt cached rendition: re-render it
+            print(f"{base.name}: unreadable preview ({e}); will re-render",
+                  file=sys.stderr)
     return None
 
 
@@ -65,7 +102,26 @@ def emit(img: Image.Image, base: pathlib.Path) -> dict:
 
 
 def fetch(doc: dict) -> tuple[str, dict | None, dict | None]:
-    """(alias, fresh preview size or None, kept-but-unchecked size or None)."""
+    """(alias, fresh preview size or None, kept-but-unchecked size or None).
+
+    Any unexpected failure is treated as "could not check": the existing
+    preview is kept and the run still fails. Only Google answering
+    definitively that the document is not public removes a preview.
+    """
+    alias = doc["alias"]
+    try:
+        return _fetch(doc)
+    except Exception as e:  # noqa: BLE001 - one bad doc must not abort the run
+        print(f"{alias}: error while checking ({e!r}); keeping existing "
+              "previews", file=sys.stderr)
+        UNCHECKED.add(alias)
+        return alias, None, existing(OUT / alias)
+
+
+UNCHECKED: set[str] = set()
+
+
+def _fetch(doc: dict) -> tuple[str, dict | None, dict | None]:
     alias, url = doc["alias"], doc["url"]
     base = OUT / alias
     m = DOC_RE.search(url)
@@ -81,14 +137,13 @@ def fetch(doc: dict) -> tuple[str, dict | None, dict | None]:
     except requests.RequestException as e:
         r = None
         why = str(e)
-    if r is None or r.status_code == 429 or r.status_code >= 500:
-        # Could not tell either way (rate limit, Google hiccup, network):
-        # keep whatever previews exist, but still fail the run.
-        why = why if r is None else f"HTTP {r.status_code}"
-        print(f"{alias}: could not check ({why}); keeping existing previews",
-              file=sys.stderr)
-        return alias, None, existing(base)
-    if not r.ok or "accounts.google.com" in r.url or r.content[:5] != b"%PDF-":
+    # Only a definitive "this is not public" answer removes a preview: a
+    # 404/410, or Google bouncing the export to its sign-in page. Anything
+    # else — a rate limit, a server error, a network failure, an HTML
+    # interstitial served as 200 — is indistinguishable from throttling, so
+    # the preview is kept and the run fails instead of wiping the page.
+    if r is not None and (r.status_code in (404, 410)
+                          or "accounts.google.com" in r.url):
         print(f"{alias}: NOT publicly readable (HTTP {r.status_code}, "
               f"final URL {r.url[:60]})", file=sys.stderr)
         for size in (LARGE, SMALL):
@@ -97,10 +152,22 @@ def fetch(doc: dict) -> tuple[str, dict | None, dict | None]:
                 stale.unlink()
                 print(f"{alias}: deleted {stale}", file=sys.stderr)
         return alias, None, None
+    if r is None or not r.ok or r.content[:5] != b"%PDF-":
+        why = why if r is None else (
+            f"HTTP {r.status_code}" if not r.ok else "response was not a PDF")
+        print(f"{alias}: could not check ({why}); keeping existing previews",
+              file=sys.stderr)
+        UNCHECKED.add(alias)
+        return alias, None, existing(base)
     if (have := existing(base)):
         return alias, have, None
     with pymupdf.open(stream=r.content, filetype="pdf") as pdf:
+        if pdf.page_count < 1:
+            raise ValueError("exported PDF has no pages")
         page = pdf[0]
+        if page.rect.width <= 0:
+            raise ValueError(f"page has no width: {page.rect}")
+        redact_contacts(page)
         zoom = LARGE / page.rect.width  # render straight to the large width
         pix = page.get_pixmap(matrix=pymupdf.Matrix(zoom, zoom), alpha=False)
         img = Image.open(io.BytesIO(pix.tobytes("png")))
@@ -118,7 +185,7 @@ def main() -> int:
         return 1
     with ThreadPoolExecutor(4) as ex:
         results = list(ex.map(fetch, docs))
-    unchecked = [a for a, _, kept in results if kept]
+    unchecked = [a for a in aliases if a in UNCHECKED]
     # Previews of documents that could not be checked this time are kept
     # (a rate limit must not wipe the page); only a confirmed non-public
     # document loses its preview.
@@ -132,7 +199,8 @@ def main() -> int:
         "# Generated by scripts/fetch_doc_thumbs.py — do not hand-edit.\n"
         "# w/h are the -480 rendition's true pixel size (for srcset/width).\n"
         + yaml.safe_dump(manifest, sort_keys=True, allow_unicode=True))
-    missing = [a for a in aliases if a not in manifest]
+    missing = [a for a in aliases if a not in manifest
+               and a not in UNCHECKED]
     print(f"{len(manifest)}/{len(aliases)} documents have thumbnails")
     if missing:
         print("MISSING thumbnails (page will show plain cards): "
