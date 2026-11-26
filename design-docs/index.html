@@ -70,7 +70,7 @@ description: "Public design documents, proposals and requirements docs written o
             document edited last year sorts above a 2024 one.
           {%- endcomment %}
           <span class="nowrap">·&nbsp;edited {{ doc.modified | slice: 0, 7 }}</span>
-          <span>·&nbsp;<a class="doc-link" href="{{ href | escape }}"><span class="ci-icon" aria-hidden="true">{% include icons/googledocs.svg %}</span> {{ short_disp }}</a></span>
+          <span class="doc-where"><a class="doc-link" href="{{ href | escape }}"><span class="ci-icon" aria-hidden="true">{% include icons/googledocs.svg %}</span> {{ short_disp }}</a></span>
         </p>
       </div>
     </article>

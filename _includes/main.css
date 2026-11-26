@@ -359,12 +359,30 @@ ul.deg-list { padding-left: 0; list-style: none; }
 .doc-desc { margin: .5rem 0 0; font-family: var(--sans); font-size: .88rem; color: #c4beb2; text-wrap: pretty; }
 .doc-body .meta { margin: .45rem 0 0; color: var(--muted); font-size: .74rem; line-height: 1.7; }
 .doc-body .au { font-family: var(--sans); }
-.doc-link { color: var(--gold); text-decoration: none; overflow-wrap: anywhere; }
+/* The short link gets a line of its own, and stays in one piece on it.
+   Measured across 433-1600px, the byline already fills the first line on
+   every one of the cards, so the link never shared it anyway; making the
+   line explicit drops the `·` that would otherwise lead the wrapped line.
+   nowrap is what keeps the link whole: a hyphen is a normal soft-wrap
+   opportunity, so without it `mith.ro/ws-gatearray-v1` splits after `ws-`
+   whenever the line happens to fill up. */
+.doc-where { display: block; white-space: nowrap; }
+.doc-link { color: var(--gold); text-decoration: none; }
 .doc-link:hover, .doc-link:focus-visible { text-decoration: underline; }
 .doc-link .ci-icon svg { width: .9em; height: .9em; fill: currentColor; vertical-align: -0.1em; }
 @media (max-width: 480px) {
   .doc-thumb { flex-basis: 5.5rem; }
   .doc-grid { gap: 1.4rem; }
+}
+/* Narrower than this the longest link (mith.ro/blink-layout-tests-swarming)
+   no longer fits the card body on a line of its own, so letting it break
+   beats letting it spill out of the card. `anywhere` also lets the body
+   shrink below the width of that one unbreakable token. Measured: it stops
+   fitting just under 410px, so nowrap first applies at 417px with about
+   8px to spare, for engines whose monospace metrics differ from the one
+   that was measured. */
+@media (max-width: 26rem) {
+  .doc-where { white-space: normal; overflow-wrap: anywhere; }
 }
 
 /* ---- Print ----------------------------------------------------------
