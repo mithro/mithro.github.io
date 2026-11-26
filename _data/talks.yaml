@@ -12,6 +12,9 @@
 #   scripts/enrich_talk_embeds.py — edit slides/slides_edit, not this.
 # slides_short: hand-maintained canonical short URL for the deck
 #   (wafer.space/<alias>) — preferred over bit.ly/mith.ro on /talks/.
+# allow_private_shortlink: true lets enrich_talk_embeds.py resolve this
+#   talk's bit.ly/j.mp slides link even though the short-link sheet marks
+#   it PRIVATE, publishing the deck's id (optional; deliberate opt-in).
 # slides_pub: the deck's "Publish to the web" link (/d/e/2PACX-…/pub),
 #   for decks published but not link-shared; scripts/deck_links.py
 #   links visitors there first (optional; hand-maintained).

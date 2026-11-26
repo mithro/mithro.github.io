@@ -16,6 +16,12 @@ record it as a slides_embed field:
 The talks page renders that URL in an <iframe>. The file is edited
 textually (comments and formatting preserved); existing slides_embed
 lines are regenerated, so the script is idempotent.
+
+Private short links: the mirror also holds PRIVATE links (include:
+false), whose targets must never reach committed files. An alias is
+only resolved through a private link when the talk opts in with
+`allow_private_shortlink: true` — publishing that deck's id is then a
+deliberate choice. Otherwise the talk is reported and gets no embed.
 """
 
 import pathlib
@@ -32,19 +38,21 @@ RKEY_RE = re.compile(r"resourcekey=([A-Za-z0-9_-]+)")
 ALIAS_RE = re.compile(r"https?://(?:bit\.ly|j\.mp)/([^/?#\s]+)")
 
 
-def alias_map() -> dict[str, str]:
-    """Map every bit.ly/j.mp alias (keyword + custom aliases) to its long URL."""
+def alias_map() -> dict[str, tuple[str, bool]]:
+    """Map every bit.ly/j.mp alias (keyword + custom aliases) to
+    (long URL, public?) — public meaning the sheet marks it include: true."""
     if not SHORTLINKS.exists():
         print(f"warning: {SHORTLINKS} missing — bit.ly slides links "
               "cannot be resolved (run scripts/fetch_bitly.py)", file=sys.stderr)
         return {}
-    amap: dict[str, str] = {}
+    amap: dict[str, tuple[str, bool]] = {}
     for entry in yaml.safe_load(SHORTLINKS.read_text()):
-        amap[entry["keyword"]] = entry["long_url"]
+        target = (entry["long_url"], bool(entry.get("include")))
+        amap[entry["keyword"]] = target
         for custom in entry.get("custom_bitlinks") or []:
             m = ALIAS_RE.match(custom)
             if m:
-                amap[m.group(1)] = entry["long_url"]
+                amap[m.group(1)] = target
     return amap
 
 
@@ -67,6 +75,7 @@ def main() -> None:
 
     out, stats = [], {"direct": 0, "alias": 0, "none": 0}
     unresolved: list[str] = []
+    private: list[str] = []
     for chunk in chunks:
         old_embed = next((l for l in chunk.splitlines(keepends=True)
                           if l.startswith("  slides_embed:")), None)
@@ -83,7 +92,12 @@ def main() -> None:
                 break
             am = ALIAS_RE.match(candidate)
             if am and am.group(1) in aliases:
-                embed = embed_url(aliases[am.group(1)])
+                long_url, public = aliases[am.group(1)]
+                if not public and fields.get("allow_private_shortlink") != "true":
+                    # Never print long_url: it is the private part.
+                    private.append(f"{fields.get('slug', '?')} — {am.group(0)}")
+                    continue
+                embed = embed_url(long_url)
                 if embed:
                     how = "alias"
                     break
@@ -101,6 +115,11 @@ def main() -> None:
     TALKS.write_text(head + "".join(out))
     print(f"embeds: {stats['direct']} direct, {stats['alias']} via bit.ly, "
           f"{stats['none']} without", file=sys.stderr)
+    if private:
+        print("skipped PRIVATE short links (add allow_private_shortlink: true "
+              "to the talk to publish its deck):", file=sys.stderr)
+        for u in private:
+            print(f"  {u}", file=sys.stderr)
     if unresolved:
         print("no embed derivable for:", file=sys.stderr)
         for u in unresolved:

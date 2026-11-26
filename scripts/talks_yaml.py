@@ -16,7 +16,7 @@ import yaml
 TALKS = pathlib.Path("_data/talks.yaml")
 # Field order for lines inserted by set_fields (after the title line).
 ORDER = ["slug", "talk_title", "categories", "series", "venue", "strips",
-         "highlight", "blurb"]
+         "highlight", "blurb", "allow_private_shortlink"]
 
 
 def load() -> list[dict]:
