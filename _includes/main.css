@@ -26,6 +26,10 @@ main { display: block; }
 
 a { color: var(--gold); }
 
+/* Skip link: off-screen until focused, then shown over the header. */
+.skip-link { position: absolute; left: .75rem; top: -3rem; z-index: 10; padding: .5rem .8rem; background: var(--panel); color: var(--gold); border: 1px solid var(--gold); border-radius: 4px; }
+.skip-link:focus { top: .75rem; }
+main:focus { outline: none; }
 .topline {
   display: flex; justify-content: space-between; align-items: center;
   flex-wrap: wrap; gap: .5rem;
