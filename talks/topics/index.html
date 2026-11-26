@@ -9,7 +9,7 @@ A table of the topics; the talks themselves live on one page per topic
 where_exp takes exactly ONE comparison, hence the separate assigns.
 {%- endcomment -%}
 <section class="sect">
-  <h2><span aria-hidden="true">🗂️</span> Talks by topic</h2>
+  <h1><span aria-hidden="true">🗂️</span> Talks by topic</h1>
   {% include talks_nav.html %}
   {%- assign multi = site.data.talks | where_exp: "t", "t.categories.size > 1" -%}
   <p class="prose cat-blurb">{{ site.data.talks | size }} talks across

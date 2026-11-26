@@ -4,7 +4,7 @@ title: Highlighted talks
 description: "A short list of Tim 'mithro' Ansell's most significant talks — start here."
 ---
 <section class="sect">
-  <h2><span aria-hidden="true">⭐</span> Highlighted talks</h2>
+  <h1><span aria-hidden="true">⭐</span> Highlighted talks</h1>
   {% include talks_nav.html %}
   {%- comment -%} highlight: ranks choose WHICH talks; they show by the date given, newest first. {%- endcomment -%}
   {% assign picks = site.data.talks | where_exp: "t", "t.highlight" | sort: "highlight" | slice: 0, 9 | sort: "sort_date" | reverse %}
