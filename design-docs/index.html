@@ -64,6 +64,12 @@ description: "Public design documents, proposals and requirements docs written o
         <p class="meta">
           <span class="au">{{ doc.authors | escape }}</span> ·
           <span class="nowrap">{{ doc.year }}{% if doc.updated and doc.updated != doc.year %}–{{ doc.updated }}{% endif %}</span>
+          {%- comment -%}
+            Cards are ordered by this date, so it has to be visible: the
+            year range alone makes the order look arbitrary, because a 2015
+            document edited last year sorts above a 2024 one.
+          {%- endcomment %}
+          <span class="nowrap">·&nbsp;edited {{ doc.modified | slice: 0, 7 }}</span>
           <span>·&nbsp;<a class="doc-link" href="{{ href | escape }}"><span class="ci-icon" aria-hidden="true">{% include icons/googledocs.svg %}</span> {{ short_disp }}</a></span>
         </p>
       </div>
