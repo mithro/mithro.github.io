@@ -18,6 +18,7 @@ original "mithro-<name>" keeps working as an alias to the same target.
 If "<name>" is reserved (e.g. mithro-talks, mithro-resume) only the
 original keyword is published.
 """
+import json
 import pathlib
 import re
 import shutil
@@ -122,7 +123,10 @@ for name, url in order:
     (outdir / f"{name}.md").write_text(
         "---\n"
         f"permalink: /{name}/\n"
-        f"redirect_to: \"{url}\"\n"
+        # json.dumps gives a valid YAML double-quoted scalar for any URL
+        # (quotes/backslashes escaped) and is byte-identical to plain
+        # "..." quoting for ordinary ASCII URLs.
+        f"redirect_to: {json.dumps(url)}\n"
         "sitemap: false\n"
         "---\n"
     )
