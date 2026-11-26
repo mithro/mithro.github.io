@@ -17,7 +17,8 @@ permalink: /talks/feed.xml
     <item>
       <title>{{ talk.talk_title | default: talk.title | escape }}</title>
       <link>{{ '/talks/' | append: talk.slug | append: '/' | absolute_url }}</link>
-      <guid isPermaLink="false">mith.ro-talk-{{ talk.sort_date }}-{{ talk.title | slugify }}-{{ talk.event | slugify }}</guid>
+      {%- comment -%} The slug is the talk's permanent id; a guid built from its title/event/date re-announced the talk whenever one was corrected. {%- endcomment %}
+      <guid isPermaLink="false">mith.ro-talk-{{ talk.slug }}</guid>
       <pubDate>{{ talk.sort_date | date_to_rfc822 }}</pubDate>
       <description>{% if talk.generic %}Shareable talk{% endif %}{{ talk.event | escape }}{% if talk.date != '' and talk.date %} · {{ talk.date | escape }}{% endif %}{% if talk.video != '' and talk.video %} · recording: {{ talk.video | escape }}{% endif %}</description>
     </item>
