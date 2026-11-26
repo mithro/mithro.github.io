@@ -180,19 +180,6 @@
   slides_edit: https://docs.google.com/presentation/d/15GaivaqPHPWyt5cwENvt6pOxai1D2v5JANegmwF938o
   source: sheet
   sort_date: '2022-04-25'
-- title: Google's Open Silicon Programs - US Navy Summary
-  slug: usn22-goog
-  talk_title: "Google's open silicon programs"
-  categories: [open-silicon]
-  strips: true
-  event: ''
-  year: 2022
-  date: 3 May 2022
-  slides: https://bit.ly/usn22-goog
-  slides_embed: https://docs.google.com/presentation/d/1l_Xr1Y5WnWZt9kjQeAiny_jOyFe3HPzirPhmgaVgR3U/embed
-  slides_edit: https://docs.google.com/presentation/d/1l_Xr1Y5WnWZt9kjQeAiny_jOyFe3HPzirPhmgaVgR3U
-  source: sheet
-  sort_date: '2022-05-03'
 - title: NSF IC Education Workshop Slides
   slug: nsf-edu-2021
   talk_title: NSF IC education workshop
