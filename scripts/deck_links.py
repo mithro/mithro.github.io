@@ -21,7 +21,10 @@ anonymous visitor sees — in this order:
          page title must equal the deck's own title. Alias names don't
          line up with slugs, and a copied deck keeps its slide ids even
          after its text is edited — per-event copies (CHIPS Alliance vs
-         SSCD 2021) differ only in title; else
+         SSCD 2021) differ only in title; a /d/e/ link the talk's own
+         wafer.space or mith.ro short link (slides, slides_short) leads to,
+         under the same proof (bit.ly/j.mp are never followed here: a
+         private one's target must not reach committed data); else
          /d/<id>/pub, which Google serves for link-shared decks
   embed  /d/<id>/embed, the slideshow. Two kinds of deck land here: ones
          link-shared but never published to the web (no /pub exists), and
@@ -195,6 +198,19 @@ def near_misses(t: dict) -> list[str]:
     return out
 
 
+OWN_SHORT_RE = re.compile(r"^https?://(wafer\.space|mith\.ro)/")
+
+
+def follow(url: str) -> str | None:
+    """Where an anonymous visitor ends up from url (redirects followed)."""
+    try:
+        with requests.get(url, headers=UA, timeout=60, stream=True) as r:
+            return r.url if r.status_code == 200 else None
+    except requests.RequestException as e:
+        print(f"  {url}: {e}", file=sys.stderr)
+        return None
+
+
 def candidates(t: dict) -> list[tuple[str, str]]:
     urls = [t.get(f) or "" for f in FIELDS]
     key = next((m.group(1) for u in urls if (m := KEY_RE.search(u))), None)
@@ -215,6 +231,22 @@ def candidates(t: dict) -> list[tuple[str, str]]:
                             f"{base}/edit?usp=sharing{q}"])
         if (u := PUB_BY_SLIDES.get((ids, title))):
             out.append(("pub", u))
+    if doc and ids:
+        base = f"https://docs.google.com/presentation/d/{doc}"
+        title = None
+        for f in ("slides_short", "slides"):
+            short = t.get(f) or ""
+            if not OWN_SHORT_RE.match(short):
+                continue
+            end = follow(short)
+            if not (end and PUB_RE.search(end) and "/pub" in end):
+                continue
+            if title is None:
+                title = deck_title([f"{base}/embed?start=false{q}", f"{base}/pub?start=false{q}",
+                                    f"{base}/edit?usp=sharing{q}"])
+            if slides_shown(end) == (ids, title):
+                out.append(("pub", end))
+                break
     if doc:
         base = f"https://docs.google.com/presentation/d/{doc}"
         out += [("pub", f"{base}/pub?start=false{q}"),
@@ -229,6 +261,9 @@ def pick(t: dict) -> tuple[dict, str] | None:
     if not cands:
         return None  # no Google Slides deck (e.g. a PDF or no slides)
     for via, url in cands:
+        # Some published links autoplay (start=true&loop=true); a visitor
+        # who clicked slide N should stay on slide N.
+        url = url.replace("start=true", "start=false").replace("loop=true", "loop=false")
         if opens(url):
             reason = via
             if via == "pub" and "/d/e/" not in url:
