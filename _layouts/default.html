@@ -3,17 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% if page.title %}{{ page.title }} · {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
-  <meta name="description" content="{{ page.description | default: site.description }}">
+  <title>{% if page.title %}{{ page.title | escape }} · {{ site.title | escape }}{% else %}{{ site.title | escape }}{% endif %}</title>
+  <meta name="description" content="{{ page.description | default: site.description | escape }}">
   <meta name="git-commit" content="{{ site.github.build_revision }}">
   <link rel="canonical" href="{{ page.url | absolute_url }}">
   <style>{% include main.css %}</style>
   <link rel="alternate" type="application/rss+xml" title="Tim 'mithro' Ansell — Talks" href="{{ '/talks/feed.xml' | absolute_url }}">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22><circle cx=%228%22 cy=%228%22 r=%226%22 fill=%22none%22 stroke=%22%23d4a72c%22 stroke-width=%221.5%22/><path d=%22M8 0v5M8 11v5M0 8h5M11 8h5%22 stroke=%22%23d4a72c%22 stroke-width=%221.5%22/></svg>">
-  <meta property="og:title" content="{{ page.title | default: site.title }}">
-  <meta property="og:description" content="{{ page.description | default: site.description }}">
+  <meta property="og:title" content="{{ page.title | default: site.title | escape }}">
+  <meta property="og:description" content="{{ page.description | default: site.description | escape }}">
+  <meta property="og:type" content="{% if page.collection == 'talks' %}article{% else %}website{% endif %}">
   <meta property="og:url" content="{{ page.url | absolute_url }}">
-  <meta property="og:image" content="{{ '/assets/photos/og-image.jpg' | absolute_url }}">
+  <meta property="og:image" content="{{ page.image | default: '/assets/photos/og-image.jpg' | absolute_url }}">
+  <meta name="twitter:card" content="summary_large_image">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -35,18 +37,19 @@
   </script>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
   <header class="topline">
     <a class="brand" href="{{ '/' | relative_url }}">mith.ro</a>
-    <nav>
+    <nav aria-label="Main">
       <a href="{{ '/' | relative_url }}"{% if page.url == '/' %} class="on" aria-current="page"{% endif %}>About</a>
-      <a href="{{ '/talks/' | relative_url }}"{% if page.url contains '/talks/' %} class="on" aria-current="page"{% endif %}>Talks</a>
-      <a href="{{ '/interviews/' | relative_url }}"{% if page.url contains '/interviews/' %} class="on" aria-current="page"{% endif %}>Interviews</a>
-      <a href="{{ '/papers/' | relative_url }}"{% if page.url contains '/papers/' %} class="on" aria-current="page"{% endif %}>Papers</a>
-      <a href="{{ '/projects/' | relative_url }}"{% if page.url contains '/projects/' %} class="on" aria-current="page"{% endif %}>Projects</a>
-      <a href="{{ '/resume/' | relative_url }}"{% if page.url contains '/resume/' %} class="on" aria-current="page"{% endif %}>Resume</a>
+      <a href="{{ '/talks/' | relative_url }}"{% if page.url contains '/talks/' %} class="on"{% if page.url == '/talks/' %} aria-current="page"{% endif %}{% endif %}>Talks</a>
+      <a href="{{ '/interviews/' | relative_url }}"{% if page.url contains '/interviews/' %} class="on"{% if page.url == '/interviews/' %} aria-current="page"{% endif %}{% endif %}>Interviews</a>
+      <a href="{{ '/papers/' | relative_url }}"{% if page.url contains '/papers/' %} class="on"{% if page.url == '/papers/' %} aria-current="page"{% endif %}{% endif %}>Papers</a>
+      <a href="{{ '/projects/' | relative_url }}"{% if page.url contains '/projects/' %} class="on"{% if page.url == '/projects/' %} aria-current="page"{% endif %}{% endif %}>Projects</a>
+      <a href="{{ '/resume/' | relative_url }}"{% if page.url contains '/resume/' %} class="on"{% if page.url == '/resume/' %} aria-current="page"{% endif %}{% endif %}>Resume</a>
     </nav>
   </header>
-  <main>
+  <main id="main" tabindex="-1">
     {{ content }}
   </main>
   <footer class="footer">

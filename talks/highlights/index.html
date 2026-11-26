@@ -1,0 +1,29 @@
+---
+layout: default
+title: Highlighted talks
+description: "A short list of Tim 'mithro' Ansell's most significant talks — start here."
+---
+<section class="sect">
+  <h1><span aria-hidden="true">⭐</span> Highlighted talks</h1>
+  {% include talks_nav.html %}
+  {%- comment -%} highlight: ranks choose WHICH talks; they show by the date given, newest first. {%- endcomment -%}
+  {% assign picks = site.data.talks | where_exp: "t", "t.highlight" | sort: "highlight" | slice: 0, 9 | sort: "sort_date" | reverse %}
+  {% for talk in picks %}
+  {%- assign title = talk.talk_title | default: talk.title -%}
+  <article class="hl">
+    <h2 class="hl-title"><a href="{{ '/talks/' | append: talk.slug | append: '/' | relative_url }}">{{ title | escape }}</a></h2>
+    <p class="talk-meta">{% if talk.event and talk.event != "" %}{% if talk.event_url %}<a href="{{ talk.event_url | escape }}">{{ talk.event | escape }}</a>{% else %}{{ talk.event | escape }}{% endif %}{% if talk.date and talk.date != "" %} · {% endif %}{% endif %}{% if talk.date and talk.date != "" %}<span class="nowrap">{{ talk.date | escape }}</span>{% endif %}</p>
+    <p class="prose">{{ talk.blurb | escape }}</p>
+    {%- assign has_strip = false -%}{%- if site.data.strips[talk.slug] -%}{%- assign has_strip = true -%}{%- endif %}
+    {%- comment -%} Same arrangement as a timeline row: the recording on the left, the film strip beside it. {%- endcomment %}
+    <div class="embeds">
+      {% include talk_embeds.html talk=talk eager=forloop.first no_slides_tile=has_strip %}
+      {%- assign has_video = false -%}{%- if talk.video contains "youtu.be/" or talk.video contains "watch?v=" -%}{%- assign has_video = true -%}{%- endif -%}
+      {%- if forloop.first and has_video == false -%}{%- assign strip_eager = true -%}{%- else -%}{%- assign strip_eager = false -%}{%- endif %}
+      {% if has_strip %}{% include strip.html slug=talk.slug title=title limit=24 eager=strip_eager %}{% endif %}
+    </div>
+  </article>
+  {% endfor %}
+</section>
+{% include embed_script.html %}
+{% include strip_script.html %}

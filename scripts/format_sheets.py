@@ -36,6 +36,7 @@ format rules are cleared before new ones are added.
 """
 
 import pathlib
+import re
 import subprocess
 import sys
 
@@ -240,6 +241,15 @@ def wayback(url: str, created: str) -> str | None:
 
 # Dead statuses that warrant an Internet Archive fallback (401/403/429
 # mean auth-walled, bot-blocked or throttled — the page itself may live).
+def strip_alias(url_cell: str) -> str:
+    """'bit.ly/foo' / 'mith.ro/foo' -> 'foo' (sheet URL column)."""
+    return re.sub(r"^(?:https?://)?(?:bit\.ly|j\.mp|mith\.ro)/", "", url_cell.strip())
+
+
+def alias_prefix(entry: dict) -> str:
+    return "mith.ro/" if entry.get("source") == "sheet" else "bit.ly/"
+
+
 def is_dead(status: str) -> bool:
     return (status.startswith("error:")
             or (status.startswith("HTTP")
@@ -291,7 +301,7 @@ def do_audit(s: requests.Session) -> None:
     vis: dict[str, str] = {}
     for row in grid:
         if len(row) >= 2:
-            key = row[0].removeprefix("bit.ly/")
+            key = strip_alias(row[0])
             if vis.get(key) != "public":
                 vis[key] = row[1]
 
@@ -314,7 +324,7 @@ def do_audit(s: requests.Session) -> None:
                               else "private"))
         if status in ("HTTP 403", "HTTP 404"):
             visibility = "private"  # broken links must not get redirects
-        body.append([f"bit.ly/{alias}",
+        body.append([f"{alias_prefix(e)}{alias}",
                      visibility,
                      title or e.get("title") or "",
                      str(e.get("created") or ""),
@@ -413,18 +423,38 @@ def do_sync(s: requests.Session) -> None:
     from datetime import date
 
     links = yaml.safe_load(pathlib.Path("_data/shortlinks.yaml").read_text())
-    grid = check(s.get(f"{SHEETS}/{SHORTLINKS_SHEET}/values/A2:G100000")
+    grid = check(s.get(f"{SHEETS}/{SHORTLINKS_SHEET}/values/A2:H100000")
                  ).get("values", [])
     public_aliases: set[str] = set()
     for row in grid:
         if len(row) >= 2 and row[1] == "public":
-            public_aliases.add(row[0].removeprefix("bit.ly/"))
+            public_aliases.add(strip_alias(row[0]))
             if len(row) >= 7 and row[6]:
                 public_aliases.update(a.strip() for a in row[6].split(","))
 
     by_keyword = {e["keyword"] for e in links}
     stamp = date.today().isoformat()
     changed = 0
+
+    # Sheet-native rows (mith.ro/<alias> added by talks_sheet.py shortlinks,
+    # no bit.ly behind them) become YAML entries with source: sheet; the
+    # target lives in the Final URL column.
+    known = set(by_keyword)
+    for e in links:
+        known.update(u.rsplit("/", 1)[-1] for u in e.get("custom_bitlinks") or [])
+    added = 0
+    for row in grid:
+        if len(row) < 5 or not row[0]:
+            continue
+        alias = strip_alias(row[0])
+        if alias in known or not row[4]:
+            continue
+        links.append({"keyword": alias, "long_url": row[4], "title": row[2],
+                      "created": row[3] if len(row) > 3 else stamp,
+                      "include": row[1] == "public",
+                      "reason": f"sheet-native {stamp}", "source": "sheet"})
+        known.add(alias)
+        added += 1
     for e in links:
         customs = [u.rsplit("/", 1)[-1] for u in e.get("custom_bitlinks") or []]
         names = {e["keyword"], *customs}
@@ -441,7 +471,7 @@ def do_sync(s: requests.Session) -> None:
     ordered = []
     for e in links:
         item = {k: e[k] for k in ("keyword", "long_url", "title", "created",
-                                  "include", "reason") if k in e}
+                                  "include", "reason", "source") if k in e}
         if e.get("custom_bitlinks"):
             item["custom_bitlinks"] = e["custom_bitlinks"]
         ordered.append(item)
@@ -449,7 +479,8 @@ def do_sync(s: requests.Session) -> None:
         yaml.safe_dump(ordered, sort_keys=False, allow_unicode=True,
                        width=4096))
     total_pub = sum(1 for e in links if e["include"])
-    print(f"sync: {changed} entries changed; {total_pub} now include=true "
+    print(f"sync: {changed} entries changed, {added} sheet-native entries "
+          f"added; {total_pub} now include=true "
           f"({len(public_aliases)} public aliases in sheet)", file=sys.stderr)
 
 

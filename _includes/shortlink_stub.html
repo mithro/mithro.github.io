@@ -1,0 +1,24 @@
+{%- comment -%}
+  Finds the mith.ro short link page for a bit.ly keyword.
+  Usage: {% include shortlink_stub.html alias=keyword %}
+  Sets `stub` (the redirect page, or nil), `stub_path` ("/<name>/") and
+  `stub_alias` (the name to show). bit.ly "mithro-<name>" keywords
+  publish as mith.ro/<name> with the mithro- path kept as an alias
+  (scripts/gen_redirect_pages.py), so the short name is preferred, but
+  only when /<name>/ redirects to exactly the same place as
+  /mithro-<name>/ (it may belong to a different link, or be a real page).
+{%- endcomment -%}
+{%- assign stub_alias = include.alias -%}
+{%- assign stub_path = "/" | append: include.alias | append: "/" -%}
+{%- assign stub = site.pages | where: "permalink", stub_path | first -%}
+{%- assign alias_pfx = include.alias | slice: 0, 7 | downcase -%}
+{%- if stub and stub.redirect_to and alias_pfx == "mithro-" -%}
+  {%- assign short_alias = include.alias | slice: 7, 200 -%}
+  {%- assign short_path = "/" | append: short_alias | append: "/" -%}
+  {%- assign short_stub = site.pages | where: "permalink", short_path | first -%}
+  {%- if short_alias != "" and short_stub and short_stub.redirect_to == stub.redirect_to -%}
+    {%- assign stub = short_stub -%}
+    {%- assign stub_path = short_path -%}
+    {%- assign stub_alias = short_alias -%}
+  {%- endif -%}
+{%- endif -%}
