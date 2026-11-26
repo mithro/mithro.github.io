@@ -336,15 +336,6 @@ ul.deg-list { padding-left: 0; list-style: none; }
   .cy-orgs { grid-column: 1 / -1; max-width: calc(100vw - 2.5rem); padding-left: 0; }
 }
 
-/* ---- Print ----------------------------------------------------------
-   The resume page prints like the canonical resume Google Doc: black
-   Arial on white, plain section headings, name + contact masthead.
-   The masthead exists only in resume/index.html; the rest of these
-   rules also give the other pages a sane light printout. */
-.print-head { display: none; }
-
-@page { margin: 1.6cm; }
-
 /* Design documents: portrait first-page thumbnails beside the summary. */
 .doc-toc { display: flex; flex-wrap: wrap; gap: .5rem .9rem; margin-top: 1rem; font-size: .78rem; }
 .doc-toc a { color: var(--muted); text-decoration: none; border: 1px solid var(--line); border-radius: 999px; padding: .3rem .8rem; }
@@ -375,6 +366,15 @@ ul.deg-list { padding-left: 0; list-style: none; }
   .doc-thumb { flex-basis: 5.5rem; }
   .doc-grid { gap: 1.4rem; }
 }
+
+/* ---- Print ----------------------------------------------------------
+   The resume page prints like the canonical resume Google Doc: black
+   Arial on white, plain section headings, name + contact masthead.
+   The masthead exists only in resume/index.html; the rest of these
+   rules also give the other pages a sane light printout. */
+.print-head { display: none; }
+
+@page { margin: 1.6cm; }
 
 @media print {
   body {
