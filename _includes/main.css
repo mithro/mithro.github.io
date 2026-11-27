@@ -336,6 +336,55 @@ ul.deg-list { padding-left: 0; list-style: none; }
   .cy-orgs { grid-column: 1 / -1; max-width: calc(100vw - 2.5rem); padding-left: 0; }
 }
 
+/* Design documents: portrait first-page thumbnails beside the summary. */
+.doc-toc { display: flex; flex-wrap: wrap; gap: .5rem .9rem; margin-top: 1rem; font-size: .78rem; }
+.doc-toc a { color: var(--muted); text-decoration: none; border: 1px solid var(--line); border-radius: 999px; padding: .3rem .8rem; }
+.doc-toc a:hover, .doc-toc a:focus-visible { color: var(--gold); border-color: var(--gold-dim); }
+.doc-toc .n { color: var(--gold); margin-left: .3rem; }
+.doc-group { padding-top: .6rem; }
+.doc-group .year-head { border-bottom: 1px solid var(--gold-dim); padding-bottom: .3rem; }
+.doc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 30rem), 1fr)); gap: 1.2rem 2rem; margin-top: 1rem; }
+.doc-card { display: flex; gap: 1rem; align-items: flex-start; }
+.doc-thumb { flex: 0 0 7.5rem; display: block; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; background: var(--panel); }
+.doc-thumb:hover, .doc-thumb:focus-visible { border-color: var(--gold-dim); }
+/* Same card shape for A4 and US Letter first pages (Letter crops a little at the bottom). */
+.doc-thumb img { display: block; width: 100%; height: auto; aspect-ratio: 480 / 679; object-fit: cover; object-position: top; }
+.doc-blank { display: grid; place-items: center; aspect-ratio: 480 / 679; color: var(--gold-dim); }
+.doc-blank svg { width: 2.4rem; height: 2.4rem; fill: currentColor; }
+.doc-body { min-width: 0; overflow-wrap: break-word; }
+.doc-body h4 { margin: 0; font-size: .95rem; line-height: 1.35; text-wrap: pretty; }
+.doc-body h4 a { color: var(--silk); text-decoration: underline; text-decoration-color: var(--gold-dim); text-underline-offset: 3px; }
+.doc-body h4 a:hover, .doc-body h4 a:focus-visible { color: var(--gold); text-decoration-color: var(--gold); }
+.doc-sub { margin: .15rem 0 0; color: var(--muted); font-size: .8rem; }
+.doc-desc { margin: .5rem 0 0; font-family: var(--sans); font-size: .88rem; color: #c4beb2; text-wrap: pretty; }
+.doc-body .meta { margin: .45rem 0 0; color: var(--muted); font-size: .74rem; line-height: 1.7; }
+.doc-body .au { font-family: var(--sans); }
+/* The short link gets a line of its own, and stays in one piece on it.
+   Measured across 433-1600px, the byline already fills the first line on
+   every one of the cards, so the link never shared it anyway; making the
+   line explicit drops the `·` that would otherwise lead the wrapped line.
+   nowrap is what keeps the link whole: a hyphen is a normal soft-wrap
+   opportunity, so without it `mith.ro/ws-gatearray-v1` splits after `ws-`
+   whenever the line happens to fill up. */
+.doc-where { display: block; white-space: nowrap; }
+.doc-link { color: var(--gold); text-decoration: none; }
+.doc-link:hover, .doc-link:focus-visible { text-decoration: underline; }
+.doc-link .ci-icon svg { width: .9em; height: .9em; fill: currentColor; vertical-align: -0.1em; }
+@media (max-width: 480px) {
+  .doc-thumb { flex-basis: 5.5rem; }
+  .doc-grid { gap: 1.4rem; }
+}
+/* Narrower than this the longest link (mith.ro/blink-layout-tests-swarming)
+   no longer fits the card body on a line of its own, so letting it break
+   beats letting it spill out of the card. `anywhere` also lets the body
+   shrink below the width of that one unbreakable token. Measured: it stops
+   fitting just under 410px, so nowrap first applies at 417px with about
+   8px to spare, for engines whose monospace metrics differ from the one
+   that was measured. */
+@media (max-width: 26rem) {
+  .doc-where { white-space: normal; overflow-wrap: anywhere; }
+}
+
 /* ---- Print ----------------------------------------------------------
    The resume page prints like the canonical resume Google Doc: black
    Arial on white, plain section headings, name + contact masthead.
@@ -371,6 +420,9 @@ ul.deg-list { padding-left: 0; list-style: none; }
   .sect h2 [aria-hidden="true"] { display: none; } /* emoji: screen-only */
 
   .prose { color: #000; font-family: inherit; font-size: 10.5pt; break-inside: avoid; }
+  .doc-toc, .doc-thumb { display: none; }
+  .doc-card { break-inside: avoid; }
+  .doc-desc, .doc-sub, .doc-body .meta, .doc-body h4 a, .doc-link { color: #000; }
   .prose h3 { color: #000; font-family: inherit; font-size: 11pt; margin: 8pt 0 2pt; }
   .prose.meta, .prose .meta { color: #333; font-family: inherit; font-size: 9.5pt; }
   .sect .prose + .prose { border-top: 0; margin-top: 6pt; padding-top: 0; }
