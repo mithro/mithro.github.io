@@ -15,6 +15,12 @@
 #                a redirect stub exists (see scripts/gen_redirect_pages.py)
 #                and falls back to `url` otherwise. Also the thumbnail
 #                file name (scripts/fetch_doc_thumbs.py).
+#   short_url    optional preferred short link, shown and linked instead
+#                of the mith.ro one. The wafer.space documents use their
+#                own domain, which drops the `ws-` prefix: alias
+#                `ws-gf180` is wafer.space/gf180. The mith.ro/<alias>
+#                links keep working either way — they are generated from
+#                _data/shortlinks.yaml, not from this field.
 #   url          canonical Google Docs URL (keep any resourcekey — the
 #                anonymous export needs it).
 #   year         when the document was written (its own header date, or
@@ -30,10 +36,10 @@
 #                document was touched once (a 2015 Chrome design doc was
 #                edited in 2026).
 #
-# Both orderings are refreshed by scripts/fetch_doc_dates.py, which reads
-# the dates from Drive and rewrites this file in order. The template sorts
-# on the same two fields, so a hand-added entry still lands in the right
-# place before that script is next run.
+# Both dates are refreshed by scripts/fetch_doc_dates.py, which reads them
+# from Drive and writes them back without moving any entry. The ordering
+# lives in the template, which sorts on these two fields, so file order
+# does not matter and a hand-added entry lands in the right place.
 - id: wafer-space
   topic: wafer.space
   blurb: >-
@@ -51,6 +57,7 @@
       maskless tools such as the HackerFab stepper, Heidelberg MLA150 and
       MinimalFab — with the configurable-element budget per die size.
     url: https://docs.google.com/document/d/1fs6V-7rEOaixsN88ZM_rbp1WFtheEz0K0Ui6tlUtnBk/edit
+    short_url: https://wafer.space/gatearray-v1
     modified: '2026-11-07'
   - alias: ws-gf180
     title: GlobalFoundries 180nm Technologies
@@ -62,6 +69,7 @@
       processes — decoding stack-up names like 1P5M26ML, the optional mask
       layers, core voltages and how GF180MCU relates to its siblings.
     url: https://docs.google.com/document/d/1lrMhid2jS-c8bI_PZVREyryfDxO88WH4Us-1_qfQWWI/edit
+    short_url: https://wafer.space/gf180
     modified: '2026-09-17'
   - alias: ws-tiny-riscv-proof
     title: GF180MCU Bit Serial RISC-V Implementation
@@ -73,6 +81,7 @@
       subdivided into chiplets with chip-on-board packaging — including the
       cost breakdown and SRAM sizing that make it viable.
     url: https://docs.google.com/document/d/1U5tQairqGWx1kK3jr6FB_aSNz2RWzo8jpJg-MWs9UXI/edit
+    short_url: https://wafer.space/tiny-riscv-proof
     modified: '2025-09-18'
   - alias: ws-gf180mcu-stdcells
     title: Voltages and options for I/O and standard cells
@@ -85,6 +94,7 @@
       9-track 5V cell libraries and alternative standard cell options, with
       a summary comparison table.
     url: https://docs.google.com/document/d/1vQCrkIvE0MdizFUSRD8Sxo-BBnwj0SztJd-1aU5nRRs/edit
+    short_url: https://wafer.space/gf180mcu-stdcells
     modified: '2025-09-01'
   activity: '2025-09-18'
 - id: silicon

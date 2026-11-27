@@ -55,8 +55,11 @@ hand-edited, some are refreshed from external sources with a script:
   documents Tim wrote, co-wrote or reviewed (Google Docs behind his short links), grouped by
   topic with a one-paragraph summary each; rendered on
   `/design-docs/`. The header comment records the selection rules.
-  Each card links through the `/<alias>/` redirect stub when the
-  alias is public in the short-link sheet, else to the document.
+  Each card links through the document's own `short_url:` when it has
+  one (the wafer.space documents are published under that domain, and
+  their `mith.ro/ws-*` links keep working alongside it), else through
+  the `/<alias>/` redirect stub when the alias is public in the
+  short-link sheet, else to the document itself.
   Preview images come from `scripts/fetch_doc_thumbs.py` (below);
   `_data/doc_thumbs.yaml` is its generated manifest. Documents are
   listed newest first and topics are ordered by how recently they have
@@ -122,11 +125,12 @@ uv run scripts/fetch_doc_dates.py
 Re-run when documents have been edited, or after adding one. It reads
 each document's real last-modified date from Google Drive into
 `modified:`, sets each topic's `activity:` to the **median** of its
-documents' dates, and rewrites `_data/design_docs.yaml` with both lists
-newest first. The median is deliberate: ranking topics on their single
-newest document let a dormant topic jump to the top because one old
-document had been touched once. Comments and the hand-written
-descriptions survive the rewrite. Without a Drive token the dates can be
+documents' dates, and writes both back to `_data/design_docs.yaml`
+without moving any entry — `/design-docs/` sorts on those two fields,
+so file order does not matter. The median is deliberate: ranking topics
+on their single newest document let a dormant topic jump to the top
+because one old document had been touched once. Comments and the
+hand-written descriptions survive the rewrite. Without a Drive token the dates can be
 supplied from a JSON file of `{alias: "YYYY-MM-DD"}` via `--dates`.
 
 ### `scripts/fetch_doc_thumbs.py`

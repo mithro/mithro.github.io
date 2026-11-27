@@ -12,9 +12,9 @@ description: "Public design documents, proposals and requirements docs written o
   {%- endfor %}
   <p class="prose">{{ doc_total }} public design documents, proposals and
   requirements docs that Tim wrote, co-wrote or reviewed, all Google Docs
-  shared with anyone who has the link. Most open via their <code>mith.ro</code> short links — the same
-  links quoted in the documents themselves and in talks that reference
-  them.</p>
+  shared with anyone who has the link. Most open via their <code>mith.ro</code> short links, and the
+  wafer.space ones via <code>wafer.space</code> — the same links quoted in
+  the documents themselves and in talks that reference them.</p>
   <nav class="doc-toc" aria-label="Topics">
     {%- for group in groups %}
     <a href="#{{ group.id | escape }}">{{ group.topic | escape }} <span class="n">{{ group.docs.size }}</span></a>
@@ -32,13 +32,19 @@ description: "Public design documents, proposals and requirements docs written o
   {% for doc in group_docs %}
     {%- assign tile_n = tile_n | plus: 1 -%}
     {%- comment -%}
-      Link through the mith.ro redirect stub when one is generated for the
-      alias (public in the short-link sheet); otherwise fall back to the
+      Prefer the document's own short link when it declares one: the
+      wafer.space documents are published under that domain, and the
+      mith.ro/<alias> link keeps working alongside it. Otherwise link
+      through the mith.ro redirect stub when one is generated for the
+      alias (public in the short-link sheet), and fall back to the
       document itself so the card is never a dead end.
     {%- endcomment -%}
     {%- assign stub_path = "/" | append: doc.alias | append: "/" -%}
     {%- assign stub = site.pages | where: "permalink", stub_path | first -%}
-    {%- if stub -%}
+    {%- if doc.short_url -%}
+      {%- assign href = doc.short_url -%}
+      {%- assign short_disp = doc.short_url | remove_first: "https://" | remove_first: "http://" -%}
+    {%- elsif stub -%}
       {%- assign href = stub_path | relative_url -%}
       {%- assign short_disp = "mith.ro/" | append: doc.alias -%}
     {%- else -%}
