@@ -66,6 +66,28 @@ hand-edited, some are refreshed from external sources with a script:
   `assets/photos/og-image.jpg` is derived from `die-scan.jpg` by
   `scripts/make_og_image.py` (see below) rather than fetched directly.
 
+### `scripts/fetch_pcbs.py` (unlisted `/pcbs/` page)
+
+```bash
+uv run scripts/fetch_pcbs.py
+```
+
+Feeds `/pcbs/`, an **unlisted** page: nothing links to it, it sets
+`sitemap: false` (so `jekyll-sitemap` skips it) and `noindex: true`
+(which `_layouts/default.html` turns into a robots `noindex` meta tag).
+Keep it that way — don't add it to the nav or the projects page.
+
+The script snapshots a hand-curated list of PCB repositories (`REPOS` at
+the top of the script: those with commits in the current year) into
+`_data/pcbs.yaml` and `assets/pcbs/`. It blobless-clones each repository
+over SSH into the gitignored `tmp/pcb-repos/` for commit history, board
+files and renders; reads issue/PR/release/CI state from the GitHub API
+via `gh` (falling back to anonymous HTTPS, enough for ~5 calls per
+repo); parses each `.kicad_pcb` for board size (Edge.Cuts outline),
+copper layer and footprint counts; and converts the repository's own
+committed KiCad 3D renders to small WebP files. Edit `REPOS` to add a
+board or change which render is shown, then re-run.
+
 ### `scripts/fetch_contributions.py`
 
 ```bash
